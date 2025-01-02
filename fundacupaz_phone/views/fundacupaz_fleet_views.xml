@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fundacupaz_fleet_vehicle_view_form" model="ir.ui.view">
+            <field name="name">fundacupaz.vehicle.form</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='license_plate']" position='before'>
+                    <label for="bl"/>
+                    <field label='0' name="bl"/>
+                </xpath>
+                <xpath expr="//label[@for='bl']" position='before'>
+                    <label for="acta_asig"/>
+                    <field label='0' name="acta_asig"/>
+                </xpath>
+                <xpath expr="//label[@for='acta_asig']" position='before'>
+                    <label for="serial_vin"/>
+                    <field label='0' name="serial_vin"/>
+                </xpath>
+
+                <xpath expr="//field[@name='driver_id']" position='before'>
+                    <field name="beneficiario" string="Beneficiario" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/>
+                </xpath>
+                <xpath expr="//field[@name='beneficiario']" position='before'>
+                    <field name="ente" string="Ente" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/>
+                </xpath>
+                <xpath expr="//field[@name='next_assignation_date']" position='before'>
+                    <field name="organo" string="Organo" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/>
+                </xpath>
+                <xpath expr="//field[@name='location']" position='before'>
+                    <field label='0' name="OBSERVACIONES"/>
+                </xpath>
+                <xpath expr="//field[@name='OBSERVACIONES']" position='before'>
+                    <field label='0' name="estatus"/>
+                </xpath>
+                 <xpath expr="//field[@name='estatus']" position='before'>
+                    <field label='0' name="tipo"/>
+                </xpath>
+                <xpath expr="//field[@name='tipo']" position='before'>
+                    <field label='0' name="color"/>
+                </xpath>
+                 <xpath expr="//field[@name='color']" position='before'>
+                    <field label='0' name="ano"/>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='order_date']" position='replace' readonly="1">
+                     <field name="order_date" invisible="True"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position='replace' readonly="1">
+                     <field name="category_id" invisible="True"/>
+                </xpath>
+                <xpath expr="//field[@name='future_driver_id']" position='replace' readonly="1">
+                     <field name="future_driver_id" invisible="True"/>
+                </xpath>
+                <xpath expr="//field[@name='driver_id']" position='replace' readonly="1">
+                     <field name="driver_id" invisible="True"/>
+                </xpath>
+                 <xpath expr="//field[@name='tag_ids']" position='replace' readonly="1">
+                     <field name="tag_ids" invisible="True"/>
+                </xpath>
+                <xpath expr="//field[@name='manager_id']" position='replace' readonly="1">
+                     <field name="manager_id" invisible="True"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="fundacupaz_fleet_vehicle_view_tree_inherit_hr" model="ir.ui.view">
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="license_plate" position="before">
+                    <field name="OBSERVACIONES" optional="show"/>
+                </field>
+                <field name="OBSERVACIONES" position="before">
+                    <field name="ano" optional="show"/>
+                </field>
+                <field name="ano" position="before">
+                    <field name="color" optional="show"/>
+                </field>
+                <field name="color" position="before">
+                    <field name="next_assignation_date" optional="show"/>
+                </field>
+                <field name="next_assignation_date" position="before">
+                    <field name="tipo" optional="show"/>
+                </field>
+                <field name="tipo" position="before">
+                    <field name="estatus" optional="show"/>
+                </field>
+                <field name="estatus" position="before">
+                    <field name="organo" optional="show"/>
+                </field>
+                <field name="organo" position="before">
+                    <field name="ente" optional="show"/>
+                </field>
+                <field name="ente" position="before">
+                    <field name="beneficiario" optional="show"/>
+                </field>
+                <field name="beneficiario" position="before">
+                    <field name="bl" optional="show"/>
+                </field>
+                <field name="bl" position="before">
+                        <field name="acta_asig" optional="show"/>
+                </field>
+                <field name="acta_asig" position="before">
+                    <field name="serial_vin" optional="show"/>
+                </field>
+
+
+
+                <field name="acquisition_date"  position='replace' readonly="1">
+                    <field name="acquisition_date" optional="hide"/>
+                </field>
+                <field name="category_id"  position='replace' readonly="1">
+                    <field name="category_id" optional="hide"/>
+                </field>
+                <field name="tag_ids"  position='replace' readonly="1">
+                    <field name="tag_ids" optional="hide"/>
+                </field>
+                <field name="contract_renewal_due_soon"  position='replace' readonly="1">
+                    <field name="contract_renewal_due_soon" optional="hide"/>
+                </field>
+                <field name="contract_renewal_overdue"  position='replace' readonly="1">
+                    <field name="contract_renewal_overdue" optional="hide"/>
+                </field>
+
+            </field>
+        </record>
+    </data>
+</odoo>

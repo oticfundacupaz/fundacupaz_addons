@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_fundacupaz_ente" model="ir.ui.view">
+            <field name="name">fundacupaz.ente.form</field>
+            <field name="model">fundacupaz.ente</field>
+            <field name="arch" type="xml">
+                <form string="Fundacupaz">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="True"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_fundacupaz_ente" model="ir.ui.view">
+            <field name="name">fundacupaz.ente.tree</field>
+            <field name="model">fundacupaz.ente</field>
+            <field name="arch" type="xml">
+                <list string="Fundacupaz">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_fundacupaz_ente" model="ir.actions.act_window">
+            <field name="name">Entes</field>
+            <field name="res_model">fundacupaz.ente</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_fundacupaz_ente"/>
+        </record>
+
+        <menuitem id="menu_fundacupaz_ente" name="Entes" parent="base.menu_administration"
+            sequence="10000" action="action_fundacupaz_ente"/>
+    </data>
+</odoo>

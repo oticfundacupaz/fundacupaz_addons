@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+                     <!--permisos para solo lectura y administrador -->
+        <!--##########################################################################################-->
+        <record model="ir.module.category" id="module_category_fundacupaz_phone">
+            <field name="name">Fundacupaz permiso</field>
+            <field name="sequence">1000</field>
+        </record>
+
+                                     <!--solo lectura -->
+        <!--##########################################################################################-->
+                                     <!--solo lectura telefono -->
+        <!--##########################################################################################-->
+        <record id="gupo_fundacupaz" model="res.groups">
+            <field name="name"> fundacupaz solo lectura telefono</field>
+            <field name="comment"> fundacupaz permiso solo lectura telefono</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+                                             <!--Boton Validar inventario -->
+        <!--##########################################################################################-->
+        <record id="grupo_inventario_transferencia_boton_validar" model="res.groups">
+            <field name="name"> fundacupaz transferencias Boton Validar inventario</field>
+            <field name="comment">fundacupaz transferencias Boton Validar inventario</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+                                             <!--transferencias inventario -->
+        <!--##########################################################################################-->
+        <record id="grupo_inventario_transferencias" model="res.groups">
+            <field name="name"> fundacupaz transferencias inventario</field>
+            <field name="comment"> fundacupaz transferencias inventario</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+                                     <!--solo lectura inventario -->
+        <!--##########################################################################################-->
+        <record id="grupo_inventario" model="res.groups">
+            <field name="name"> fundacupaz solo lectura inventario</field>
+            <field name="comment"> fundacupaz permiso solo lectura inventario</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+    <!--     ##########################################################################################-->
+                                             <!--solo lectura producto -->
+        <!--##########################################################################################-->
+        <record id="grupo_producto_solo_lectura" model="res.groups">
+            <field name="name"> fundacupaz solo lectura producto</field>
+            <field name="comment"> fundacupaz permiso solo lectura productos</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+        <!--     ##########################################################################################-->
+                        <!--administrador -->
+        <record id="grupo_fundacupaz_administrador" model="res.groups">
+            <field name="name"> fundacupaz Administrador telefono</field>
+            <field name="comment"> fundacupaz Administrador telefono</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+        <!--##########################################################################################-->
+                        <!--permisos para menu -->
+        <!--##########################################################################################-->
+        <record model="ir.module.category" id="module_category_fundacupaz_menu">
+            <field name="name">Fundacupaz menu</field>
+            <field name="sequence">1000</field>
+        </record>
+                                     <!--menu inventario -->
+        <!--##########################################################################################-->
+        <record id="grupo_fundacupaz_menu_inventario" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario </field>
+            <field name="comment"> fundacupaz Menu Inventario</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.menu_stock_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_inventario')])]"/>
+        </record>
+                                    <!--menu inventario/operaciones -->
+        <record id="grupo_fundacupaz_menu_inventario_operaciones" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.menu_stock_warehouse_mgmt" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_inventario_operaciones')])]"/>
+        </record>
+                    <!--menu inventario/operaciones/traslados -->
+        <record id="grupo_fundacupaz_menu_inventario_operaciones_traslados" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones Traslados</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones Traslados</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.menu_stock_transfers" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_inventario_operaciones_traslados')])]"/>
+        </record>
+                    <!--menu inventario/operaciones/traslados/Recibidos -->
+        <record id="grupo_fundacupaz_menu_iot_recibidos" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones Traslados Recibidos</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones Traslados Recibidos</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.in_picking" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_iot_recibidos')])]"/>
+        </record>
+                       <!--menu inventario/operaciones/traslados/Entregas -->
+        <record id="grupo_fundacupaz_menu_iot_entregas" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones Traslados Entregas</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones Traslados Entregas</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.out_picking" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_iot_entregas')])]"/>
+        </record>
+                       <!--menu inventario/operaciones/Ajustes -->
+        <record id="grupo_fundacupaz_menu_io_ajustes" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones Ajustes</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones Ajustes</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.menu_stock_adjustments" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_io_ajustes')])]"/>
+        </record>
+                       <!--menu inventario/operaciones/Ajustes/inventario fisico -->
+        <record id="grupo_fundacupaz_menu_ioa_fisico" model="res.groups">
+            <field name="name"> fundacupaz Menu Inventario Operaciones Fisico</field>
+            <field name="comment"> fundacupaz Menu Inventario Operaciones Fisico</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_ioa_fisico')])]"/>
+        </record>
+                                        <!--menu Telefono -->
+        <!--##########################################################################################-->
+
+        <record id="grupo_fundacupaz_menu_telefonos" model="res.groups">
+            <field name="name"> fundacupaz Menu Telefono </field>
+            <field name="comment"> fundacupaz Menu Telefono</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="fundacupaz_phone.menu_fundacupaz_phone" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>
+        </record>
+                                      <!--menu flota -->
+        <!--##########################################################################################-->
+        <record id="grupo_fundacupaz_menu_vehiculo" model="res.groups">
+            <field name="name"> fundacupaz Menu Flota </field>
+            <field name="comment"> fundacupaz Menu Flota</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="fleet.menu_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_vehiculo')])]"/>
+        </record>
+                                        <!--menu proyecto -->
+        <!--##########################################################################################-->
+         <record id="grupo_fundacupaz_menu_proyecto" model="res.groups">
+            <field name="name"> fundacupaz Menu Proyecto </field>
+            <field name="comment"> fundacupaz Menu Proyecto</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="project.menu_main_pm" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_proyecto')])]"/>
+        </record>
+                                        <!--menu conversaciones -->
+        <!--##########################################################################################-->
+         <record id="grupo_fundacupaz_menu_conversaciones" model="res.groups">
+            <field name="name"> fundacupaz Menu Conversaciones </field>
+            <field name="comment"> fundacupaz Menu Conversaciones</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="mail.menu_root_discuss" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_conversaciones')])]"/>
+        </record>
+                                     <!--menu Contacto -->
+        <!--##########################################################################################-->
+         <record id="grupo_fundacupaz_menu_Contacto" model="res.groups">
+            <field name="name"> fundacupaz Menu Contacto </field>
+            <field name="comment"> fundacupaz Menu Contacto</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="contacts.menu_contacts" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Contacto')])]"/>
+        </record>
+                                    <!--menu Aplicaciones -->
+        <!--##########################################################################################-->
+         <record id="grupo_fundacupaz_menu_Aplicaciones" model="res.groups">
+            <field name="name"> fundacupaz Menu Aplicaciones </field>
+            <field name="comment"> fundacupaz Menu Aplicaciones</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="base.menu_management" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Aplicaciones')])]"/>
+        </record>
+
+    </data>
+</odoo>

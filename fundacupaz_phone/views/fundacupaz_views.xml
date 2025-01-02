@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.form</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <form string="Fundacupaz">
+                    <header><field name="estatus" widget="statusbar" options="{'clickable': '1'}"/></header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="number_phone" required="True"/>
+                                <field name="operadora" required="True"/>
+                                <field name="planes" required="True"/>
+                                <field name="ente" required="True"/>
+                                <field name="persona_asignada" required="True"/>
+                            </group>
+                            <group>
+                                <field name="estado" required="True"/>
+                                <field name="municipio" required="True"/>
+                                <field name="cuadrante" required="True"/>
+                                <field name="observaciones" required="True"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.tree</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <list string="Fundacupaz">
+                    <field name="number_phone"/>
+                    <field name="operadora"/>
+                    <field name="planes"/>
+                    <field name="ente"/>
+                    <field name="persona_asignada"/>
+                    <field name="estatus"/>
+                    <field name="estado" required="True"/>
+                    <field name="municipio" required="True"/>
+                    <field name="cuadrante" required="True"/>
+                    <field name="observaciones" required="True"/>
+                </list>
+            </field>
+        </record>
+
+         <record id="view_pivot_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.pivot</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <pivot string="Fundacupaz">
+                    <field name="estatus" type="col"/>
+                    <field name="operadora" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_graph_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.graph</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <graph string="Fundacupaz" >
+                    <field name="estatus"/>
+                    <field name="operadora"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_fundacupaz_phone" model="ir.actions.act_window">
+            <field name="name">Telefonos</field>
+            <field name="res_model">fundacupaz.phone</field>
+            <field name="view_mode">list,form,pivot,graph</field>
+            <field name="view_id" ref="view_tree_fundacupaz_phone"/>
+        </record>
+
+        <menuitem id="menu_fundacupaz_phone" name="Telefonos"
+            sequence="10000" action="action_fundacupaz_phone"/>
+    </data>
+</odoo>
