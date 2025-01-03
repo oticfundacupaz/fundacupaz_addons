@@ -2,7 +2,7 @@
     'name' : 'Fundacupaz Phone',
     'version': '1.0',
     'description': "inventario de telefonos de fundacupaz",
-    'depends': ['base', 'web', 'mail', 'fleet' ,'stock'],
+    'depends': ['base', 'web', 'mail', 'fleet' ,'stock', 'l10n_ve_dpt-10'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

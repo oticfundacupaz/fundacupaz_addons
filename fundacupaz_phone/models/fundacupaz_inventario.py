@@ -9,5 +9,16 @@ from odoo.exceptions import ValidationError
 class FundacupazInventario(models.Model):
     _inherit = 'product.template'
 
-
     ente = fields.Many2one('fundacupaz.ente', string="Ente Origen")
+
+
+class FundacupazInventarioCampos(models.Model):
+    _inherit = 'stock.picking'
+
+    tipo_entrega = fields.Selection(
+        selection=[
+            ('asi', 'Asignación'),
+            ('dot', 'Dotación'),
+            ('don', 'Donación'),
+        ],
+    string='Tipo de Entrega', required=True, tracking=True)
