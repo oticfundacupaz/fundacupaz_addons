@@ -47,10 +47,24 @@
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
         </record>
         <!--     ##########################################################################################-->
-                        <!--administrador -->
+                        <!--administrador telefono-->
         <record id="grupo_fundacupaz_administrador" model="res.groups">
             <field name="name"> fundacupaz Administrador telefono</field>
             <field name="comment"> fundacupaz Administrador telefono</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+        <!--##########################################################################################-->
+                        <!--solo lectura pc-->
+        <record id="grupo_fundacupaz_pc_solo_lectura" model="res.groups">
+            <field name="name">fundacupaz solo lectura PC</field>
+            <field name="comment">fundacupaz solo lectura PC</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+        </record>
+        <!--##########################################################################################-->
+                        <!--administrador pc-->
+        <record id="grupo_fundacupaz_pc_administrador" model="res.groups">
+            <field name="name"> fundacupaz Administrador PC</field>
+            <field name="comment"> fundacupaz Administrador PC</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
         </record>
         <!--##########################################################################################-->
@@ -124,17 +138,34 @@
         <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_ioa_fisico')])]"/>
         </record>
+                                                <!--menu PC -->
+        <!--##########################################################################################-->
+
+        <record id="grupo_fundacupaz_menu_pc" model="res.groups">
+            <field name="name">fundacupaz Menu PC</field>
+            <field name="comment">fundacupaz Menu PC</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="menu_fundacupaz_pc" model="ir.ui.menu">
+            <field name="action" ref="fundacupaz_phone.action_fundacupaz_pc"/>
+            <field name="name">PC</field>
+            <field name="sequence">10001</field>
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_pc')])]"/>
+        </record>
                                         <!--menu Telefono -->
         <!--##########################################################################################-->
 
-<!--        <record id="grupo_fundacupaz_menu_telefonos" model="res.groups">-->
-<!--            <field name="name"> fundacupaz Menu Telefono </field>-->
-<!--            <field name="comment"> fundacupaz Menu Telefono</field>-->
-<!--            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>-->
-<!--        </record>-->
-<!--        <record id="fundacupaz_phone_menu_fundacupaz_phone" model="ir.ui.menu">-->
-<!--            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>-->
-<!--        </record>-->
+        <record id="grupo_fundacupaz_menu_telefonos" model="res.groups">
+            <field name="name">fundacupaz Menu Telefono</field>
+            <field name="comment">fundacupaz Menu Telefono</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+        <record id="menu_fundacupaz_phone" model="ir.ui.menu">
+            <field name="action" ref="action_fundacupaz_phone"/>
+            <field name="name">Telefonos</field>
+            <field name="sequence">10000</field>
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>
+        </record>
                                       <!--menu flota -->
         <!--##########################################################################################-->
         <record id="grupo_fundacupaz_menu_vehiculo" model="res.groups">
@@ -143,6 +174,7 @@
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
         </record>
         <record id="fleet.menu_root" model="ir.ui.menu">
+            <field name="action" ref="event.action_event_mail"/>
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_vehiculo')])]"/>
         </record>
                                         <!--menu proyecto -->

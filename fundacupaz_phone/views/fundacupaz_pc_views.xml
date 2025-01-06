@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_fundacupaz_pc" model="ir.ui.view">
+            <field name="name">fundacupaz.pc.form</field>
+            <field name="model">fundacupaz.pc</field>
+            <field name="arch" type="xml">
+                <form string="Fundacupaz">
+                    <header><field name="estatus" widget="statusbar" options="{'clickable': '1'}"/></header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="True"/>
+                                <field name="persona_asignada" required="True"/>
+                                <field name="ente" required="True"/>
+                                <field name="bien_mueble" required="True"/>
+                                <field name="conexion_red" required="True"/>
+                                <field name="ip" required="True"/>
+                            </group>
+                            <group>
+                                <field name="serial" required="True"/>
+                                <field name="mac" required="True"/>
+                                <field name="sistema_operativo" required="True"/>
+                                <field name="procesador" required="True"/>
+                                <field name="disco_duro" required="True"/>
+                                <field name="memoria_ram" required="True"/>
+                                <field name="observaciones" required="False"/>
+                                <!--<field name="estado" required="True"/>-->
+                                <!--field name="municipio" required="True"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_fundacupaz_pc" model="ir.ui.view">
+            <field name="name">fundacupaz.pc.tree</field>
+            <field name="model">fundacupaz.pc</field>
+            <field name="arch" type="xml">
+                <list string="Fundacupaz">
+                    <field name="name"/>
+                    <field name="persona_asignada"/>
+                    <field name="ente"/>
+                    <field name="bien_mueble"/>
+                    <field name="conexion_red"/>
+                    <field name="ip"/>
+                    <field name="serial"/>
+                    <field name="mac"/>
+                    <field name="sistema_operativo"/>
+                    <field name="procesador"/>
+                    <field name="disco_duro"/>
+                    <field name="memoria_ram"/>
+                    <field name="observaciones"/>
+                </list>
+            </field>
+        </record>
+
+         <record id="view_pivot_fundacupaz_pc" model="ir.ui.view">
+            <field name="name">fundacupaz.pc.pivot</field>
+            <field name="model">fundacupaz.pc</field>
+            <field name="arch" type="xml">
+                <pivot string="Fundacupaz">
+                    <field name="estatus" type="col"/>
+                    <field name="name" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_graph_fundacupaz_pc" model="ir.ui.view">
+            <field name="name">fundacupaz.pc.graph</field>
+            <field name="model">fundacupaz.pc</field>
+            <field name="arch" type="xml">
+                <graph string="Fundacupaz" >
+                    <field name="estatus"/>
+                    <field name="name"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_fundacupaz_pc" model="ir.actions.act_window">
+            <field name="name">Equipos Computación</field>
+            <field name="res_model">fundacupaz.pc</field>
+            <field name="view_mode">list,form,pivot,graph</field>
+            <field name="view_id" ref="view_tree_fundacupaz_pc"/>
+        </record>
+
+    </data>
+</odoo>
