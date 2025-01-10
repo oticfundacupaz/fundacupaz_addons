@@ -17,8 +17,8 @@ class FundacupazInventarioCampos(models.Model):
 
     tipo_entrega = fields.Selection(
         selection=[
-            ('asi', 'Asignación'),
-            ('dot', 'Dotación'),
-            ('don', 'Donación'),
+            ('asi', 'ASIGNACIÓN'),
+            ('dot', 'DOTACIÓN'),
+            ('don', 'DONACIÓN'),
         ],
     string='Tipo de Entrega', required=True, tracking=True)

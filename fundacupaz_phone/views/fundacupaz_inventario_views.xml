@@ -62,6 +62,9 @@
                 <xpath expr="//sheet//group//group//field[@name='picking_type_id']" position="after">
                     <field name="tipo_entrega" invisible="picking_type_code != 'outgoing'"/>
                 </xpath>
+
+
+
             </field>
         </record>
 
