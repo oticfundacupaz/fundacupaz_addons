@@ -6,6 +6,12 @@ from odoo.addons.mail.models.discuss.mail_guest import add_guest_to_context
 from odoo.exceptions import ValidationError
 
 
+class FundacupazContactos(models.Model):
+    _inherit = 'res.partner'
+
+    ente = fields.Many2one('fundacupaz.ente', string="Ente Origen")
+
+
 class FundacupazInventario(models.Model):
     _inherit = 'product.template'
 
@@ -20,5 +26,15 @@ class FundacupazInventarioCampos(models.Model):
             ('asi', 'ASIGNACIÓN'),
             ('dot', 'DOTACIÓN'),
             ('don', 'DONACIÓN'),
-        ],
-    string='Tipo de Entrega', required=True, tracking=True)
+        ], string='Tipo de Entrega', required=True, tracking=True)
+
+    def get_month_name(self, date):
+        if date:
+            months = [
+                "enero", "febrero", "marzo", "abril",
+                "mayo", "junio", "julio", "agosto",
+                "septiembre", "octubre", "noviembre", "diciembre"
+            ]
+            month_index = date.month - 1
+            return months[month_index]
+        return ''

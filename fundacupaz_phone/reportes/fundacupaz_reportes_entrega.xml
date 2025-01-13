@@ -26,7 +26,8 @@
                         </div>
                     </div>
                     <h6 align="justify">
-                        En la ciudad de Caracas, a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes  <span t-field="o.date_done" t-options="{'format': 'M'}"/> del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el Ciudadano Coronel José Francisco Calzadilla Cabriles, titular de la cédula de identidad N° V-14.455.960, en su condición de Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024 del Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz (MPPRIJP); procede hacer entregade los siguientes articulos:
+                        En la ciudad de Caracas, a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes de <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el Ciudadano Coronel José Francisco Calzadilla Cabriles, titular de la cédula de identidad N° V-14.455.960, en su condición de Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024 del Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz (MPPRIJP); procede hacer entregade los siguientes articulos:
+<!--                        En la ciudad de Caracas, a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes  <span t-field="o.date_done" t-options="{'format': 'M'}"/> del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el Ciudadano Coronel José Francisco Calzadilla Cabriles, titular de la cédula de identidad N° V-14.455.960, en su condición de Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024 del Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz (MPPRIJP); procede hacer entregade los siguientes articulos:-->
                     </h6>
                     <table t-if="o.state!='done'">
                         <thead>
@@ -62,7 +63,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="table table-borderless mt48" t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
+                    <table class="table table-borderless mt12" t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
                         <t t-set="has_serial_number" t-value="False"/>
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_lot_on_delivery_slip"/>
                         <thead>
@@ -73,7 +74,7 @@
                                 <th name="th_sml_quantity" class="text-center">Entregado</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="line-height:80%;">
                         <!-- This part gets complicated with different use cases (additional use cases in extensions of this report):
                                 1. If serial numbers are used and set to print on delivery slip => print lines as is, otherwise group them by overlapping
                                     product + description + uom combinations
@@ -157,7 +158,7 @@
 
                     </style>
                     <h6 align="justify">
-                        En calidad de <span t-field="o.tipo_entrega"/>,   en esta acta por el ciudadano (a): <strong> <span class="Letra" t-field="o.partner_id"/></strong>  titular de la cedula N° <span t-field="o.partner_id.vat"/>, en su carácter de <span t-field="o.partner_id.function"/>. Se levanta la presente acta en original y dos (02) copias a un mismo tenor y a un solo efecto, una leida conforme firman.
+                        En calidad de <span t-field="o.tipo_entrega"/>, en esta acta por el ciudadano (a): <strong> <span class="Letra" t-field="o.partner_id"/></strong><t t-if="o.partner_id.vat"> titular de la cédula N° <span t-field="o.partner_id.vat"/>,</t><t t-if="o.partner_id.function"> en su carácter de <span t-field="o.partner_id.function"/></t>. Se levanta la presente acta en original y dos (02) copias a un mismo tenor y a un solo efecto, una leida conforme firman.
                     </h6>
 
                     <table class="table1">
@@ -174,7 +175,11 @@
                         <tr>
                             <td rowspan="4" align="center" WIDTH="40%" height="30px"> Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ)</td>
                             <td width="20%" height="30px" align="right"/>
-                            <td align="center" WIDTH="40%" height="30px"> Cedula de Identidad: <span class="Letra1" t-field="o.partner_id.vat"/></td>
+                            <td align="center" WIDTH="40%" height="30px">
+                                <t t-if="o.partner_id.ente"><span class="Letra" t-field="o.partner_id.ente"/><br/></t>
+                                <t t-if="o.partner_id.function"><span class="Letra" t-field="o.partner_id.function"/><br/></t>
+                                <t t-if="o.partner_id.vat">Cedula de Identidad: <span class="Letra" t-field="o.partner_id.vat" widget="float" options="{'digits': (16, 0)}"/></t>
+                            </td>
                         </tr>
 
                     </table>
