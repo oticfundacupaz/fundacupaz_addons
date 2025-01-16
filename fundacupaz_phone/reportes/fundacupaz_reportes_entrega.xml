@@ -26,7 +26,11 @@
                         </div>
                     </div>
                     <h6 align="justify">
+<<<<<<< HEAD
                         En la ciudad de Caracas, a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes  <span t-field="o.date_done" t-options="{'format': 'M'}"/> del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el Ciudadano Coronel José Francisco Calzadilla Cabriles, titular de la cédula de identidad N° V-14.455.960, en su condición de Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024 del Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz (MPPRIJP); procede hacer entrega de los siguientes articulos:
+=======
+                        En la ciudad de Caracas, a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes de <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el Ciudadano Coronel José Francisco Calzadilla Cabriles, titular de la cédula de identidad N° V-14.455.960, en su condición de Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024 del Ministerio del Poder Popular para Relaciones Interiores, Justicia y Paz (MPPRIJP); procede hacer entrega de los siguientes articulos:
+>>>>>>> b10979a (mejoras reporte entrega 16ENE2025)
                     </h6>
                     <table t-if="o.state!='done'">
                         <thead>
@@ -172,12 +176,17 @@
                             <td align="center" WIDTH="40%" height="30px"> <span class="Letra1" t-field="o.partner_id"/></td>
                         </tr>
                         <tr>
+<<<<<<< HEAD
                             <td rowspan="4" align="center" WIDTH="40%" height="30px"> Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024</td>
+=======
+                            <td rowspan="4" align="center" WIDTH="40%" height="30px">Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024</td>
+>>>>>>> b10979a (mejoras reporte entrega 16ENE2025)
                             <td width="20%" height="30px" align="right"/>
                             <td align="center" WIDTH="40%" height="30px">
                                 <t t-if="o.partner_id.ente"><span class="Letra" t-field="o.partner_id.ente"/><br/></t>
                                 <t t-if="o.partner_id.function"><span class="Letra" t-field="o.partner_id.function"/><br/></t>
-                                <t t-if="o.partner_id.vat">Cedula de Identidad: <span class="Letra" t-field="o.partner_id.vat" widget="float" options="{'digits': (16, 0)}"/></t>
+                                <t t-if="o.partner_id.vat">Cédula de Identidad: <span class="Letra" t-field="o.partner_id.vat"/></t>
+                                <t t-if="o.partner_id.phone">Teléfono: <span class="Letra" t-field="o.partner_id.phone"/></t>
                             </td>
                         </tr>
                         <tr>
