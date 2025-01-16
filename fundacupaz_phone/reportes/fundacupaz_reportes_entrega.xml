@@ -133,7 +133,7 @@
                         border: 1px solid white !important;
                         position: absolute;
                         top: 800px;
-                        left: 20px;
+                        <!--left: 20px;-->
                         }
                         th, td, tr{
                         border:none;
@@ -155,6 +155,12 @@
                         font-family:'Helvetica','Verdana','Monaco',sans-serif;
                         }
 
+                        .Letra2 {
+                        font-style:italic;
+                        font-size:13px;
+                        font-color:#0495fa;
+                        font-family:'Helvetica','Verdana','Monaco',sans-serif;
+                        }
                     </style>
                     <h6 align="justify">
                         En calidad de <span t-field="o.tipo_entrega"/>, en esta acta por el ciudadano (a): <strong> <span class="Letra" t-field="o.partner_id"/></strong><t t-if="o.partner_id.vat"> titular de la cédula N° <span t-field="o.partner_id.vat"/>,</t><t t-if="o.partner_id.function"> en su carácter de <span t-field="o.partner_id.function"/></t>. Se levanta la presente acta en original y dos (02) copias a un mismo tenor y a un solo efecto, una leida conforme firman.
@@ -162,30 +168,25 @@
 
                     <table class="table1">
                         <tr>
-                            <td WIDTH="40%" align="center" height="30px">Por la Fundación: </td>
+                            <td width="40%" align="center" height="30px">Por la Fundación</td>
                             <td width="20%" height="30px" align="right"/>
-                            <td WIDTH="40%" align="center" height="30px">Por la "Institución" </td>
+                            <td width="40%" align="center" height="30px">Por la Institución</td>
                         </tr>
-                        <tr>
-                            <td align="center" WIDTH="40%" height="30px">José Francisco Calzadilla Cabriles</td>
+                        <tr class="Letra1">
+                            <td align="center" width="40%" height="30px">JOSÉ FRANCISCO CALZADILLA CABRILES</td>
                             <td width="20%" height="30px" align="center"/>
-                            <td align="center" WIDTH="40%" height="30px"> <span class="Letra1" t-field="o.partner_id"/></td>
+                            <td align="center" width="40%" height="30px"><span t-field="o.partner_id"/></td>
                         </tr>
-                        <tr>
-                            <td rowspan="4" align="center" WIDTH="40%" height="30px">Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024</td>
+                        <tr class="Letra2">
+                            <td rowspan="4" align="center" width="40%" height="30px" class="Letra2">Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024</td>
                             <td width="20%" height="30px" align="right"/>
-                            <td align="center" WIDTH="40%" height="30px">
-                                <t t-if="o.partner_id.ente"><span class="Letra" t-field="o.partner_id.ente"/><br/></t>
-                                <t t-if="o.partner_id.function"><span class="Letra" t-field="o.partner_id.function"/><br/></t>
-                                <t t-if="o.partner_id.vat">Cédula de Identidad: <span class="Letra" t-field="o.partner_id.vat"/></t>
-                                <t t-if="o.partner_id.phone">Teléfono: <span class="Letra" t-field="o.partner_id.phone"/></t>
+                            <td align="center" width="40%" height="30px">
+                                <t t-if="o.partner_id.ente"><span t-field="o.partner_id.ente"/><br/></t>
+                                <t t-if="o.partner_id.function"><span t-field="o.partner_id.function"/><br/></t>
+                                <t t-if="o.partner_id.vat">Cédula de Identidad: <span t-field="o.partner_id.vat"/><br/></t>
+                                <t t-if="o.partner_id.phone">Teléfono: <span t-field="o.partner_id.phone"/></t>
                             </td>
                         </tr>
-                        <tr>
-                            <td width="20%" height="30px" align="right"/>
-                            <td align="center" WIDTH="40%">Telefono: <span class="Letra1" t-field="o.partner_id.phone"/></td>
-                        </tr>
-
                     </table>
 
                     <div t-if="not o.signature" class="oe_structure"/>
