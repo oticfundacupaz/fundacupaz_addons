@@ -35,6 +35,17 @@
             </field>
         </record>
 
+        <record id="fundacupaz_partner_form_view" model="ir.ui.view">
+            <field name="name">fundacupaz.partner.form.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet//group//group//field[@name='function']" position="before">
+                    <field name="ente"/>
+                </xpath>
+            </field>
+        </record>
+
         <record id="view_picking_form_inherit_fundacupaz_header" model="ir.ui.view">
             <field name="name">stock.picking.form.inherit.fundacupaz.header</field>
             <field name="model">stock.picking</field>
