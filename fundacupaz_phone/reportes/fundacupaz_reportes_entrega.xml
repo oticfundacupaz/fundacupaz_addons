@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <h6 align="justify">
-                        En la ciudad de Caracas, Capital de la República Bolivariana de Venezuela, a los  <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes  <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el ciudadano Presidente de la Fundación Gran Misión Cuadrantes de Paz,<strong><span class="Letra"> JOSÉ FRANCISCO CALZADILLA CABRILES </span></strong>, titular de la cédula de identidad N° V-14.455.960, designado según Resolución Nº 0110 de fecha 15 SEP 2024, emanado por el Ministerio del Poder Popular para Relaciones interiores, Justicia y Paz, publicada en Gaceta Oficial Nº 42.971, de la misma fecha, autoriza al ciudadano <strong><span class="Letra"> GABRIEL ARMAS </span></strong> encargado de los depósitos de la Yaguara, hacer entrega entrega formal al ciudadano <strong> <span class="Letra" t-field="o.partner_id"/></strong> <span t-field="o.partner_id.function"/>, de los Bienes y/o Materiales en calidad de <span t-field="o.tipo_entrega"/>, en Fe y de Conformidad al cumplimiento de las características técnicas y funciones del bien  que se describe a continuación:
+                        En la ciudad de Caracas, Capital de la República Bolivariana de Venezuela, a los  <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes de <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el ciudadano Presidente de la Fundación Gran Misión Cuadrantes de Paz,<strong><span class="Letra"> JOSÉ FRANCISCO CALZADILLA CABRILES </span></strong>, titular de la cédula de identidad N° V-14.455.960, designado según Resolución Nº 0110 de fecha 15 SEP 2024, emanado por el Ministerio del Poder Popular para Relaciones interiores, Justicia y Paz, publicada en Gaceta Oficial Nº 42.971, de la misma fecha, autoriza al ciudadano <strong><span class="Letra"> GABRIEL ARMAS </span></strong> director de logística de los depósitos de la Yaguara, hacer entrega entrega formal al ciudadano <strong> <span class="Letra" t-field="o.partner_id"/></strong> <span t-field="o.partner_id.function"/>, de los Bienes y/o Materiales en calidad de <span t-field="o.tipo_entrega"/>, en Fe y de Conformidad al cumplimiento de las características técnicas y funciones del bien  que se describe a continuación:
                     </h6>
                     <table t-if="o.state!='done'">
                         <thead>
@@ -222,4 +222,4 @@
                 </div>
             </t>
         </xpath>
-    </data>
+    </data> 
