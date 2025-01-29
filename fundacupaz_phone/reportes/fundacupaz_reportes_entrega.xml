@@ -141,7 +141,7 @@
                             border:none !important;
                             border: 1px solid white !important;
                             position: absolute;
-                            top: 750px;
+                            top: 650px;
                             <!--left: 20px;-->
                             }
                             th, td, tr{
