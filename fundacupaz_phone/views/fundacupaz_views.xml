@@ -13,10 +13,13 @@
                                 <field name="number_phone" required="True"/>
                                 <field name="operadora" required="True"/>
                                 <field name="planes" required="True"/>
-                                <field name="ente" required="True"/>
+                                <field name="marca_phone"/>
+                                <field name="modelo_phone"/>
+                                <field name="imei_phone"/>
                                 <field name="persona_asignada" required="True"/>
                             </group>
                             <group>
+                                <field name="ente" required="True"/>
                                 <field name="estado" required="True"/>
                                 <field name="municipio" required="True"/>
                                 <field name="cuadrante" required="True"/>
