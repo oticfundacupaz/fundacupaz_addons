@@ -40,6 +40,9 @@
                     <field name="number_phone"/>
                     <field name="operadora"/>
                     <field name="planes"/>
+                    <field name="marca_phone" optional="hide"/>
+                    <field name="modelo_phone" optional="hide"/>
+                    <field name="imei_phone" optional="hide"/>
                     <field name="ente"/>
                     <field name="persona_asignada"/>
                     <field name="estatus"/>
