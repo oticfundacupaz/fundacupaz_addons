@@ -29,6 +29,7 @@ class FundacupazPhone(models.Model):
             ('MOVISTAR PLUS 25 GB', 'MOVISTAR PLUS 25 GB'),
             ('MOVISTAR PLUS 10 GB', 'MOVISTAR PLUS 10 GB'),
             ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB'),
+            ('DIGITEL INTELIGENTE PLUS 2GB', 'DIGITEL INTELIGENTE PLUS 2GB'),
             ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
             ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
         ],
@@ -42,7 +43,7 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus')
+    string='Estatus', default=False)
 
     estado = fields.Many2one('res.country.state',domain="[('country_id.name','=','Venezuela')]", string="Estado")
     municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio")

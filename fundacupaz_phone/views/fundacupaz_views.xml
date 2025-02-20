@@ -6,7 +6,7 @@
             <field name="model">fundacupaz.phone</field>
             <field name="arch" type="xml">
                 <form string="Fundacupaz">
-                    <header><field name="estatus" widget="statusbar" options="{'clickable': '1'}"/></header>
+                    <header><field name="estatus" widget="statusbar" required="True" options="{'clickable': '1'}"/></header>
                     <sheet>
                         <group>
                             <group>
@@ -76,10 +76,52 @@
             </field>
         </record>
 
+        <record id="view_filter_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.filter</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <search string="Fundacupaz">
+                    <field name="number_phone"/>
+                    <field name="imei_phone" />
+                    <field name="marca_phone" />
+                    <field name="persona_asignada" />
+                    <field name="cuadrante" />
+                    <filter string="Líneas Activas" name="estatus" domain="[('estatus','=','ACTIVA')]"/>
+                    <filter string="Líneas Inactivas" name="estatus" domain="[('estatus','=','INACTIVA')]"/>
+                    <filter string="Líneas Suspendidas" name="estatus" domain="[('estatus','=','SUSPENDIDA')]"/>
+                </search>
+             </field>
+        </record>
+
+        <record id="view_kanban_fundacupaz_phone" model="ir.ui.view">
+            <field name="name">fundacupaz.phone.kanban</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="number_phone"/>
+                    <field name="marca_phone"/>
+                    <field name="imei_phone"/>
+                    <field name="cuadrante"/>
+                    <field name="persona_asignada"/>
+                    <field name="estatus"/>
+                    <templates>
+                        <t t-name="card">
+                            <field name="number_phone" class="fw-bolder"/>
+                            <field name="marca_phone"/>
+                            <field name="imei_phone"/>
+                            <field name="cuadrante"/>
+                            <field name="persona_asignada"/>
+                            <field name="estatus"/>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <record id="action_fundacupaz_phone" model="ir.actions.act_window">
             <field name="name">Telefonos</field>
             <field name="res_model">fundacupaz.phone</field>
-            <field name="view_mode">list,form,pivot,graph</field>
+            <field name="view_mode">list,form,pivot,graph,search,kanban</field>
             <field name="view_id" ref="view_tree_fundacupaz_phone"/>
         </record>
 
