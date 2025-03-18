@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_res_users_tree_inherit_comisionado" model="ir.ui.view">
+        <field name="name">res.users.tree.inherit.comisionado</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="es_comisionado"/>
+                <field name="estado_comisionado" attrs="{'invisible': [('es_comisionado', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_users_form_inherit_comisionado" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.comisionado</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="es_comisionado" readonly="1"/>
+                    <field name="estado_comisionado" attrs="{'readonly': [('es_comisionado', '=', False)]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

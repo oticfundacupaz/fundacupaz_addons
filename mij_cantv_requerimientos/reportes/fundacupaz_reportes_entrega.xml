@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template inherit_id="stock.report_delivery_document" id="report_delivery_document_fundacupaz">
+        <data inherit_id="stock.report_delivery_document">
+            <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+                <t t-call="web.external_layout">
+                    <t t-set="o" t-value="o.with_context(lang=o._get_report_lang())"/>
+                    <t t-set="partner" t-value="o.partner_id or (o.move_ids and o.move_ids[0].partner_id) or False"/>
+                    <style>
+                        .Letra {
+                        font-style:italic;
+                        font-weight:bold;
+                        font-size:13px;
+                        font-color:#0495fa;
+                        font-family:'Helvetica','Verdana','Monaco',sans-serif;
+                        }
+                    </style>
+                    <div class="page">
+                        <h2>
+                            <span t-field="o.name">0001</span>
+                        </h2>
+                        <h2 align="center">
+                            <span>ACTA DE </span><span t-field="o.tipo_entrega"/>
+                        </h2>
+                        <div class="oe_structure"/>
+                        <div id="informations" class="row mb-4">
+                            <div t-if="o.origin" class="col col-3 mw-100 mb-2" name="div_origin">
+                                <strong>Order</strong>
+                                <div t-field="o.origin" class="m-0">S0001</div>
+                            </div>
+                            <div t-if="o.state" class="col col-3 mw-100 mb-2" name="div_sched_date">
+                                <strong>Fecha de Entrega</strong>
+                                <div t-if="o.state == 'done'" t-field="o.date_done" class="m-0"/>
+                                <div t-else="" t-field="o.scheduled_date" class="m-0"/>
+                            </div>
+                        </div>
+                        <h6 align="justify">
+                            En la ciudad de Caracas, Capital de la República Bolivariana de Venezuela, a los  <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes de <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> , el ciudadano Presidente de la Fundación Gran Misión Cuadrantes de Paz,<strong><span class="Letra"> JOSÉ FRANCISCO CALZADILLA CABRILES </span></strong>, titular de la cédula de identidad N° V-14.455.960, designado según Resolución Nº 0110 de fecha 15 SEP 2024, emanado por el Ministerio del Poder Popular para Relaciones interiores, Justicia y Paz, publicada en Gaceta Oficial Nº 42.971, de la misma fecha, autoriza al ciudadano <strong><span class="Letra"> GABRIEL ARMAS </span></strong> director de logística de los depósitos de la Yaguara, hacer entrega entrega formal al ciudadano <strong> <span class="Letra" t-field="o.partner_id"/></strong> <span t-field="o.partner_id.function"/>, de los Bienes y/o Materiales en calidad de <span t-field="o.tipo_entrega"/>, en Fe y de Conformidad al cumplimiento de las características técnicas y funciones del bien  que se describe a continuación:
+                        </h6>
+                        <table t-if="o.state!='done'">
+                            <thead>
+                                <tr>
+                                    <th name="th_sm_product">DESCRIPCION DEL MATERIAL</th>
+                                    <th name="th_sm_ordered" class="text-end">Ordered</th>
+                                    <th name="th_sm_quantity" class="text-end">CANTIDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
+                                <tr t-foreach="lines" t-as="move">
+                                    <td height="30px">
+                                        <span t-field="move.product_id">Customizable Desk</span>
+                                        <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                            <span t-field="move.description_picking">Description on transfer</span>
+                                        </p>
+                                    </td>
+                                    <td height="30px" class="text-end">
+                                        <span t-field="move.product_uom_qty">3.00</span>
+                                        <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                                        <span t-if="move.product_packaging_id">
+                                            (<span t-field="move.product_packaging_qty" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                                        </span>
+                                    </td>
+                                    <td height="30px" class="text-end">
+                                        <span t-field="move.quantity">3.00</span>
+                                        <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                                        <span t-if="move.product_packaging_id">
+                                            (<span t-field="move.product_packaging_quantity" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table style="font-size:10pt" class="table table-borderless mt12" t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
+                            <t t-set="has_serial_number" t-value="False"/>
+                            <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_lot_on_delivery_slip"/>
+                            <thead>
+                                <tr>
+                                    <th name="th_sml_product">Producto</th>
+                                    <th name="th_sml_qty_ordered" class="text-center" t-if="not has_serial_number">Ordered</th>
+                                    <th name="lot_serial" t-else="">Número de Serial</th>
+                                    <th name="th_sml_quantity" class="text-center">Entregado</th>
+                                </tr>
+                            </thead>
+                            <tbody style="line-height:75%;">
+                                <!-- This part gets complicated with different use cases (additional use cases in extensions of this report):
+                                        1. If serial numbers are used and set to print on delivery slip => print lines as is, otherwise group them by overlapping
+                                            product + description + uom combinations
+                                        2. If any packages are assigned => split products up by package (or non-package) and then apply use case 1 -->
+                                <!-- If has destination packages => create sections of corresponding products -->
+                                <t t-if="o.has_packages" name="has_packages">
+                                    <t t-set="packages" t-value="o.move_line_ids.mapped('result_package_id')"/>
+                                    <t t-foreach="packages" t-as="package">
+                                        <t t-call="stock.stock_report_delivery_package_section_line"/>
+                                        <t t-set="package_move_lines" t-value="o.move_line_ids.filtered(lambda l: l.result_package_id == package)"/>
+                                        <!-- If printing lots/serial numbers => keep products in original lines -->
+                                        <t t-if="has_serial_number">
+                                            <tr t-foreach="package_move_lines" t-as="move_line">
+                                                <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                            </tr>
+                                        </t>
+                                        <!-- If not printing lots/serial numbers => merge lines with same product+description+uom -->
+                                        <t t-else="">
+                                            <t t-set="aggregated_lines" t-value="package_move_lines._get_aggregated_product_quantities(strict=True)"/>
+                                            <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                        </t>
+                                    </t>
+                                    <!-- Make sure we do another section for package-less products if they exist -->
+                                    <t t-set="move_lines" t-value="o.move_line_ids.filtered(lambda l: not l.result_package_id)"/>
+                                    <t t-set="aggregated_lines" t-value="o.move_line_ids._get_aggregated_product_quantities(except_package=True)"/>
+                                    <t t-if="move_lines or aggregated_lines" name="no_package_move_lines">
+                                        <t t-call="stock.stock_report_delivery_no_package_section_line" name="no_package_section"/>
+                                        <t t-if="has_serial_number">
+                                            <tr t-foreach="move_lines" t-as="move_line">
+                                                <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                            </tr>
+                                        </t>
+                                        <t t-elif="aggregated_lines">
+                                            <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                        </t>
+                                    </t>
+                                </t>
+                                <!-- No destination packages -->
+                                <t t-else="">
+                                    <!-- If printing lots/serial numbers => keep products in original lines -->
+                                    <t t-if="has_serial_number">
+                                        <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                            <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                        </tr>
+                                    </t>
+                                    <!-- If not printing lots/serial numbers => merge lines with same product -->
+                                    <t t-else="" name="aggregated_move_lines">
+                                        <t t-set="aggregated_lines" t-value="o.move_line_ids._get_aggregated_product_quantities()"/>
+                                        <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                        <style>
+                            .table1{
+                            border:none !important;
+                            border: 1px solid white !important;
+                            position: absolute;
+                            top: 650px;
+                            <!--left: 20px;-->
+                            }
+                            th, td, tr{
+                            border:none;
+                            }
+
+                            .Letra1 {
+                            font-style:italic;
+                            font-weight:bold;
+                            font-size:16px;
+                            font-color:#0495fa;
+                            font-family:'Helvetica','Verdana','Monaco',sans-serif;
+                            }
+
+                            .Letra2 {
+                            font-style:italic;
+                            font-size:13px;
+                            font-color:#0495fa;
+                            font-family:'Helvetica','Verdana','Monaco',sans-serif;
+                            }
+                        </style>
+<!--                        <h6 align="justify">-->
+<!--                            La presente entrega se realiza en pro de las Grandes Transformaciones, Seguridad Ciudadana y Defensa, a fin de maximizar y consolidar las políticas de la Fundación Gran Misión Cuadrantes de Paz, fortaleciendo la correlación de la Organización comunitaria, los cuales deberán ser incluidos en el Inventario de los Bienes Públicos o de Materia de esa Institución.-->
+<!--                        </h6>-->
+                        <h6 align="justify">
+                            Se levanta la presente Acta en tres  (03) ejemplares a un mismo tenor a un solo efecto, en la ciudad de Caracas a los <span t-field="o.date_done" t-options="{'format': 'dd'}"/> días del mes  <span t-esc="o.get_month_name(o.date_done)"/>  del <span t-field="o.date_done" t-options="{'format': 'yyyy'}"/> .
+                        </h6>
+
+
+                        <table class="table1">
+                            <tr>
+                                <td width="30%" align="center" height="30px">Entrega</td>
+                                <td width="40%" height="30px" align="right"/>
+                                <td width="30%" align="center" height="30px">Recibe</td>
+                            </tr>
+                            <tr class="Letra1">
+                                <td align="center" width="30%" height="30px">__________________________</td>
+                                <td width="40%" height="30px" align="center"/>
+                                <td align="center" width="30%" height="30px">__________________________</td>
+                            </tr>
+                            <tr class="Letra1">
+                                <td align="center" width="30%" height="30px">GABRIEL ARMAS</td>
+                                <td width="40%" height="30px" align="center"/>
+                                <td align="center" width="30%" height="30px"><span t-field="o.partner_id"/></td>
+                            </tr>
+                            <tr class="Letra2">
+                                <td  align="center" width="30%" height="30px" class="Letra2">Director  Logistico Galpon FUNDACUPAZ La Yaguara</td>
+                                <td width="40%" height="30px" align="right"/>
+                                <td align="center" width="30%" height="30px">
+                                    <t t-if="o.partner_id.ente"><span t-field="o.partner_id.ente"/><br/></t>
+                                    <t t-if="o.partner_id.function"><span t-field="o.partner_id.function"/><br/></t>
+                                    <t t-if="o.partner_id.vat">Cédula de Identidad: <span t-field="o.partner_id.vat"/><br/></t>
+                                    <t t-if="o.partner_id.phone">Teléfono: <span t-field="o.partner_id.phone"/></t>
+                                </td>
+                            </tr>
+                            <tr class="Letra1">
+                                <td align="center" width="30%" height="30px"></td>
+                                <td width="40%" height="30px" align="center">JOSÉ FRANCISCO CALZADILLA CABRILES</td>
+                                <td align="center" width="30%" height="30px"></td>
+                            </tr>
+                            <tr class="Letra2">
+                                <td align="center" width="30%" height="30px"></td>
+                                <td width="40%" height="30px" align="center">Presidente de la Fundación Gran Misión Cuadrantes de Paz (FUNDACUPAZ), designado según resolución N° 42.971 de fecha 25 de septiembre del 2024</td>
+                                <td align="center" width="30%" height="30px"></td>
+                            </tr>
+                        </table>
+
+                        <div t-if="not o.signature" class="oe_structure"/>
+                        <div t-else="" class="mt32 ml64 mr4" name="signature">
+                            <div class="offset-8">
+                                <strong>Signature</strong>
+                            </div>
+                            <div class="offset-8">
+                                <img t-att-src="image_data_uri(o.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                            </div>
+                            <div t-if="o.partner_id.name" class="offset-8 text-center">
+                                <p t-field="o.partner_id.name">John Doe</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
+        </data>
+    </template>
+</odoo>
