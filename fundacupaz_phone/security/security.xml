@@ -214,6 +214,28 @@
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Aplicaciones')])]"/>
         </record>
 
+        <!-- Grupo de seguridad para ocultar el menú -->
+        <record id="grupo_ocultar_menus" model="res.groups">
+            <field name="name">Grupo: Ocultar Otros Menús</field>
+            <field name="comment">Grupo para ocultar menús específicos</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+
+        <record id="project_todo.menu_todo_todos" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="utm.menu_link_tracker_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
 
         <!-- Nueva Categoría -->
         <record id="module_category_cuadrantes_paz" model="ir.module.category">

@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="es_comisionado"/>
-                <field name="estado_comisionado" attrs="{'invisible': [('es_comisionado', '=', False)]}"/>
+                <field name="estado_comisionado" invisible="not es_comisionado"/>
             </xpath>
         </field>
     </record>
@@ -19,7 +19,7 @@
             <xpath expr="//sheet" position="inside">
                 <group>
                     <field name="es_comisionado" readonly="1"/>
-                    <field name="estado_comisionado" attrs="{'readonly': [('es_comisionado', '=', False)]}"/>
+                    <field name="estado_comisionado" readonly="not es_comisionado"/>
                 </group>
             </xpath>
         </field>

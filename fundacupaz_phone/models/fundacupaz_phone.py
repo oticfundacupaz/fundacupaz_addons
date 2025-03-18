@@ -49,3 +49,10 @@ class FundacupazPhone(models.Model):
     municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio")
     cuadrante = fields.Char("Cuadrante")
     observaciones = fields.Char("Observaciones")
+
+    @api.constrains('estado')
+    def _check_estado_comisionado(self):
+        for record in self:
+            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
+            if record.estado.id != user_estado_id:
+                raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
