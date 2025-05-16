@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class FundacupazPC(models.Model):
@@ -28,6 +28,11 @@ class FundacupazPC(models.Model):
             ('DESINCORPORADA', 'DESINCORPORADA')
         ], string='Estatus')
     observaciones = fields.Char("Observaciones")
-    # estado = fields.Many2one('res.country.state', domain="[('country_id.name','=','Venezuela')]", string="Estado")
-    # municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]",
-    #                             string="Municipio")
+
+
+    @api.constrains('name', 'serial')
+    def _check_pc_serial(self):
+        for record in self:
+            existing_records = record.env['fundacupaz.pc'].search([('name', '=', record.name.id), ('serial', '=', record.serial.id), ('id', '!=', record.id)])
+        if existing_records:
+            raise ValidationError("Los valores del nombre del producto y el serial deben ser únicos.")

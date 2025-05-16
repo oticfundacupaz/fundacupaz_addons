@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+                                <!--categoria de grupo en usuario -->
+        <!--##########################################################################################-->
+        <record model="ir.module.category" id="module_category_fundacupaz_administracion_menu">
+            <field name="name">Fundacupaz Administracion</field>
+            <field name="sequence">1000</field>
+        </record>
+        <!--administrador fundacupaz -->
+        <!--##########################################################################################-->
+        <record id="group_hoja_de_ruta_admin" model="res.groups">
+            <field name="name">Administrador de Hoja de Ruta</field>
+            <field name="category_id" ref="hoja_de_ruta.module_category_fundacupaz_administracion_menu"/>
+        </record>
+        <!--usuario solo lectura fundacupaz -->
+        <!--##########################################################################################-->
+        <record id="group_hoja_de_ruta_lector" model="res.groups">
+            <field name="name">Lector de Hoja de Ruta</field>
+            <field name="category_id" ref="hoja_de_ruta.module_category_fundacupaz_administracion_menu"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,160 @@
+<odoo>
+    <record id="view_hoja_de_ruta_form" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.form</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <form string="Hoja de Ruta">
+                <header><field name="estado" widget="statusbar"/></header>
+                <sheet>
+                    <field name="porcentaje_progreso" widget="progressbar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Número de Proceso"/></h1>
+                    </div>
+                    <label for="objeto" string="Objeto"/>
+                    <field name="objeto" nolabel="1" placeholder="Objeto del Proceso"/>
+                    <group>
+                        <group>
+                            <field name="correlativo"/>
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin_prevista"/>
+                        </group>
+                        <group>
+                            <field name="institucion"/>
+                            <field name="nombre_proveedor"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Seguimiento del Proceso">
+                            <field name="lineas_ids">
+                                <list editable="bottom">
+                                    <field name="paso_id"/>
+                                    <field name="completado"/>
+                                    <field name="fecha"/>
+                                    <field name="observaciones"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_list" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.list</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <list string="Hojas de Ruta">
+                <field name="name"/>
+                <field name="correlativo"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin_prevista"/>
+                <field name="porcentaje_progreso" widget="progressbar"/>
+                <field name="estado" widget="badge" decoration-success="estado == 'ejecutada'" decoration-info="estado == 'en_ejecucion'" decoration-warning="estado == 'por_ejecutar'" decoration-danger="estado == 'cancelada'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_kanban" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.kanban</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <kanban string="Hojas de Ruta" class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="objeto"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin_prevista"/>
+                <field name="porcentaje_progreso"/>
+                <field name="estado"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_kanban_record">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </div>
+                                <span class="o_kanban_record_subtitle">
+                                    <field name="estado" widget="label_selection" options="{'classes': {'por_ejecutar': 'warning', 'en_ejecucion': 'info', 'ejecutada': 'success', 'cancelada': 'danger'}}"/>
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="porcentaje_progreso" widget="progressbar"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="fecha_fin_prevista" options='{"format": "dd/MM/yyyy"}'/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_pivot" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.pivot</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Hojas de Ruta">
+                <field name="estado" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_calendar" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.calendar</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendario de Hojas de Ruta" date_start="fecha_inicio" date_stop="fecha_fin_prevista" color="estado">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_graph" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.graph</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <graph string="Gráfico de Hojas de Ruta">
+                <field name="estado"/>
+                <field name="porcentaje_progreso" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_search" model="ir.ui.view">
+        <field name="name">hoja_de_ruta.search</field>
+        <field name="model">hoja.de.ruta</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Hojas de Ruta">
+                <field name="name" string="Número de Proceso"/>
+                <field name="objeto"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin_prevista"/>
+                <field name="estado"/>
+                <filter string="Por Ejecutar" name="por_ejecutar" domain="[('estado', '=', 'por_ejecutar')]"/>
+                <filter string="En Ejecución" name="en_ejecucion" domain="[('estado', '=', 'en_ejecucion')]"/>
+                <filter string="Ejecutadas" name="ejecutadas" domain="[('estado', '=', 'ejecutada')]"/>
+                <filter string="Canceladas" name="canceladas" domain="[('estado', '=', 'cancelada')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hoja_de_ruta" model="ir.actions.act_window">
+        <field name="name">Hojas de Ruta</field>
+        <field name="res_model">hoja.de.ruta</field>
+        <field name="view_mode">list,kanban,form,pivot,calendar,graph</field>
+        <field name="search_view_id" ref="view_hoja_de_ruta_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree una nueva Hoja de Ruta
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hoja_de_ruta_root" name="Hoja de Ruta" sequence="10"/>
+    <menuitem id="menu_hoja_de_ruta" name="Hojas de Ruta" parent="menu_hoja_de_ruta_root" action="action_hoja_de_ruta" sequence="10"/>
+
+</odoo>

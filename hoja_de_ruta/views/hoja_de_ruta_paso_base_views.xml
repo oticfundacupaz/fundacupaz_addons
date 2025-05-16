@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_hoja_de_ruta_paso_base_list" model="ir.ui.view">
+        <field name="name">hoja_de_ruta_paso_base.list</field>
+        <field name="model">hoja.de.ruta.paso.base</field>
+        <field name="arch" type="xml">
+            <list string="Pasos Base de la Hoja de Ruta">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hoja_de_ruta_paso_base_form" model="ir.ui.view">
+        <field name="name">hoja_de_ruta_paso_base.form</field>
+        <field name="model">hoja.de.ruta.paso.base</field>
+        <field name="arch" type="xml">
+            <form string="Paso Base de la Hoja de Ruta">
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hoja_de_ruta_paso_base" model="ir.actions.act_window">
+        <field name="name">Pasos Base de la Hoja de Ruta</field>
+        <field name="res_model">hoja.de.ruta.paso.base</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hoja_de_ruta_paso_base" name="Pasos Base" parent="menu_hoja_de_ruta_root" action="action_hoja_de_ruta_paso_base" sequence="30"/>
+</odoo>

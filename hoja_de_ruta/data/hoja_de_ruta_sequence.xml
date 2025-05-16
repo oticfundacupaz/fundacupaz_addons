@@ -1,0 +1,12 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_hoja_de_ruta" model="ir.sequence">
+            <field name="name">Correlativo Hoja de Ruta</field>
+            <field name="code">hoja.de.ruta.correlativo</field>
+            <field name="prefix">RUTA</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range">0</field>
+        </record>
+    </data>
+</odoo>
