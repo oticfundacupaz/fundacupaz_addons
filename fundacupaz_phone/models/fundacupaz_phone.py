@@ -10,6 +10,10 @@ class FundacupazPhone(models.Model):
     _name = "fundacupaz.phone"
     _inherit = "mail.thread"
 
+    number_phone = fields.Char("Número Telefono")
+    marca_phone = fields.Char("Marca")
+    modelo_phone = fields.Char("Modelo")
+    imei_phone = fields.Char("IMEI")
     number_phone = fields.Char("Numero Telefono")
     operadora = fields.Selection(
         selection=[
@@ -18,14 +22,16 @@ class FundacupazPhone(models.Model):
             ('DIGITEL', 'DIGITEL')
         ],
     string='Operadora')
-    planes = fields.Char(string="Planesss")
     planes = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
             ('MOVILNET EMPRENDE 10', 'MOVILNET EMPRENDE 10'),
             ('MOVISTAR PLUS 25 GB', 'MOVISTAR PLUS 25 GB'),
             ('MOVISTAR PLUS 10 GB', 'MOVISTAR PLUS 10 GB'),
-            ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB')
+            ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB'),
+            ('DIGITEL INTELIGENTE PLUS 2GB', 'DIGITEL INTELIGENTE PLUS 2GB'),
+            ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
+            ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
         ],
         string='Planes')
     ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado")
@@ -37,9 +43,16 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus')
+    string='Estatus', default=False)
 
     estado = fields.Many2one('res.country.state',domain="[('country_id.name','=','Venezuela')]", string="Estado")
     municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio")
     cuadrante = fields.Char("Cuadrante")
     observaciones = fields.Char("Observaciones")
+
+    @api.constrains('estado')
+    def _check_estado_comisionado(self):
+        for record in self:
+            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
+            if record.estado.id != user_estado_id:
+                raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")

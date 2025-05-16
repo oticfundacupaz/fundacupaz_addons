@@ -160,12 +160,7 @@
             <field name="comment">fundacupaz Menu Telefono</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
         </record>
-        <record id="menu_fundacupaz_phone" model="ir.ui.menu">
-            <field name="action" ref="action_fundacupaz_phone"/>
-            <field name="name">Telefonos</field>
-            <field name="sequence">10000</field>
-            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>
-        </record>
+
                                       <!--menu flota -->
         <!--##########################################################################################-->
         <record id="grupo_fundacupaz_menu_vehiculo" model="res.groups">
@@ -214,8 +209,52 @@
             <field name="comment"> fundacupaz Menu Aplicaciones</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
         </record>
+
         <record id="base.menu_management" model="ir.ui.menu">
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Aplicaciones')])]"/>
+        </record>
+
+        <!-- Grupo de seguridad para ocultar el menú -->
+        <record id="grupo_ocultar_menus" model="res.groups">
+            <field name="name">Grupo: Ocultar Otros Menús</field>
+            <field name="comment">Grupo para ocultar menús específicos</field>
+            <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
+        </record>
+
+        <record id="project_todo.menu_todo_todos" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <record id="utm.menu_link_tracker_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
+
+        <!-- Nueva Categoría -->
+        <record id="module_category_cuadrantes_paz" model="ir.module.category">
+            <field name="name">Cuadrantes de Paz</field>
+            <field name="description">Grupos relacionados con los Comisionados Estatales de la Gran Misión Cuadrantes de Paz</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_comisionados_estatales" model="res.groups">
+            <field name="name">Comisionados Estadales - Gran Misión Cuadrantes de Paz</field>
+            <field name="category_id" ref="module_category_cuadrantes_paz"/>
+            <field name="comment">Este grupo identifica a los usuarios comisionados estadales para la Gran Misión Cuadrantes de Paz</field>
+        </record>
+
+        <record id="fundacupaz_phone_rule_comisionados" model="ir.rule">
+            <field name="name">Regla: Filtrar fundacupaz.phone por estado para comisionados</field>
+            <field name="model_id" ref="model_fundacupaz_phone"/>
+            <field name="domain_force">[('estado', '=', (user.estado_comisionado.id if user.estado_comisionado else False))]</field>
+            <field name="groups" eval="[(4, ref('group_comisionados_estatales'))]"/>
         </record>
 
     </data>
