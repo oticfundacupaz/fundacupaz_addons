@@ -250,12 +250,12 @@
             <field name="comment">Este grupo identifica a los usuarios comisionados estadales para la Gran Misión Cuadrantes de Paz</field>
         </record>
 
-<!--        <record id="fundacupaz_phone_rule_comisionados" model="ir.rule">-->
-<!--            <field name="name">Regla: Filtrar fundacupaz.phone por estado para comisionados</field>-->
-<!--            <field name="model_id" ref="model_fundacupaz_phone"/>-->
-<!--            <field name="domain_force">[('estado', '=', (user.estado_comisionado.id if user.estado_comisionado else False))]</field>-->
-<!--            <field name="groups" eval="[(4, ref('fundacupaz_phone.group_comisionados_estatales'))]"/>-->
-<!--        </record>-->
+        <record id="fundacupaz_phone_rule_comisionados" model="ir.rule">
+            <field name="name">Regla: Filtrar fundacupaz.phone por estado para comisionados</field>
+            <field name="model_id" ref="model_fundacupaz_phone"/>
+            <field name="domain_force">[('estado', '=', (user.estado_comisionado.id if user.estado_comisionado else False))]</field>
+            <field name="groups" eval="[(4, ref('fundacupaz_phone.group_comisionados_estatales'))]"/>
+        </record>
 
     </data>
 </odoo>
