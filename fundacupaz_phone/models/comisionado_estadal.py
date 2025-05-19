@@ -16,12 +16,12 @@ class ResUsers(models.Model):
         string="Estado"
     )
 
-    @api.depends('groups_id')
-    def _compute_es_comisionado(self):
-        """Detectar si el usuario pertenece al grupo de comisionados"""
-        comisionado_group = self.env.ref('fundacupaz_phone.group_comisionados_estatales')
-        for user in self:
-            user.es_comisionado = comisionado_group in user.groups_id
+    # @api.depends('groups_id')
+    # def _compute_es_comisionado(self):
+    #     """Detectar si el usuario pertenece al grupo de comisionados"""
+    #     comisionado_group = self.env.ref('fundacupaz_phone.group_comisionados_estatales')
+    #     for user in self:
+    #         user.es_comisionado = comisionado_group in user.groups_id
 
     @api.model
     def create(self, vals):
