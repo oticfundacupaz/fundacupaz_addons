@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_delivery_document_fundacupaz_inherit" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[@t-if='not o.signature']" position="before">
+            <table style="width: 100%; margin-top: 50px; page-break-inside: avoid; border-collapse: collapse; border: 1px solid black;"> <tbody>
+                    <tr style="text-align: center; vertical-align: bottom;">
+                        <td style="width: 33.3%; height: 5cm; border: 1px solid black;"> <div> </div>
+                            Cordinacion de Compras
+                        </td>
+                        <td style="width: 33.3%; height: 5cm; border: 1px solid black;"> <div> </div>
+                            [SELLO]
+                        </td>
+                        <td style="width: 33.3%; height: 5cm; font-weight: bold; border: 1px solid black;"> <div> </div>
+                            <t t-if="o.picking_type_id.code == 'incoming'">
+                                Firma del Proveedor: <t t-esc="o.partner_id.name or ''"/>
+                            </t>
+                            <t t-elif="o.picking_type_id.code == 'outgoing'">
+                                Firma del Receptor
+                            </t>
+                            <t t-elif="o.picking_type_id.code == 'internal'">
+                                Firma del Responsable: <t t-esc="o.partner_id.name or ''"/>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+</odoo>

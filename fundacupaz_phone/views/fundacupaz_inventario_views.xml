@@ -17,9 +17,9 @@
                      <field name="sale_ok" invisible="True"/>
                 </xpath>
 
-                <xpath expr="//field[@name='purchase_ok']" position='replace' readonly="1">
-                     <field name="purchase_ok" invisible="True"/>
-                </xpath>
+<!--                <xpath expr="//field[@name='purchase_ok']" position='replace' readonly="1">-->
+<!--                     <field name="purchase_ok" invisible="True"/>-->
+<!--                </xpath>-->
             </field>
         </record>
 
@@ -71,7 +71,7 @@
                 </xpath>
 
                 <xpath expr="//sheet//group//group//field[@name='picking_type_id']" position="after">
-                    <field name="tipo_entrega" invisible="picking_type_code != 'outgoing'"/>
+                    <field name="tipo_entrega"/>
                 </xpath>
 
 

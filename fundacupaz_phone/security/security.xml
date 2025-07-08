@@ -150,7 +150,7 @@
             <field name="action" ref="fundacupaz_phone.action_fundacupaz_pc"/>
             <field name="name">PC</field>
             <field name="sequence">10001</field>
-            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_pc')])]"/>
+<!--            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_pc')])]"/>-->
         </record>
                                         <!--menu Telefono -->
         <!--##########################################################################################-->
