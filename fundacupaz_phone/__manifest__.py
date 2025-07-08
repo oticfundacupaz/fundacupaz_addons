@@ -6,8 +6,8 @@
     'data': [
         'views/fundacupaz_pc_views.xml',
         'security/security.xml',
-        #'views/fundacupaz_pc_views.xml',
-        # 'security/security.xml',
+        'views/fundacupaz_pc_views.xml',
+         'security/security.xml',
         'security/ir.model.access.csv',
         'views/comisionado_estadal.xml',
         'views/fundacupaz_views.xml',

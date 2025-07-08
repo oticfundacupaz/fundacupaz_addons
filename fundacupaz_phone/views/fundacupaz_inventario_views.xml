@@ -17,9 +17,9 @@
                      <field name="sale_ok" invisible="True"/>
                 </xpath>
 
-<!--                <xpath expr="//field[@name='purchase_ok']" position='replace' readonly="1">-->
-<!--                     <field name="purchase_ok" invisible="True"/>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='purchase_ok']" position='replace' readonly="1">
+                     <field name="purchase_ok" invisible="True"/>
+                </xpath>
             </field>
         </record>
 
