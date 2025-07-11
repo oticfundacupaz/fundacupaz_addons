@@ -17,13 +17,16 @@
                                 <field name="modelo_phone"/>
                                 <field name="imei_phone"/>
                                 <field name="persona_asignada" required="True"/>
+                                <field name="ente" required="True"/>
                             </group>
                             <group>
-                                <field name="ente" required="True"/>
-                                <field name="estado" required="True"/>
-                                <field name="municipio" required="True"/>
-                                <field name="cuadrante" required="True"/>
+                                <field name="es_cuadrante"/>  <field name="estado" required="True" invisible="is_cuadrante_fields_invisible"/>
+                                <field name="municipio" required="True" invisible="is_cuadrante_fields_invisible"/>
+                                <field name="cuadrantes" required="True" invisible="is_cuadrante_fields_invisible"/>
                                 <field name="observaciones" required="True"/>
+                                <field name="facturado_por" required="True"/>
+                                <field name="revisado"/>
+                                <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>
                             </group>
                         </group>
                     </sheet>
@@ -48,8 +51,11 @@
                     <field name="estatus"/>
                     <field name="estado" required="True"/>
                     <field name="municipio" required="True"/>
-                    <field name="cuadrante" required="True"/>
+                    <field name="cuadrantes" required="True"/>
                     <field name="observaciones" required="True"/>
+                    <field name="facturado_por" optional="hide"/>
+                    <field name="revisado"/>
+                    <field name="fecha_revision"/>
                 </list>
             </field>
         </record>
@@ -85,7 +91,8 @@
                     <field name="imei_phone" />
                     <field name="marca_phone" />
                     <field name="persona_asignada" />
-                    <field name="cuadrante" />
+                    <field name="cuadrantes" />
+                    <field name="facturado_por" />
                     <filter string="Líneas Activas" name="estatus" domain="[('estatus','=','ACTIVA')]"/>
                     <filter string="Líneas Inactivas" name="estatus" domain="[('estatus','=','INACTIVA')]"/>
                     <filter string="Líneas Suspendidas" name="estatus" domain="[('estatus','=','SUSPENDIDA')]"/>
@@ -101,7 +108,7 @@
                     <field name="number_phone"/>
                     <field name="marca_phone"/>
                     <field name="imei_phone"/>
-                    <field name="cuadrante"/>
+                    <field name="cuadrantes"/>
                     <field name="persona_asignada"/>
                     <field name="estatus"/>
                     <templates>
@@ -109,7 +116,7 @@
                             <field name="number_phone" class="fw-bolder"/>
                             <field name="marca_phone"/>
                             <field name="imei_phone"/>
-                            <field name="cuadrante"/>
+                            <field name="cuadrantes"/>
                             <field name="persona_asignada"/>
                             <field name="estatus"/>
                         </t>

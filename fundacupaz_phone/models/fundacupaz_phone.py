@@ -10,18 +10,17 @@ class FundacupazPhone(models.Model):
     _name = "fundacupaz.phone"
     _inherit = "mail.thread"
 
-    number_phone = fields.Char("Número Telefono")
-    marca_phone = fields.Char("Marca")
-    modelo_phone = fields.Char("Modelo")
-    imei_phone = fields.Char("IMEI")
-    number_phone = fields.Char("Numero Telefono")
+    number_phone = fields.Char("Número Telefono", tracking=True)
+    marca_phone = fields.Char("Marca", tracking=True)
+    modelo_phone = fields.Char("Modelo", tracking=True)
+    imei_phone = fields.Char("IMEI", tracking=True)
     operadora = fields.Selection(
         selection=[
             ('MOVILNET', 'MOVILNET'),
             ('MOVISTAR', 'MOVISTAR'),
             ('DIGITEL', 'DIGITEL')
         ],
-    string='Operadora')
+    string='Operadora', tracking=True)
     planes = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -33,9 +32,9 @@ class FundacupazPhone(models.Model):
             ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
             ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
         ],
-        string='Planes')
-    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado")
-    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada" )
+        string='Planes', Tracking=True)
+    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", Tracking=True)
+    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", Tracking=True )
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -43,16 +42,66 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus', default=False)
+    string='Estatus', default=False, Tracking=True)
 
-    estado = fields.Many2one('res.country.state',domain="[('country_id.name','=','Venezuela')]", string="Estado")
-    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio")
-    cuadrante = fields.Char("Cuadrante")
-    observaciones = fields.Char("Observaciones")
+    estado = fields.Many2one(
+        'res.country.state',
+        domain=[('country_id.name','=','Venezuela')],
+        string="Estado", Tracking=True
+    )
+    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", Tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", Tracking=True)
+    observaciones = fields.Char("Observaciones", Tracking=True)
+    facturado_por = fields.Selection(
+        selection=[
+            ('Fundacupaz', 'Fundacupaz'),
+            ('MIJ', 'MIJ'),
+            ('Otros', 'Otros')
+        ],
+        string='Facturado por:', tracking=True)
+    revisado = fields.Boolean("Revisado", Tracking=True)
+    fecha_revision = fields.Date("Fecha de Revisión", Trackin=True)
+
+    is_fecha_revision_invisible = fields.Boolean(
+        compute='_compute_is_fecha_revision_invisible',
+        store=False, Tracking=True
+    )
+
+    @api.depends('revisado')
+    def _compute_is_fecha_revision_invisible(self):
+        for record in self:
+            record.is_fecha_revision_invisible = not record.revisado
+
+    @api.onchange('revisado')
+    def _onchange_revisado(self):
+        """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
+        if not self.revisado:
+            self.fecha_revision = False
+
+    es_cuadrante = fields.Boolean("Es un cuadrante?")
+
+    is_cuadrante_fields_invisible = fields.Boolean(
+        compute='_compute_is_cuadrante_fields_invisible',
+        store=False
+    )
+
+    @api.depends('es_cuadrante')
+    def _compute_is_cuadrante_fields_invisible(self):
+        for record in self:
+            record.is_cuadrante_fields_invisible = not record.es_cuadrante
+
+    @api.onchange('es_cuadrante')
+    def _onchange_es_cuadrante(self):
+        """Si 'Es un cuadrante?' se desmarca, vaciar 'Estado', 'Municipio' y 'Cuadrante'."""
+        if not self.es_cuadrante:
+            self.estado = False
+            self.municipio = False
+            self.cuadrantes = False
 
     @api.constrains('estado')
     def _check_estado_comisionado(self):
         for record in self:
             user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
-            if record.estado.id != user_estado_id:
-                raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
+            if user_estado_id:
+                if record.estado.id != user_estado_id:
+                    raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")

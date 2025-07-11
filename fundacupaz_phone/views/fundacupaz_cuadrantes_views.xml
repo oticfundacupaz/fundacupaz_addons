@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_fundacupaz_cuadrante" model="ir.ui.view">
+            <field name="name">fundacupaz.cuadrante.form</field>
+            <field name="model">fundacupaz.cuadrante</field>
+            <field name="arch" type="xml">
+                <form string="Fundacupaz">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="True"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_fundacupaz_cuadrante" model="ir.ui.view">
+            <field name="name">fundacupaz.cuadrante.tree</field>
+            <field name="model">fundacupaz.cuadrante</field>
+            <field name="arch" type="xml">
+                <list string="Fundacupaz">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_fundacupaz_cuadrante" model="ir.actions.act_window">
+            <field name="name">Cuadrantes</field>
+            <field name="res_model">fundacupaz.cuadrante</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_tree_fundacupaz_cuadrante"/>
+        </record>
+
+        <menuitem id="menu_fundacupaz_cuadrante" name="Cuadrante" parent="base.menu_administration"
+            sequence="10001" action="action_fundacupaz_cuadrante"/>
+    </data>
+</odoo>
