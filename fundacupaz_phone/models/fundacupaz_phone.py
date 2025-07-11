@@ -32,9 +32,9 @@ class FundacupazPhone(models.Model):
             ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
             ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
         ],
-        string='Planes', Tracking=True)
-    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", Tracking=True)
-    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", Tracking=True )
+        string='Planes', tracking=True)
+    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", tracking=True )
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -42,16 +42,16 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus', default=False, Tracking=True)
+    string='Estatus', default=False, tracking=True)
 
     estado = fields.Many2one(
         'res.country.state',
         domain=[('country_id.name','=','Venezuela')],
-        string="Estado", Tracking=True
+        string="Estado", tracking=True
     )
-    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", Tracking=True)
-    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", Tracking=True)
-    observaciones = fields.Char("Observaciones", Tracking=True)
+    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", tracking=True)
+    observaciones = fields.Char("Observaciones", tracking=True)
     facturado_por = fields.Selection(
         selection=[
             ('Fundacupaz', 'Fundacupaz'),
@@ -59,12 +59,12 @@ class FundacupazPhone(models.Model):
             ('Otros', 'Otros')
         ],
         string='Facturado por:', tracking=True)
-    revisado = fields.Boolean("Revisado", Tracking=True)
+    revisado = fields.Boolean("Revisado", tracking=True)
     fecha_revision = fields.Date("Fecha de Revisión", Trackin=True)
 
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
-        store=False, Tracking=True
+        store=False, tracking=True
     )
 
     @api.depends('revisado')

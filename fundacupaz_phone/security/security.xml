@@ -221,9 +221,9 @@
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
         </record>
 
-<!--        <record id="project_todo.menu_todo_todos" model="ir.ui.menu">-->
-<!--            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>-->
-<!--        </record>-->
+        <record id="project_todo.menu_todo_todos" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
+        </record>
 
         <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
