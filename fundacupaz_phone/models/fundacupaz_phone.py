@@ -60,7 +60,7 @@ class FundacupazPhone(models.Model):
         ],
         string='Facturado por:', tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
-    fecha_revision = fields.Date("Fecha de Revisión", Trackin=True)
+    fecha_revision = fields.Date("Fecha de Revisión", Tracking=True)
 
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
@@ -78,7 +78,7 @@ class FundacupazPhone(models.Model):
         if not self.revisado:
             self.fecha_revision = False
 
-    es_cuadrante = fields.Boolean("Es un cuadrante?")
+    es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
 
     is_cuadrante_fields_invisible = fields.Boolean(
         compute='_compute_is_cuadrante_fields_invisible',
