@@ -60,7 +60,7 @@ class FundacupazPhone(models.Model):
         ],
         string='Facturado por:', tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
-    fecha_revision = fields.Date("Fecha de Revisión", Tracking=True)
+    fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
 
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
