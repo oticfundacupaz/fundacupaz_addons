@@ -43,7 +43,6 @@ class FundacupazPhone(models.Model):
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
     string='Estatus', default=False, tracking=True)
-
     estado = fields.Many2one(
         'res.country.state',
         domain=[('country_id.name','=','Venezuela')],
@@ -58,14 +57,27 @@ class FundacupazPhone(models.Model):
             ('MIJ', 'MIJ'),
             ('Otros', 'Otros')
         ],
-        string='Facturado por:', tracking=True)
+        string='Facturado a:', tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
     fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
-
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
         store=False, tracking=True
     )
+    es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
+    is_cuadrante_fields_invisible = fields.Boolean(
+        compute='_compute_is_cuadrante_fields_invisible',
+        store=False
+    )
+    llamado = fields.Boolean("Llamado", tracking=True)
+    telf_verificado = fields.Selection(
+        selection=[
+            ('ver01', 'Corresponde a Cuadrante'),
+            ('ver02', 'No corresponde a Cuadrante'),
+            ('ver03', 'No contesta'),
+            ('ver04', 'Fuera de Linea')
+        ],
+    string='Telefono Verificado', default=False, tracking=True)
 
     @api.depends('revisado')
     def _compute_is_fecha_revision_invisible(self):
@@ -77,13 +89,6 @@ class FundacupazPhone(models.Model):
         """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
         if not self.revisado:
             self.fecha_revision = False
-
-    es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
-
-    is_cuadrante_fields_invisible = fields.Boolean(
-        compute='_compute_is_cuadrante_fields_invisible',
-        store=False
-    )
 
     @api.depends('es_cuadrante')
     def _compute_is_cuadrante_fields_invisible(self):

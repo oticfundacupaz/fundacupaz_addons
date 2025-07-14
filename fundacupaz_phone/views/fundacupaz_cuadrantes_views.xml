@@ -8,8 +8,12 @@
                 <form string="Fundacupaz">
                     <sheet>
                         <group>
-                            <group>
+                            <group string="col_izq">
                                 <field name="name" required="True"/>
+                            </group>
+                            <group string="col_der">
+                                <field name="estado"/>
+                                <field name="municipio"/>
                             </group>
                         </group>
                     </sheet>
@@ -24,6 +28,8 @@
             <field name="arch" type="xml">
                 <list string="Fundacupaz">
                     <field name="name"/>
+                    <field name="estado"/>
+                    <field name="municipio"/>
                 </list>
             </field>
         </record>

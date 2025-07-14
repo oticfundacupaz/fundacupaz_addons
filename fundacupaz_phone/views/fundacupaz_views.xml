@@ -27,6 +27,8 @@
                                 <field name="facturado_por" required="True"/>
                                 <field name="revisado"/>
                                 <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>
+                                <field name="llamado"/>
+                                <field name="telf_verificado" invisible="not llamado"/>
                             </group>
                         </group>
                     </sheet>
@@ -42,20 +44,22 @@
                 <list string="Fundacupaz">
                     <field name="number_phone"/>
                     <field name="operadora"/>
-                    <field name="planes"/>
+                    <field name="planes" optional="show"/>
                     <field name="marca_phone" optional="hide"/>
                     <field name="modelo_phone" optional="hide"/>
                     <field name="imei_phone" optional="hide"/>
                     <field name="ente"/>
                     <field name="persona_asignada"/>
-                    <field name="estatus"/>
-                    <field name="estado" required="True"/>
-                    <field name="municipio" required="True"/>
-                    <field name="cuadrantes" required="True"/>
-                    <field name="observaciones" required="True"/>
+                    <field name="estado"/>
+                    <field name="municipio" optional="show"/>
+                    <field name="cuadrantes" optional="show"/>
                     <field name="facturado_por" optional="hide"/>
-                    <field name="revisado"/>
-                    <field name="fecha_revision"/>
+                    <field name="revisado" optional="show"/>
+                    <field name="fecha_revision" optional="hide"/>
+                    <field name="llamado" optional="hide"/>
+                    <field name="telf_verificado" optional="hide"/>
+                    <field name="estatus"/>
+                    <field name="observaciones" optional="hide"/>
                 </list>
             </field>
         </record>
@@ -96,6 +100,11 @@
                     <filter string="Líneas Activas" name="estatus" domain="[('estatus','=','ACTIVA')]"/>
                     <filter string="Líneas Inactivas" name="estatus" domain="[('estatus','=','INACTIVA')]"/>
                     <filter string="Líneas Suspendidas" name="estatus" domain="[('estatus','=','SUSPENDIDA')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Telefonos Revisados" name="revisado" domain="[]" context="{'group_by': 'revisado'}"/>
+                        <filter string="Telefonos Llamados" name="llamado" domain="[]" context="{'group_by': 'llamado'}"/>
+                        <filter string="Estatus" name="estatus" domain="[]" context="{'group_by': 'estatus'}"/>
+                    </group>
                 </search>
              </field>
         </record>
