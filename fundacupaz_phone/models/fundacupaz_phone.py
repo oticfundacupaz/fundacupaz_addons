@@ -110,3 +110,18 @@ class FundacupazPhone(models.Model):
             if user_estado_id:
                 if record.estado.id != user_estado_id:
                     raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
+
+    # # Nuevo campo y método para el color de Kanban
+    # kanban_color_status = fields.Integer(compute='_compute_kanban_color_status', store=True)
+    #
+    # @api.depends('estatus')
+    # def _compute_kanban_color_status(self):
+    #     for record in self:
+    #         if record.estatus == 'ACTIVA':
+    #             record.kanban_color_status = 2  # Color azul/verdoso en Odoo
+    #         elif record.estatus == 'INACTIVA':
+    #             record.kanban_color_status = 1  # Color rojizo en Odoo
+    #         elif record.estatus == 'SUSPENDIDA':
+    #             record.kanban_color_status = 10 # Color anaranjado/amarillento en Odoo
+    #         else:
+    #             record.kanban_color_status = 0 # Color por defecto

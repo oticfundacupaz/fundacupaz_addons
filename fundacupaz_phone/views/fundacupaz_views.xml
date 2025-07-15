@@ -6,31 +6,65 @@
             <field name="model">fundacupaz.phone</field>
             <field name="arch" type="xml">
                 <form string="Fundacupaz">
-                    <header><field name="estatus" widget="statusbar" required="True" options="{'clickable': '1'}"/></header>
+                    <header>
+                        <field name="estatus" widget="statusbar" required="True"
+                               options="{'clickable': '1', 'colors': {'ACTIVA': 'success', 'INACTIVA': 'danger', 'SUSPENDIDA': 'warning'}}"/>
+                    </header>
                     <sheet>
                         <group>
-                            <group>
+                            <group string="Información del Dispositivo">
                                 <field name="number_phone" required="True"/>
-                                <field name="operadora" required="True"/>
-                                <field name="planes" required="True"/>
                                 <field name="marca_phone"/>
                                 <field name="modelo_phone"/>
                                 <field name="imei_phone"/>
+                            </group>
+                            <group string="Detalles de Operadora y Plan">
+                                <field name="operadora" required="True"/>
+                                <field name="planes" required="True"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Asignación del Teléfono">
                                 <field name="persona_asignada" required="True"/>
                                 <field name="ente" required="True"/>
                             </group>
-                            <group>
-                                <field name="es_cuadrante"/>  <field name="estado" required="True" invisible="is_cuadrante_fields_invisible"/>
-                                <field name="municipio" required="True" invisible="is_cuadrante_fields_invisible"/>
-                                <field name="cuadrantes" required="True" invisible="is_cuadrante_fields_invisible"/>
-                                <field name="observaciones" required="True"/>
-                                <field name="facturado_por" required="True"/>
-                                <field name="revisado"/>
-                                <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>
-                                <field name="llamado"/>
-                                <field name="telf_verificado" invisible="not llamado"/>
-                            </group>
+                            <group/>
                         </group>
+                        <group string="Observaciones Adicionales">
+                            <field name="observaciones" nolabel="1" colspan="2"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Ubicación y Cuadrante" name="location_details">
+                                <group>
+                                    <label for="es_cuadrante"/>
+                                    <div>
+                                        <field name="es_cuadrante"/>
+                                    </div>
+                                </group>
+
+                                <group invisible="not es_cuadrante">
+                                    <field name="estado" required="True"/>
+                                    <field name="municipio" required="True"/>
+                                    <field name="cuadrantes" required="True"/>
+                                </group>
+                            </page>
+
+                            <page string="Gestión y Verificación" name="management_details">
+                                <group>
+                                    <group string="Proceso de Facturación y Revisión">
+                                        <field name="facturado_por" required="True"/>
+                                        <field name="revisado"/>
+                                        <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>
+                                    </group>
+                                    <group string="Verificación Telefónica">
+                                        <field name="llamado"/>
+                                        <field name="telf_verificado" invisible="not llamado"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
                     <chatter/>
                 </form>
@@ -41,7 +75,10 @@
             <field name="name">fundacupaz.phone.tree</field>
             <field name="model">fundacupaz.phone</field>
             <field name="arch" type="xml">
-                <list string="Fundacupaz">
+                <list string="Fundacupaz"
+                    decoration-success="estatus == 'ACTIVA'"
+                    decoration-danger="estatus == 'INACTIVA'"
+                    decoration-warning="estatus == 'SUSPENDIDA'">
                     <field name="number_phone"/>
                     <field name="operadora"/>
                     <field name="planes" optional="show"/>
@@ -95,8 +132,6 @@
                     <field name="imei_phone" />
                     <field name="marca_phone" />
                     <field name="persona_asignada" />
-                    <field name="cuadrantes" />
-                    <field name="facturado_por" />
                     <filter string="Líneas Activas" name="estatus" domain="[('estatus','=','ACTIVA')]"/>
                     <filter string="Líneas Inactivas" name="estatus" domain="[('estatus','=','INACTIVA')]"/>
                     <filter string="Líneas Suspendidas" name="estatus" domain="[('estatus','=','SUSPENDIDA')]"/>
@@ -116,18 +151,46 @@
                 <kanban class="o_kanban_mobile" sample="1">
                     <field name="number_phone"/>
                     <field name="marca_phone"/>
+                    <field name="modelo_phone"/>
                     <field name="imei_phone"/>
                     <field name="cuadrantes"/>
                     <field name="persona_asignada"/>
                     <field name="estatus"/>
+
                     <templates>
-                        <t t-name="card">
-                            <field name="number_phone" class="fw-bolder"/>
-                            <field name="marca_phone"/>
-                            <field name="imei_phone"/>
-                            <field name="cuadrantes"/>
-                            <field name="persona_asignada"/>
-                            <field name="estatus"/>
+                        <t t-name="card"> <div t-attf-class="oe_kanban_global_click_edit oe_semantic_html_override o_kanban_card d-flex flex-column"
+                                 style="background-color: {{ (record.estatus.raw_value == 'ACTIVA') ? '#D4EDDA' : (record.estatus.raw_value == 'INACTIVA') ? '#F8D7DA' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFF3CD' : '' }};
+                                        border: 1px solid {{ (record.estatus.raw_value == 'ACTIVA') ? '#28A745' : (record.estatus.raw_value == 'INACTIVA') ? '#DC3545' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFC107' : '' }};">
+                                <div class="oe_kanban_details d-flex flex-column">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_title">
+                                            <div>
+                                                <strong>Número:</strong> <field name="number_phone"/>
+                                            </div>
+                                            <div>
+                                                <strong>Marca:</strong> <field name="marca_phone"/>
+                                            </div>
+                                            <div>
+                                                <strong>Modelo:</strong> <field name="modelo_phone"/>
+                                            </div>
+                                            <div>
+                                                <strong>IMEI:</strong> <field name="imei_phone"/>
+                                            </div>
+                                            <div>
+                                                <strong>Persona Asignada:</strong> <field name="persona_asignada"/>
+                                            </div>
+                                            <div>
+                                                <strong>Cuadrante:</strong> <field name="cuadrantes"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom d-flex align-items-end justify-content-end mt-auto">
+                                        <div t-attf-style="color: {{ (record.estatus.raw_value == 'ACTIVA') ? '#28A745' : (record.estatus.raw_value == 'INACTIVA') ? '#DC3545' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFC107' : 'grey' }};">
+                                            <field name="estatus"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </t>
                     </templates>
                 </kanban>
