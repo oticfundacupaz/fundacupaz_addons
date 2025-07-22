@@ -60,7 +60,16 @@
                                     </group>
                                     <group string="Verificación Telefónica">
                                         <field name="llamado"/>
-                                        <field name="telf_verificado" invisible="not llamado"/>
+                                        <field name="telf_corresponde" widget="radio" options="{'horizontal': true}"
+                                               invisible="llamado == False"/>
+                                        <div invisible="llamado == False or telf_corresponde != 'no'">
+                                            <label for="motivo_seleccionado" string="Motivo:"/>
+                                            <field name="motivo_seleccionado" widget="radio" options="{'horizontal': true}"/>
+                                            <field name="motivo_otros_observaciones"
+                                                   placeholder="Especifique el motivo..."
+                                                   invisible="motivo_seleccionado != 'otros'"
+                                                   nolabel="1"/>
+                                        </div>
                                     </group>
                                 </group>
                             </page>
@@ -94,7 +103,6 @@
                     <field name="revisado" optional="show"/>
                     <field name="fecha_revision" optional="hide"/>
                     <field name="llamado" optional="hide"/>
-                    <field name="telf_verificado" optional="hide"/>
                     <field name="estatus"/>
                     <field name="observaciones" optional="hide"/>
                 </list>

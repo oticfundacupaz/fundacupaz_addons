@@ -54,7 +54,7 @@ class FundacupazPhone(models.Model):
     facturado_por = fields.Selection(
         selection=[
             ('Fundacupaz', 'Fundacupaz'),
-            ('MIJ', 'MIJ'),
+            ('MIJ', 'MPPIJP'),
             ('Otros', 'Otros')
         ],
         string='Facturado a:', tracking=True)
@@ -70,14 +70,53 @@ class FundacupazPhone(models.Model):
         store=False
     )
     llamado = fields.Boolean("Llamado", tracking=True)
-    telf_verificado = fields.Selection(
+
+    # --- INICIO DE CAMBIOS REQUERIDOS ---
+    # Se elimina el campo 'telf_verificado' y se agregan los nuevos campos.
+    telf_corresponde = fields.Selection(
         selection=[
-            ('ver01', 'Corresponde a Cuadrante'),
-            ('ver02', 'No corresponde a Cuadrante'),
-            ('ver03', 'No contesta'),
-            ('ver04', 'Fuera de Linea')
+            ('si', 'Sí'),
+            ('no', 'No')
         ],
-    string='Telefono Verificado', default=False, tracking=True)
+        string="¿Teléfono verificado corresponde?",
+        tracking=True
+    )
+    # MODIFICACIÓN: Campo de selección para los motivos
+    motivo_seleccionado = fields.Selection( #
+        selection=[
+            ('N/D', 'No Disponible'),
+            ('F/L', 'Fuera de línea / Apagado'),
+            ('N/A', 'No Asignado'),
+            ('S/D', 'Dañado / Suspendido por operadora'),
+            ('otros', 'Otros')
+        ],
+        string="Motivo",
+        tracking=True
+    )
+    motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
+
+    @api.onchange('llamado')
+    def _onchange_llamado(self):
+        """Si 'Llamado' se desmarca, limpia todos los campos de verificación."""
+        if not self.llamado:
+            self.telf_corresponde = False
+            self.motivo_seleccionado = False # CAMBIO AQUÍ
+            self.motivo_otros_observaciones = ''
+
+    @api.onchange('telf_corresponde')
+    def _onchange_telf_corresponde(self):
+        """Si la respuesta no es 'no', limpia los campos de motivo."""
+        if self.telf_corresponde != 'no':
+            self.motivo_seleccionado = False # CAMBIO AQUÍ
+            self.motivo_otros_observaciones = '' # Asegurarse de limpiar también las observaciones
+
+    @api.onchange('motivo_seleccionado') # NUEVO MÉTODO ONCHANGE
+    def _onchange_motivo_seleccionado(self):
+        """Si el motivo seleccionado no es 'Otros', limpia el campo de observaciones."""
+        if self.motivo_seleccionado != 'otros':
+            self.motivo_otros_observaciones = ''
+    # --- FIN DE CAMBIOS REQUERIDOS ---
+
 
     @api.depends('revisado')
     def _compute_is_fecha_revision_invisible(self):
@@ -106,22 +145,7 @@ class FundacupazPhone(models.Model):
     @api.constrains('estado')
     def _check_estado_comisionado(self):
         for record in self:
-            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
+            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_compositionado else False
             if user_estado_id:
                 if record.estado.id != user_estado_id:
                     raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
-
-    # # Nuevo campo y método para el color de Kanban
-    # kanban_color_status = fields.Integer(compute='_compute_kanban_color_status', store=True)
-    #
-    # @api.depends('estatus')
-    # def _compute_kanban_color_status(self):
-    #     for record in self:
-    #         if record.estatus == 'ACTIVA':
-    #             record.kanban_color_status = 2  # Color azul/verdoso en Odoo
-    #         elif record.estatus == 'INACTIVA':
-    #             record.kanban_color_status = 1  # Color rojizo en Odoo
-    #         elif record.estatus == 'SUSPENDIDA':
-    #             record.kanban_color_status = 10 # Color anaranjado/amarillento en Odoo
-    #         else:
-    #             record.kanban_color_status = 0 # Color por defecto
