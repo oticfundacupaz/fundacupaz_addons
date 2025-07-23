@@ -78,7 +78,8 @@ class FundacupazPhone(models.Model):
             ('si', 'Sí'),
             ('no', 'No')
         ],
-        string="¿Teléfono verificado corresponde?"
+        string="¿Teléfono verificado corresponde?",
+        tracking=True
     )
     # MODIFICACIÓN: Campo de selección para los motivos
     motivo_seleccionado = fields.Selection( #
@@ -93,6 +94,15 @@ class FundacupazPhone(models.Model):
         tracking=True
     )
     motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
+
+    telf_verificado = fields.Selection(
+        selection=[
+            ('ver01', 'Corresponde a Cuadrante'),
+            ('ver02', 'No corresponde a Cuadrante'),
+            ('ver03', 'No contesta'),
+            ('ver04', 'Fuera de Linea')
+        ],
+        string='Telefono Verificado', default=False, tracking=True)
 
     @api.onchange('llamado')
     def _onchange_llamado(self):
