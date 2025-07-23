@@ -78,8 +78,7 @@ class FundacupazPhone(models.Model):
             ('si', 'Sí'),
             ('no', 'No')
         ],
-        string="¿Teléfono verificado corresponde?",
-        tracking=True
+        string="¿Teléfono verificado corresponde?"
     )
     # MODIFICACIÓN: Campo de selección para los motivos
     motivo_seleccionado = fields.Selection( #
