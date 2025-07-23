@@ -145,7 +145,7 @@ class FundacupazPhone(models.Model):
     @api.constrains('estado')
     def _check_estado_comisionado(self):
         for record in self:
-            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_compositionado else False
+            user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comionado else False
             if user_estado_id:
                 if record.estado.id != user_estado_id:
                     raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
