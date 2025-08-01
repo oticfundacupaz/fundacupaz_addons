@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<template id="report_template_fundacupaz_verificacion">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>Reporte de Verificación Telefónica</h2>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col-auto">
+                                <p>
+                                    Fecha de generación: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                                </p>
+                            </div>
+                            <div class="col-auto">
+                                <p>
+                                    Generado por: <span t-esc="user.name"/> (<span t-esc="user.login"/>)
+                                </p>
+                            </div>
+                        </div>
+
+                        <t t-foreach="telefonos_agrupados" t-as="group">
+                            <h3 class="mt-4">
+                                Estado: <span t-esc="group['estado'] or 'Sin Estado Asignado'"/>
+                            </h3>
+
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Número de Teléfono</th>
+                                        <th>Operadora</th>
+                                        <th>Cuadrante</th>
+                                        <th>Motivo</th>
+                                        <th>Otras Observaciones</th>
+                                        <th>Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="group['records']" t-as="phone">
+                                        <td><span t-esc="phone['number_phone']"/></td>
+                                        <td><span t-esc="phone['operadora']"/></td>
+                                        <td><span t-esc="phone['cuadrantes']"/></td>
+                                        <td><span t-esc="phone['motivo_seleccionado']"/></td>
+                                        <td><span t-esc="phone['motivo_otros_observaciones']"/></td>
+                                        <td><span t-esc="phone['estatus']"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+        <record id="paperformat_fundacupaz_report_landscape" model="report.paperformat">
+            <field name="name">Fundacupaz Reporte Horizontal A4</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_report_fundacupaz_verificacion" model="ir.actions.report">
+            <field name="name">Reporte de Verificación Telefónica</field>
+            <field name="model">fundacupaz.phone</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fundacupaz_phone.report_template_fundacupaz_verificacion</field>
+            <field name="report_file">fundacupaz_phone.report_template_fundacupaz_verificacion</field>
+            <field name="print_report_name">'Reporte de Verificación - %s' % (object.name or '')</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="paperformat_id" ref="fundacupaz_phone.paperformat_fundacupaz_report_landscape"/>
+        </record>
+    </data>
+</odoo>

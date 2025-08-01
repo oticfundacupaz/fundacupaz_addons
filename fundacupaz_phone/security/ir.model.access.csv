@@ -11,3 +11,4 @@
 "access_fundacupaz_cuadrante","access.fundacupaz.cuadrante","model_fundacupaz_cuadrante",base.group_user,1,1,1,1
 "access_administrador_fundacupaz_pc","administrador.fundacupaz.pc","model_fundacupaz_pc",fundacupaz_phone.grupo_fundacupaz_pc_solo_lectura,1,0,0,0
 "access_readonly_fundacupaz_pc","readonly.fundacupaz.pc","model_fundacupaz_pc",fundacupaz_phone.grupo_fundacupaz_pc_administrador,1,1,1,1
+access_fundacupaz_phone_report_wizard,fundacupaz.phone.report.wizard.access,model_fundacupaz_phone_report_wizard,base.group_user,1,1,1,1

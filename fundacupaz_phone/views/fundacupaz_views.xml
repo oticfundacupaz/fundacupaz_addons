@@ -106,7 +106,7 @@
                     <field name="telf_corresponde" optional="hide"/>
                     <field name="motivo_seleccionado" optional="hide"/>
                     <field name="motivo_otros_observaciones" optional="hide"/>
-                    <field name="estatus"/>
+                    <field name="estatus" widget="badge" decoration-info="estatus == 'N/A'" decoration-success="estatus == 'ACTIVA'" decoration-danger="estatus == 'INACTIVA'" decoration-warning="estatus == 'SUSPENDIDA'" optional="show"/>
                     <field name="observaciones" optional="hide"/>
                 </list>
             </field>
@@ -169,9 +169,7 @@
                     <field name="estatus"/>
 
                     <templates>
-                        <t t-name="card"> <div t-attf-class="oe_kanban_global_click_edit oe_semantic_html_override o_kanban_card d-flex flex-column"
-                                 style="background-color: {{ (record.estatus.raw_value == 'ACTIVA') ? '#D4EDDA' : (record.estatus.raw_value == 'INACTIVA') ? '#F8D7DA' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFF3CD' : '' }};
-                                        border: 1px solid {{ (record.estatus.raw_value == 'ACTIVA') ? '#28A745' : (record.estatus.raw_value == 'INACTIVA') ? '#DC3545' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFC107' : '' }};">
+                        <t t-name="card"> <div t-attf-class="oe_kanban_global_click_edit oe_semantic_html_override o_kanban_card d-flex flex-column">
                                 <div class="oe_kanban_details d-flex flex-column">
                                     <div class="o_kanban_record_top">
                                         <div class="o_kanban_record_title">
@@ -196,8 +194,8 @@
                                         </div>
                                     </div>
                                     <div class="o_kanban_record_bottom d-flex align-items-end justify-content-end mt-auto">
-                                        <div t-attf-style="color: {{ (record.estatus.raw_value == 'ACTIVA') ? '#28A745' : (record.estatus.raw_value == 'INACTIVA') ? '#DC3545' : (record.estatus.raw_value == 'SUSPENDIDA') ? '#FFC107' : 'grey' }};">
-                                            <field name="estatus"/>
+                                        <div>
+                                            <field name="estatus"  widget="label_selection" options="{'classes': {'INACTIVA': 'danger', 'SUSPENDIDA': 'warning', 'N/A': 'info', 'ACTIVA': 'success'}}" class="ms-auto"/>
                                         </div>
                                     </div>
                                 </div>
@@ -220,6 +218,20 @@
             <field name="name">Telefonos</field>
             <field name="sequence">10000</field>
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>
+        </record>
+
+        <record id="menu_fundacupaz_reportes_root" model="ir.ui.menu">
+            <field name="name">Reportes</field>
+            <field name="sequence">10</field>
+            <field name="parent_id" ref="menu_fundacupaz_phone"/>
+            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_telefonos')])]"/>
+        </record>
+
+        <record id="menu_action_reporte_verificacion" model="ir.ui.menu">
+            <field name="name">Reporte de Verificación</field>
+            <field name="parent_id" ref="menu_fundacupaz_reportes_root"/>
+            <field name="action" ref="action_launch_report_verificacion_wizard"/>
+            <field name="sequence">10</field>
         </record>
     </data>
 </odoo>
