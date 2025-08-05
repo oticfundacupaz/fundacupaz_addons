@@ -27,7 +27,7 @@
                         <group>
                             <group string="Asignación del Teléfono">
                                 <field name="persona_asignada" required="True"/>
-                                <field name="ente" required="True"/>
+                                <field name="ente"/>
                             </group>
                             <group/>
                         </group>
@@ -45,9 +45,9 @@
                                 </group>
 
                                 <group invisible="not es_cuadrante">
-                                    <field name="estado" required="True"/>
-                                    <field name="municipio" required="True"/>
-                                    <field name="cuadrantes" required="True"/>
+                                    <field name="estado"/>
+                                    <field name="municipio"/>
+                                    <field name="cuadrantes"/>
                                 </group>
                             </page>
 

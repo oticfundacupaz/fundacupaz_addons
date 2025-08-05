@@ -63,13 +63,17 @@ class ReportVerificacionWizard(models.TransientModel):
             if estado_nombre not in telefonos_agrupados:
                 telefonos_agrupados[estado_nombre] = []
 
+            fecha_modificacion_formateada = phone.write_date.strftime('%H:%M:%S') if phone.write_date else 'N/A'
+
             phone_dict = {
                 'number_phone': phone.number_phone,
                 'operadora': phone.operadora,
-                'cuadrantes': phone.cuadrantes.name,
+                'municipio': phone.cuadrantes.municipio.name if phone.cuadrantes.municipio else 'N/A',
+                'cuadrantes': phone.cuadrantes.name if phone.cuadrantes else 'N/A',
                 'motivo_seleccionado': phone.motivo_seleccionado,
                 'motivo_otros_observaciones': phone.motivo_otros_observaciones,
-                'estatus': phone.estatus
+                'estatus': phone.estatus,
+                'write_date': fecha_modificacion_formateada,
             }
             telefonos_agrupados[estado_nombre].append(phone_dict)
 

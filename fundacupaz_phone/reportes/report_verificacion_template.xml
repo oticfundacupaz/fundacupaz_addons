@@ -31,22 +31,26 @@
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Número de Teléfono</th>
-                                        <th>Operadora</th>
+                                        <th style="width: 180px;">Número de Teléfono</th>
+                                        <th>Municipio</th>
                                         <th>Cuadrante</th>
+                                        <th>Operadora</th>
                                         <th>Motivo</th>
                                         <th>Otras Observaciones</th>
                                         <th>Estatus</th>
+                                        <th style="width: 180px;">Fecha de Modificación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr t-foreach="group['records']" t-as="phone">
-                                        <td><span t-esc="phone['number_phone']"/></td>
-                                        <td><span t-esc="phone['operadora']"/></td>
+                                        <td style="width: 180px;"><span t-esc="phone['number_phone']"/></td>
+                                        <td><span t-esc="phone['municipio']"/></td>
                                         <td><span t-esc="phone['cuadrantes']"/></td>
+                                        <td><span t-esc="phone['operadora']"/></td>
                                         <td><span t-esc="phone['motivo_seleccionado']"/></td>
                                         <td><span t-esc="phone['motivo_otros_observaciones']"/></td>
                                         <td><span t-esc="phone['estatus']"/></td>
+                                        <td style="width: 180px"><span t-esc="phone['write_date']"/></td>
                                     </tr>
                                 </tbody>
                             </table>
