@@ -30,7 +30,9 @@ class FundacupazPhone(models.Model):
             ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB'),
             ('DIGITEL INTELIGENTE PLUS 2GB', 'DIGITEL INTELIGENTE PLUS 2GB'),
             ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
-            ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
+            ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB'),
+            ('INTERNET MOVIL 1GB', 'INTERNET MOVIL 1GB'),
+            ('RADI-CALL PLUS 4G LTE', 'RADI-CALL PLUS 4G LTE')
         ],
         string='Planes', tracking=True)
     ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", tracking=True)
@@ -150,6 +152,7 @@ class FundacupazPhone(models.Model):
             self.estado = False
             self.municipio = False
             self.cuadrantes = False
+
 
     @api.constrains('estado')
     def _check_estado_comisionado(self):
