@@ -68,7 +68,7 @@ class ReportVerificacionWizard(models.TransientModel):
             phone_dict = {
                 'number_phone': phone.number_phone,
                 'operadora': phone.operadora,
-                'municipio': phone.cuadrantes.municipio.name if phone.cuadrantes.municipio else 'N/A',
+                'municipio': phone.municipio.name if phone.municipio else 'N/A',
                 'cuadrantes': phone.cuadrantes.name if phone.cuadrantes else 'N/A',
                 'motivo_seleccionado': phone.motivo_seleccionado,
                 'motivo_otros_observaciones': phone.motivo_otros_observaciones,
