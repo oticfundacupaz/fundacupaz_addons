@@ -62,6 +62,7 @@ class FundacupazPhone(models.Model):
         string='Facturado a:', tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
     fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
+    fecha_revision_time = fields.Datetime("Fecha de Revisión hora", tracking=True)
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
         store=False, tracking=True
@@ -138,7 +139,7 @@ class FundacupazPhone(models.Model):
     def _onchange_revisado(self):
         """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
         if not self.revisado:
-            self.fecha_revision = False
+            self.fecha_revision_time = False
 
     @api.depends('es_cuadrante')
     def _compute_is_cuadrante_fields_invisible(self):

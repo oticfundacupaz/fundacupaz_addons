@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fundacion_visita_view_form" model="ir.ui.view">
+        <field name="name">fundacion.visita.view.form</field>
+        <field name="model">fundacion.visita</field>
+        <field name="arch" type="xml">
+            <form string="Registro de Visita">
+                <header>
+                    <button name="action_register_exit"
+                            type="object"
+                            string="Registrar Salida"
+                            class="oe_highlight"
+                            invisible="exit_date != False"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="visitor_id" domain="[('identification_number', '!=', False)]"/>
+                    </group>
+                    <group>
+                        <field name="name" readonly="visitor_id != False" required="visitor_id == False"/>
+                        <field name="identification_number" readonly="visitor_id != False" required="visitor_id == False"/>
+                        <field name="phone" readonly="visitor_id != False"/>
+                        <field name="email" readonly="visitor_id != False"/>
+                    </group>
+                    <group>
+                        <field name="visit_purpose" required="1"/>
+                        <field name="destination_person"/>
+                    </group>
+                    <group>
+                        <field name="entry_date"/>
+                        <field name="exit_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="fundacion_visita_view_list" model="ir.ui.view">
+        <field name="name">fundacion.visita.view.list</field>
+        <field name="model">fundacion.visita</field>
+        <field name="arch" type="xml">
+            <list string="Visitas">
+                <field name="visitor_id"/>
+                <field name="identification_number"/>
+                <field name="visit_purpose"/>
+                <field name="entry_date"/>
+                <field name="exit_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="fundacion_visita_action" model="ir.actions.act_window">
+        <field name="name">Registro de Visitas</field>
+        <field name="res_model">fundacion.visita</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea un nuevo registro de visita.
+            </p>
+        </field>
+    </record>
+</odoo>

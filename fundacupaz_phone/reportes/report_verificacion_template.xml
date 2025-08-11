@@ -50,7 +50,7 @@
                                         <td style="text-align: center;"><span t-esc="phone['motivo_seleccionado']"/></td>
                                         <td style="text-align: center;"><span t-esc="phone['motivo_otros_observaciones']"/></td>
                                         <td style="text-align: center;"><span t-esc="phone['estatus']"/></td>
-                                        <td style="width: 180px; text-align: center;"><span t-esc="phone['write_date']"/></td>
+                                        <td style="width: 180px; text-align: center;"><span t-esc="phone['fecha_revision_time']"/></td>
                                     </tr>
                                 </tbody>
                             </table>

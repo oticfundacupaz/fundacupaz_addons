@@ -50,8 +50,8 @@ class ReportVerificacionWizard(models.TransientModel):
 
         domain = [
             ('telf_corresponde', '=', 'no'),
-            ('write_date', '>=', self.fecha_inicio),
-            ('write_date', '<=', self.fecha_fin)
+            ('fecha_revision_time', '>=', self.fecha_inicio),
+            ('fecha_revision_time', '<=', self.fecha_fin)
         ]
         telefonos_a_reportar = self.env['fundacupaz.phone'].search(domain)
 
@@ -65,9 +65,8 @@ class ReportVerificacionWizard(models.TransientModel):
             if estado_nombre not in telefonos_agrupados:
                 telefonos_agrupados[estado_nombre] = []
 
-            # --- LÍNEA MODIFICADA PARA RESTAR 4 HORAS ---
-            if phone.write_date:
-                fecha_ajustada = phone.write_date - timedelta(hours=4)
+            if phone.fecha_revision_time:
+                fecha_ajustada = phone.fecha_revision_time - timedelta(hours=4)
                 fecha_modificacion_formateada = fecha_ajustada.strftime('%H:%M')
             else:
                 fecha_modificacion_formateada = 'N/A'
@@ -80,7 +79,7 @@ class ReportVerificacionWizard(models.TransientModel):
                 'motivo_seleccionado': phone.motivo_seleccionado,
                 'motivo_otros_observaciones': phone.motivo_otros_observaciones,
                 'estatus': phone.estatus,
-                'write_date': fecha_modificacion_formateada,
+                'fecha_revision_time': fecha_modificacion_formateada,
             }
             telefonos_agrupados[estado_nombre].append(phone_dict)
 

@@ -54,9 +54,10 @@
                             <page string="Gestión y Verificación" name="management_details">
                                 <group>
                                     <group string="Proceso de Facturación y Revisión">
-                                        <field name="facturado_por" required="True"/>
+                                        <field name="facturado_por"/>
                                         <field name="revisado"/>
-                                        <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>
+<!--                                        <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>-->
+                                        <field name="fecha_revision_time" invisible="is_fecha_revision_invisible"/>
                                     </group>
                                     <group string="Verificación Telefónica">
                                         <field name="llamado"/>
@@ -101,7 +102,8 @@
                     <field name="cuadrantes" optional="show"/>
                     <field name="facturado_por" optional="hide"/>
                     <field name="revisado" optional="show"/>
-                    <field name="fecha_revision" optional="hide"/>
+<!--                    <field name="fecha_revision" optional="hide"/>-->
+                    <field name="fecha_revision_time" optional="hide"/>
                     <field name="llamado" optional="hide"/>
                     <field name="telf_corresponde" optional="hide"/>
                     <field name="motivo_seleccionado" optional="hide"/>
