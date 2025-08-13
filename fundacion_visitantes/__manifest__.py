@@ -14,10 +14,10 @@
     'version': '18.0.1.0.0',
     'depends': ['base', 'mail'],
     'data': [
-        'data/sequence.xml',
-        'views/visita_hoja_views.xml',
-        'views/visitante_views.xml',
         'security/ir.model.access.csv',
+        'data/sequence.xml',
+        'views/visitante_views.xml',
+        'views/visita_hoja_views.xml',
 ],
     'demo': [],
     'installable': True,
