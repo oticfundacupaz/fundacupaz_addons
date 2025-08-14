@@ -15,16 +15,23 @@ class FundacupazPhone(models.Model):
     marca_phone = fields.Char("Marca", tracking=True)
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
+
+    # --- CAMBIO 1: Modificar el campo 'operadora' ---
     operadora = fields.Selection(
         selection=[
             ('MOVILNET', 'MOVILNET'),
             ('MOVISTAR', 'MOVISTAR'),
             ('DIGITEL', 'DIGITEL')
         ],
-    string='Operadora', tracking=True)
+        string='Operadora',
+        tracking=True,
+        compute='_compute_operadora',  # Añadir compute
+        store=True)  # Añadir store=True
+
     plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
-    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", tracking=True )
+    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
+                                       tracking=True)
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -32,14 +39,15 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus', default=False, tracking=True)
+        string='Estatus', default=False, tracking=True)
     estado = fields.Many2one(
         'res.country.state',
-        domain=[('country_id.name','=','Venezuela')],
+        domain=[('country_id.name', '=', 'Venezuela')],
         string="Estado", tracking=True
     )
-    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
-    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", tracking=True)
+    municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]",
+                                string="Municipio", tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
     observaciones = fields.Char("Observaciones", tracking=True)
     facturado_por = fields.Selection(
         selection=[
@@ -92,14 +100,13 @@ class FundacupazPhone(models.Model):
         ],
         string='Telefono Verificado', default=False, tracking=True)
 
-    @api.onchange('number_phone')
-    def _onchange_number_phone(self):
-
-        self.operadora = False
-        self.plan_id = False
-
-        domain = {'plan_id': [('id', '=', False)]}
-
+    # --- CAMBIO 2: Añadir la función de cálculo ---
+    @api.depends('number_phone')
+    def _compute_operadora(self):
+        """
+        Calcula y asigna la operadora basándose en el prefijo del número de teléfono.
+        Al tener 'store=True', el resultado se guarda en la base de datos.
+        """
         prefix_map = {
             '0412': 'DIGITEL',
             '0422': 'DIGITEL',
@@ -108,19 +115,51 @@ class FundacupazPhone(models.Model):
             '0416': 'MOVILNET',
             '0426': 'MOVILNET',
         }
+        for record in self:
+            operadora_detectada = False
+            if record.number_phone and len(record.number_phone) >= 4:
+                prefix = record.number_phone[0:4]
+                operadora_detectada = prefix_map.get(prefix, False)
+            record.operadora = operadora_detectada
 
+    # --- CAMBIO 3: Simplificar el @api.onchange ---
+    @api.onchange('number_phone')
+    def _onchange_number_phone(self):
+        """
+        Esta función ahora solo se encarga de la interactividad de la UI:
+        1. Limpiar el plan si la operadora cambia.
+        2. Actualizar el dominio del campo 'plan_id'.
+        """
+        # La operadora se recalcula por el método _compute_operadora.
+        # Aquí solo reaccionamos a ese cambio para actualizar otros campos.
+
+        # Limpiar el plan_id ya que la operadora va a cambiar.
+        # Odoo es lo suficientemente inteligente para detectar el cambio en el campo calculado
+        # y saber que debe limpiar los campos que dependen de él.
+        # Se puede forzar una limpieza para mejor respuesta de la UI.
+        original_operadora = self._origin.operadora
+
+        prefix_map = {
+            '0412': 'DIGITEL', '0422': 'DIGITEL',
+            '0414': 'MOVISTAR', '0424': 'MOVISTAR',
+            '0416': 'MOVILNET', '0426': 'MOVILNET',
+        }
+        new_operadora = False
         if self.number_phone and len(self.number_phone) >= 4:
             prefix = self.number_phone[0:4]
-            current_operadora = prefix_map.get(prefix, False)
+            new_operadora = prefix_map.get(prefix, False)
 
-            if current_operadora:
-                # Si se encuentra una operadora, la asignamos
-                self.operadora = current_operadora
-                # Se crea un dominio para filtrar solo los planes de esa operadora
-                domain['plan_id'] = [('operadora', '=', current_operadora)]
+        if new_operadora != original_operadora:
+            self.plan_id = False
 
-        return {'domain': domain}
+        # Devuelve el dominio para el campo 'plan_id' para que el usuario
+        # solo vea los planes de la operadora correcta.
+        if new_operadora:
+            return {'domain': {'plan_id': [('operadora', '=', new_operadora)]}}
+        else:
+            return {'domain': {'plan_id': [('id', '=', False)]}}
 
+    # ... (el resto de tus funciones no necesitan cambios)
 
     @api.onchange('llamado')
     def _onchange_llamado(self):
@@ -187,4 +226,5 @@ class FundacupazPhone(models.Model):
             user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
             if user_estado_id:
                 if record.estado.id != user_estado_id:
-                    raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
+                    raise ValidationError(
+                        "El estado seleccionado no coincide con el estado asignado al comisionado actual.")
