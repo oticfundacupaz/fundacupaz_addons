@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
+
 
 
 class ReportVerificacionWizard(models.TransientModel):
@@ -26,18 +27,19 @@ class ReportVerificacionWizard(models.TransientModel):
 
     @api.depends('turno_seleccion')
     def _compute_fechas(self):
-        """Calcula las fechas de inicio y fin basadas en el turno seleccionado."""
         for wizard in self:
             hoy = datetime.now().date()
+            sumar_horas = timedelta(hours=4)
+
             if wizard.turno_seleccion == 'turno_1':
-                wizard.fecha_inicio = datetime.combine(hoy, time.min)  # 00:00:00
-                wizard.fecha_fin = datetime.combine(hoy, time(11, 0, 0))  # 11:00:00
+                wizard.fecha_inicio = datetime.combine(hoy, time.min) + sumar_horas
+                wizard.fecha_fin = datetime.combine(hoy, time(11, 0, 0)) + sumar_horas
             elif wizard.turno_seleccion == 'turno_2':
-                wizard.fecha_inicio = datetime.combine(hoy, time(11, 0, 1))  # 11:00:01
-                wizard.fecha_fin = datetime.combine(hoy, time.max)  # 23:59:59
-            else:  # turno_3 o por defecto
-                wizard.fecha_inicio = datetime.combine(hoy, time.min)
-                wizard.fecha_fin = datetime.combine(hoy, time.max)
+                wizard.fecha_inicio = datetime.combine(hoy, time(11, 0, 1)) + sumar_horas
+                wizard.fecha_fin = datetime.combine(hoy, time.max) + sumar_horas
+            else:  # turno_3 (día completo)
+                wizard.fecha_inicio = datetime.combine(hoy, time.min) + sumar_horas
+                wizard.fecha_fin = datetime.combine(hoy, time.max) + sumar_horas
 
     def action_print_report(self):
         """
@@ -48,8 +50,8 @@ class ReportVerificacionWizard(models.TransientModel):
 
         domain = [
             ('telf_corresponde', '=', 'no'),
-            ('write_date', '>=', self.fecha_inicio),
-            ('write_date', '<=', self.fecha_fin)
+            ('fecha_revision_time', '>=', self.fecha_inicio),
+            ('fecha_revision_time', '<=', self.fecha_fin)
         ]
         telefonos_a_reportar = self.env['fundacupaz.phone'].search(domain)
 
@@ -63,7 +65,11 @@ class ReportVerificacionWizard(models.TransientModel):
             if estado_nombre not in telefonos_agrupados:
                 telefonos_agrupados[estado_nombre] = []
 
-            fecha_modificacion_formateada = phone.write_date.strftime('%H:%M:%S') if phone.write_date else 'N/A'
+            if phone.fecha_revision_time:
+                fecha_ajustada = phone.fecha_revision_time - timedelta(hours=4)
+                fecha_modificacion_formateada = fecha_ajustada.strftime('%H:%M')
+            else:
+                fecha_modificacion_formateada = 'N/A'
 
             phone_dict = {
                 'number_phone': phone.number_phone,
@@ -73,7 +79,7 @@ class ReportVerificacionWizard(models.TransientModel):
                 'motivo_seleccionado': phone.motivo_seleccionado,
                 'motivo_otros_observaciones': phone.motivo_otros_observaciones,
                 'estatus': phone.estatus,
-                'write_date': fecha_modificacion_formateada,
+                'fecha_revision_time': fecha_modificacion_formateada,
             }
             telefonos_agrupados[estado_nombre].append(phone_dict)
 

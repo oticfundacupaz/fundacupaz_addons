@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_fundacion_visita_hoja" model="ir.sequence">
+            <field name="name">Hoja de Visita</field>
+            <field name="code">fundacion.visita.hoja</field>
+            <field name="prefix">HVC%(year)s%(month)s</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

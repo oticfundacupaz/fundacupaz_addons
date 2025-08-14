@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
 from odoo import models, fields, api, _
+from odoo.addons.mail.models.discuss.mail_guest import add_guest_to_context
 from odoo.exceptions import ValidationError
 
 
@@ -18,13 +21,10 @@ class FundacupazPhone(models.Model):
             ('MOVISTAR', 'MOVISTAR'),
             ('DIGITEL', 'DIGITEL')
         ],
-        string='Operadora', tracking=True)
-
+    string='Operadora', tracking=True)
     plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
-
-    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
-                                       tracking=True)
+    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", tracking=True )
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -32,15 +32,14 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-        string='Estatus', default=False, tracking=True)
+    string='Estatus', default=False, tracking=True)
     estado = fields.Many2one(
         'res.country.state',
-        domain=[('country_id.name', '=', 'Venezuela')],
+        domain=[('country_id.name','=','Venezuela')],
         string="Estado", tracking=True
     )
-    municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]",
-                                string="Municipio", tracking=True)
-    cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
+    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", tracking=True)
     observaciones = fields.Char("Observaciones", tracking=True)
     facturado_por = fields.Selection(
         selection=[
@@ -51,6 +50,7 @@ class FundacupazPhone(models.Model):
         string='Facturado a:', tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
     fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
+    fecha_revision_time = fields.Datetime("Fecha de Revisión hora", tracking=True)
     is_fecha_revision_invisible = fields.Boolean(
         compute='_compute_is_fecha_revision_invisible',
         store=False, tracking=True
@@ -152,7 +152,7 @@ class FundacupazPhone(models.Model):
     def _onchange_revisado(self):
         """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
         if not self.revisado:
-            self.fecha_revision = False
+            self.fecha_revision_time = False
 
     @api.depends('es_cuadrante')
     def _compute_is_cuadrante_fields_invisible(self):
@@ -187,5 +187,4 @@ class FundacupazPhone(models.Model):
             user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
             if user_estado_id:
                 if record.estado.id != user_estado_id:
-                    raise ValidationError(
-                        "El estado seleccionado no coincide con el estado asignado al comisionado actual.")
+                    raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")

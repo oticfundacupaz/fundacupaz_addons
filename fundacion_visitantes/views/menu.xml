@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="fundacion_menu_root" name="Fundación" sequence="10"/>
+
+    <menuitem id="fundacion_visitas_menu"
+              name="Registro de Visitas"
+              parent="fundacion_menu_root"
+              action="fundacion_visita_action"
+              sequence="10"/>
+
+    <menuitem id="fundacion_visitantes_menu"
+              name="Visitantes (historial)"
+              parent="fundacion_menu_root"
+              action="fundacion_visitante_action"
+              sequence="20"/>
+
+</odoo>
