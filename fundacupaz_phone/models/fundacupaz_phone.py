@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
-
 from odoo import models, fields, api, _
-from odoo.addons.mail.models.discuss.mail_guest import add_guest_to_context
 from odoo.exceptions import ValidationError
 
 
 class FundacupazPhone(models.Model):
     _name = "fundacupaz.phone"
-    _inherit = "mail.thread"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Registro de Teléfonos'
 
-    number_phone = fields.Char("Número Telefono", tracking=True)
+    number_phone = fields.Char("Número Telefono", tracking=True, size=11)
     marca_phone = fields.Char("Marca", tracking=True)
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
@@ -20,21 +18,13 @@ class FundacupazPhone(models.Model):
             ('MOVISTAR', 'MOVISTAR'),
             ('DIGITEL', 'DIGITEL')
         ],
-    string='Operadora', tracking=True)
-    planes = fields.Selection(
-        selection=[
-            ('N/A', 'N/A'),
-            ('MOVILNET EMPRENDE 10', 'MOVILNET EMPRENDE 10'),
-            ('MOVISTAR PLUS 25 GB', 'MOVISTAR PLUS 25 GB'),
-            ('MOVISTAR PLUS 10 GB', 'MOVISTAR PLUS 10 GB'),
-            ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB'),
-            ('DIGITEL INTELIGENTE PLUS 2GB', 'DIGITEL INTELIGENTE PLUS 2GB'),
-            ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
-            ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB')
-        ],
-        string='Planes', tracking=True)
-    ente = fields.Many2one('fundacupaz.ente',string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner',domain="[('is_company', '!=','true')]",string="Persona Asignada", tracking=True )
+        string='Operadora', tracking=True)
+
+    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
+
+    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
+                                       tracking=True)
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -42,14 +32,15 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-    string='Estatus', default=False, tracking=True)
+        string='Estatus', default=False, tracking=True)
     estado = fields.Many2one(
         'res.country.state',
-        domain=[('country_id.name','=','Venezuela')],
+        domain=[('country_id.name', '=', 'Venezuela')],
         string="Estado", tracking=True
     )
-    municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
-    cuadrantes = fields.Many2one('fundacupaz.cuadrante' , string="Cuadrante", tracking=True)
+    municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]",
+                                string="Municipio", tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
     observaciones = fields.Char("Observaciones", tracking=True)
     facturado_por = fields.Selection(
         selection=[
@@ -71,8 +62,6 @@ class FundacupazPhone(models.Model):
     )
     llamado = fields.Boolean("Llamado", tracking=True)
 
-    # --- INICIO DE CAMBIOS REQUERIDOS ---
-    # Se elimina el campo 'telf_verificado' y se agregan los nuevos campos.
     telf_corresponde = fields.Selection(
         selection=[
             ('si', 'Sí'),
@@ -81,8 +70,7 @@ class FundacupazPhone(models.Model):
         string="¿Teléfono verificado corresponde?",
         tracking=True
     )
-    # MODIFICACIÓN: Campo de selección para los motivos
-    motivo_seleccionado = fields.Selection( #
+    motivo_seleccionado = fields.Selection(
         selection=[
             ('N/D', 'No Disponible'),
             ('F/L', 'Fuera de línea / Apagado'),
@@ -104,28 +92,56 @@ class FundacupazPhone(models.Model):
         ],
         string='Telefono Verificado', default=False, tracking=True)
 
+    @api.onchange('number_phone')
+    def _onchange_number_phone(self):
+
+        self.operadora = False
+        self.plan_id = False
+
+        domain = {'plan_id': [('id', '=', False)]}
+
+        prefix_map = {
+            '0412': 'DIGITEL',
+            '0422': 'DIGITEL',
+            '0414': 'MOVISTAR',
+            '0424': 'MOVISTAR',
+            '0416': 'MOVILNET',
+            '0426': 'MOVILNET',
+        }
+
+        if self.number_phone and len(self.number_phone) >= 4:
+            prefix = self.number_phone[0:4]
+            current_operadora = prefix_map.get(prefix, False)
+
+            if current_operadora:
+                # Si se encuentra una operadora, la asignamos
+                self.operadora = current_operadora
+                # Se crea un dominio para filtrar solo los planes de esa operadora
+                domain['plan_id'] = [('operadora', '=', current_operadora)]
+
+        return {'domain': domain}
+
+
     @api.onchange('llamado')
     def _onchange_llamado(self):
         """Si 'Llamado' se desmarca, limpia todos los campos de verificación."""
         if not self.llamado:
             self.telf_corresponde = False
-            self.motivo_seleccionado = False # CAMBIO AQUÍ
+            self.motivo_seleccionado = False
             self.motivo_otros_observaciones = ''
 
     @api.onchange('telf_corresponde')
     def _onchange_telf_corresponde(self):
         """Si la respuesta no es 'no', limpia los campos de motivo."""
         if self.telf_corresponde != 'no':
-            self.motivo_seleccionado = False # CAMBIO AQUÍ
-            self.motivo_otros_observaciones = '' # Asegurarse de limpiar también las observaciones
+            self.motivo_seleccionado = False
+            self.motivo_otros_observaciones = ''
 
-    @api.onchange('motivo_seleccionado') # NUEVO MÉTODO ONCHANGE
+    @api.onchange('motivo_seleccionado')
     def _onchange_motivo_seleccionado(self):
         """Si el motivo seleccionado no es 'Otros', limpia el campo de observaciones."""
         if self.motivo_seleccionado != 'otros':
             self.motivo_otros_observaciones = ''
-    # --- FIN DE CAMBIOS REQUERIDOS ---
-
 
     @api.depends('revisado')
     def _compute_is_fecha_revision_invisible(self):
@@ -151,10 +167,25 @@ class FundacupazPhone(models.Model):
             self.municipio = False
             self.cuadrantes = False
 
+    @api.constrains('number_phone')
+    def _check_phone_number_validation(self):
+        valid_prefixes = ('0412', '0414', '0416', '0424', '0426', '0422')
+        for record in self:
+            if record.number_phone:
+                phone_number = record.number_phone
+                if not phone_number.isdigit():
+                    raise ValidationError("El 'Número Telefono' solo debe contener dígitos (sin espacios ni guiones).")
+                if len(phone_number) != 11:
+                    raise ValidationError("El 'Número Telefono' debe tener exactamente 11 dígitos.")
+                if not phone_number.startswith(valid_prefixes):
+                    raise ValidationError(
+                        "El 'Número Telefono' debe comenzar con un prefijo válido (0412, 0414, 0416, 0424, 0426, o 0422).")
+
     @api.constrains('estado')
     def _check_estado_comisionado(self):
         for record in self:
             user_estado_id = self.env.user.estado_comisionado.id if self.env.user.estado_comisionado else False
             if user_estado_id:
                 if record.estado.id != user_estado_id:
-                    raise ValidationError("El estado seleccionado no coincide con el estado asignado al comisionado actual.")
+                    raise ValidationError(
+                        "El estado seleccionado no coincide con el estado asignado al comisionado actual.")

@@ -19,8 +19,13 @@
                                 <field name="imei_phone"/>
                             </group>
                             <group string="Detalles de Operadora y Plan">
-                                <field name="operadora" required="True"/>
-                                <field name="planes" required="True"/>
+                                <field name="operadora" required="True"
+                                       readonly="1"/>
+
+                                <field name="plan_id"
+                                       required="True"
+                                       domain="[('operadora', '=', operadora)]"
+                                       options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
                             </group>
                         </group>
 
@@ -90,7 +95,7 @@
                     decoration-warning="estatus == 'SUSPENDIDA'">
                     <field name="number_phone"/>
                     <field name="operadora"/>
-                    <field name="planes" optional="show"/>
+                    <field name="plan_id" optional="show"/> <field name="marca_phone" optional="hide"/>
                     <field name="marca_phone" optional="hide"/>
                     <field name="modelo_phone" optional="hide"/>
                     <field name="imei_phone" optional="hide"/>
