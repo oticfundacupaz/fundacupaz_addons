@@ -50,6 +50,20 @@ class FundacupazPhone(models.Model):
     llamado = fields.Boolean("Llamado", tracking=True)
     es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
 
+    planes = fields.Selection(
+        selection=[
+            ('N/A', 'N/A'),
+            ('MOVILNET EMPRENDE 10', 'MOVILNET EMPRENDE 10'),
+            ('MOVISTAR PLUS 25 GB', 'MOVISTAR PLUS 25 GB'),
+            ('MOVISTAR PLUS 10 GB', 'MOVISTAR PLUS 10 GB'),
+            ('DIGITEL INTELIGENTE PLUS 1.1GB', 'DIGITEL INTELIGENTE PLUS 1.1GB'),
+            ('DIGITEL INTELIGENTE PLUS 2GB', 'DIGITEL INTELIGENTE PLUS 2GB'),
+            ('DIGITEL INTELIGENTE PLUS 6GB', 'DIGITEL INTELIGENTE PLUS 6GB'),
+            ('DIGITEL INTELIGENTE PLUS 30GB', 'DIGITEL INTELIGENTE PLUS 30GB'),
+            ('INTERNET MOVIL 1GB', 'INTERNET MOVIL 1GB'),
+            ('RADI-CALL PLUS 4G LTE', 'RADI-CALL PLUS 4G LTE')
+        ],
+        string='Planes', tracking=True)
     # Campos de relación
     plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
     ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
