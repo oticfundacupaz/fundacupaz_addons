@@ -79,7 +79,7 @@ class FundacupazPhone(models.Model):
             ('otros', 'Otros')
         ],
         string="Motivo", tracking=True)
-    
+
     motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
     telf_verificado = fields.Selection(
         selection=[

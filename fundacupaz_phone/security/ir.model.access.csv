@@ -6,7 +6,7 @@
 "access_readonly_fundacupaz_inventario_move","readonly.fundacupaz.inventario.move","stock.model_stock_move","fundacupaz_phone.grupo_inventario",1,0,0,0
 "access_transferencia_fundacupaz_inventario_move","transferencia.fundacupaz.inventario.move","stock.model_stock_move","fundacupaz_phone.grupo_inventario_transferencias",1,1,1,0
 "access_transferencia_fundacupaz_inventario_almacen","transferencia.fundacupaz.inventario.almacen","stock.model_stock_warehouse_orderpoint","fundacupaz_phone.grupo_inventario_transferencias",1,1,1,0
-"access_administrador_fundacupaz_phone","administrador.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz",1,1,1,1
+"access_administrador_fundacupaz_phone","administrador.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz_administrador",1,1,1,1
 "access_fundacupaz_ente","access.fundacupaz.ente","model_fundacupaz_ente","base.group_user",1,1,1,1
 "access_fundacupaz_phone_plan","access.fundacupaz.phone.plan","model_fundacupaz_phone_plan","base.group_user",1,1,1,1
 "access_fundacupaz_cuadrante","access.fundacupaz.cuadrante","model_fundacupaz_cuadrante","base.group_user",1,1,1,1
