@@ -16,7 +16,6 @@ class FundacupazPhone(models.Model):
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
 
-    # --- CAMBIO 1: Modificar el campo 'operadora' ---
     operadora = fields.Selection(
         selection=[
             ('MOVILNET', 'MOVILNET'),
@@ -27,6 +26,15 @@ class FundacupazPhone(models.Model):
         tracking=True,
         compute='_compute_operadora',  # Añadir compute
         store=True)  # Añadir store=True
+
+    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
+    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
+                                       tracking=True)
+        string='Operadora',
+        tracking=True,
+        compute='_compute_operadora',
+        store=True)
 
     plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
     ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
@@ -100,7 +108,6 @@ class FundacupazPhone(models.Model):
         ],
         string='Telefono Verificado', default=False, tracking=True)
 
-    # --- CAMBIO 2: Añadir la función de cálculo ---
     @api.depends('number_phone')
     def _compute_operadora(self):
         """
@@ -122,7 +129,6 @@ class FundacupazPhone(models.Model):
                 operadora_detectada = prefix_map.get(prefix, False)
             record.operadora = operadora_detectada
 
-    # --- CAMBIO 3: Simplificar el @api.onchange ---
     @api.onchange('number_phone')
     def _onchange_number_phone(self):
         """
@@ -152,14 +158,11 @@ class FundacupazPhone(models.Model):
         if new_operadora != original_operadora:
             self.plan_id = False
 
-        # Devuelve el dominio para el campo 'plan_id' para que el usuario
-        # solo vea los planes de la operadora correcta.
         if new_operadora:
             return {'domain': {'plan_id': [('operadora', '=', new_operadora)]}}
         else:
             return {'domain': {'plan_id': [('id', '=', False)]}}
 
-    # ... (el resto de tus funciones no necesitan cambios)
 
     @api.onchange('llamado')
     def _onchange_llamado(self):

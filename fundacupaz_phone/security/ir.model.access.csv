@@ -1,5 +1,5 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_readonly_fundacupaz_phone","readonly.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz",1,0,0,0
+"access_readonly_fundacupaz_phone","readonly.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.gupo_fundacupaz",1,0,0,0
 "access_readonly_fundacupaz_inventario_picking","readonly.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario",1,0,0,0
 "access_transferencia_fundacupaz_inventario_picking","transferencia.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario_transferencias",1,1,1,0
 "access_readonly_fundacupaz_producto_solo_lectura","readonly.fundacupaz.producto.solo.lectura","stock.model_product_template","fundacupaz_phone.grupo_producto_solo_lectura",1,0,0,0
