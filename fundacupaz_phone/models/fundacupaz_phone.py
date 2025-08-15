@@ -2,7 +2,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import models, fields, api, _
-from odoo.addons.mail.models.discuss.mail_guest import add_guest_to_context
 from odoo.exceptions import ValidationError
 
 
@@ -11,11 +10,14 @@ class FundacupazPhone(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Registro de Teléfonos'
 
+    # Campos de información básica
     number_phone = fields.Char("Número Telefono", tracking=True, size=11)
     marca_phone = fields.Char("Marca", tracking=True)
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
+    observaciones = fields.Char("Observaciones", tracking=True)
 
+    # Campos de estado y clasificación
     operadora = fields.Selection(
         selection=[
             ('MOVILNET', 'MOVILNET'),
@@ -24,22 +26,9 @@ class FundacupazPhone(models.Model):
         ],
         string='Operadora',
         tracking=True,
-        compute='_compute_operadora',  # Añadir compute
-        store=True)  # Añadir store=True
-
-    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
-    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
-                                       tracking=True)
-        string='Operadora',
-        tracking=True,
         compute='_compute_operadora',
-        store=True)
-
-    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
-    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada",
-                                       tracking=True)
+        store=True
+    )
     estatus = fields.Selection(
         selection=[
             ('N/A', 'N/A'),
@@ -47,45 +36,40 @@ class FundacupazPhone(models.Model):
             ('INACTIVA', 'INACTIVA'),
             ('SUSPENDIDA', 'SUSPENDIDA')
         ],
-        string='Estatus', default=False, tracking=True)
-    estado = fields.Many2one(
-        'res.country.state',
-        domain=[('country_id.name', '=', 'Venezuela')],
-        string="Estado", tracking=True
+        string='Estatus', default=False, tracking=True
     )
-    municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]",
-                                string="Municipio", tracking=True)
-    cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
-    observaciones = fields.Char("Observaciones", tracking=True)
     facturado_por = fields.Selection(
         selection=[
             ('Fundacupaz', 'Fundacupaz'),
             ('MIJ', 'MPPIJP'),
             ('Otros', 'Otros')
         ],
-        string='Facturado a:', tracking=True)
+        string='Facturado a:', tracking=True
+    )
     revisado = fields.Boolean("Revisado", tracking=True)
+    llamado = fields.Boolean("Llamado", tracking=True)
+    es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
+
+    # Campos de relación
+    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
+    ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
+    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada", tracking=True)
+    estado = fields.Many2one('res.country.state', domain=[('country_id.name', '=', 'Venezuela')], string="Estado", tracking=True)
+    municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
+    cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
+
+    # Campos de revisión y verificación
     fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
     fecha_revision_time = fields.Datetime("Fecha de Revisión hora", tracking=True)
-    is_fecha_revision_invisible = fields.Boolean(
-        compute='_compute_is_fecha_revision_invisible',
-        store=False, tracking=True
-    )
-    es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
-    is_cuadrante_fields_invisible = fields.Boolean(
-        compute='_compute_is_cuadrante_fields_invisible',
-        store=False
-    )
-    llamado = fields.Boolean("Llamado", tracking=True)
-
+    is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
+    is_cuadrante_fields_invisible = fields.Boolean(compute='_compute_is_cuadrante_fields_invisible', store=False)
     telf_corresponde = fields.Selection(
         selection=[
             ('si', 'Sí'),
             ('no', 'No')
         ],
-        string="¿Teléfono verificado corresponde?",
-        tracking=True
-    )
+        string="¿Teléfono verificado corresponde?", tracking=True)
+
     motivo_seleccionado = fields.Selection(
         selection=[
             ('N/D', 'No Disponible'),
@@ -94,11 +78,9 @@ class FundacupazPhone(models.Model):
             ('S/D', 'Dañado / Suspendido por operadora'),
             ('otros', 'Otros')
         ],
-        string="Motivo",
-        tracking=True
-    )
+        string="Motivo", tracking=True)
+    
     motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
-
     telf_verificado = fields.Selection(
         selection=[
             ('ver01', 'Corresponde a Cuadrante'),
@@ -108,6 +90,7 @@ class FundacupazPhone(models.Model):
         ],
         string='Telefono Verificado', default=False, tracking=True)
 
+    # Métodos Compute
     @api.depends('number_phone')
     def _compute_operadora(self):
         """
@@ -115,12 +98,9 @@ class FundacupazPhone(models.Model):
         Al tener 'store=True', el resultado se guarda en la base de datos.
         """
         prefix_map = {
-            '0412': 'DIGITEL',
-            '0422': 'DIGITEL',
-            '0414': 'MOVISTAR',
-            '0424': 'MOVISTAR',
-            '0416': 'MOVILNET',
-            '0426': 'MOVILNET',
+            '0412': 'DIGITEL', '0422': 'DIGITEL',
+            '0414': 'MOVISTAR', '0424': 'MOVISTAR',
+            '0416': 'MOVILNET', '0426': 'MOVILNET',
         }
         for record in self:
             operadora_detectada = False
@@ -129,20 +109,22 @@ class FundacupazPhone(models.Model):
                 operadora_detectada = prefix_map.get(prefix, False)
             record.operadora = operadora_detectada
 
+    @api.depends('revisado')
+    def _compute_is_fecha_revision_invisible(self):
+        for record in self:
+            record.is_fecha_revision_invisible = not record.revisado
+
+    @api.depends('es_cuadrante')
+    def _compute_is_cuadrante_fields_invisible(self):
+        for record in self:
+            record.is_cuadrante_fields_invisible = not record.es_cuadrante
+
+    # Métodos Onchange
     @api.onchange('number_phone')
     def _onchange_number_phone(self):
         """
-        Esta función ahora solo se encarga de la interactividad de la UI:
-        1. Limpiar el plan si la operadora cambia.
-        2. Actualizar el dominio del campo 'plan_id'.
+        Actualiza el dominio del campo 'plan_id' y limpia el plan si la operadora cambia.
         """
-        # La operadora se recalcula por el método _compute_operadora.
-        # Aquí solo reaccionamos a ese cambio para actualizar otros campos.
-
-        # Limpiar el plan_id ya que la operadora va a cambiar.
-        # Odoo es lo suficientemente inteligente para detectar el cambio en el campo calculado
-        # y saber que debe limpiar los campos que dependen de él.
-        # Se puede forzar una limpieza para mejor respuesta de la UI.
         original_operadora = self._origin.operadora
 
         prefix_map = {
@@ -162,7 +144,6 @@ class FundacupazPhone(models.Model):
             return {'domain': {'plan_id': [('operadora', '=', new_operadora)]}}
         else:
             return {'domain': {'plan_id': [('id', '=', False)]}}
-
 
     @api.onchange('llamado')
     def _onchange_llamado(self):
@@ -185,21 +166,11 @@ class FundacupazPhone(models.Model):
         if self.motivo_seleccionado != 'otros':
             self.motivo_otros_observaciones = ''
 
-    @api.depends('revisado')
-    def _compute_is_fecha_revision_invisible(self):
-        for record in self:
-            record.is_fecha_revision_invisible = not record.revisado
-
     @api.onchange('revisado')
     def _onchange_revisado(self):
         """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
         if not self.revisado:
             self.fecha_revision_time = False
-
-    @api.depends('es_cuadrante')
-    def _compute_is_cuadrante_fields_invisible(self):
-        for record in self:
-            record.is_cuadrante_fields_invisible = not record.es_cuadrante
 
     @api.onchange('es_cuadrante')
     def _onchange_es_cuadrante(self):
@@ -209,6 +180,7 @@ class FundacupazPhone(models.Model):
             self.municipio = False
             self.cuadrantes = False
 
+    # Métodos Constrain
     @api.constrains('number_phone')
     def _check_phone_number_validation(self):
         valid_prefixes = ('0412', '0414', '0416', '0424', '0426', '0422')
