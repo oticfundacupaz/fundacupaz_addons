@@ -4,8 +4,10 @@
         <record id="seq_fundacion_visita_hoja" model="ir.sequence">
             <field name="name">Hoja de Visita</field>
             <field name="code">fundacion.visita.hoja</field>
-            <field name="prefix">HVC%(year)s%(month)s</field>
+            <field name="prefix">RDV/</field>
             <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
         </record>
     </data>
 </odoo>

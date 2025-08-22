@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fundacion_visitante,fundacion.visitante.access,model_fundacion_visitante,,1,1,1,1
 access_fundacion_visita,fundacion.visita.access,model_fundacion_visita,,1,1,1,1
+access_fundacion_visita_reporte_dia_wizard,fundacion.visita.reporte.dia.wizard,model_fundacion_visita_reporte_dia_wizard,base.group_user,1,1,1,1
 access_fundacion_visita_hoja,fundacion.visita.hoja.access,model_fundacion_visita_hoja,,1,1,1,1

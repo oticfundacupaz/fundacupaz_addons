@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_visita_hoja" model="ir.actions.report">
+        <field name="name">Hoja de Visita</field>
+        <field name="model">fundacion.visita.hoja</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fundacion_visitantes.report_visita_hoja_template</field>
+        <field name="report_file">fundacion_visitantes.report_visita_hoja_template</field>
+    </record>
+
+    <record id="action_report_visitas_por_dia" model="ir.actions.report">
+        <field name="name">Reporte de Visitas por Día</field>
+        <field name="model">fundacion.visita</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fundacion_visitantes.report_visitas_por_dia_template</field>
+        <field name="report_file">fundacion_visitantes.report_visitas_por_dia_template</field>
+        <field name="binding_model_id" ref="model_fundacion_visita_reporte_dia_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

@@ -4,11 +4,11 @@
     'description': "inventario de telefonos de fundacupaz",
     'depends': ['base', 'web', 'mail', 'fleet', 'hr', 'stock', 'l10n_ve_dpt-10', 'project', 'contacts', 'event'],
     'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
         'views/fundacupaz_phone_plan_views.xml',
         'views/fundacupaz_cuadrantes_views.xml',
         'views/fundacupaz_pc_views.xml',
-        'security/security.xml',
-        'security/ir.model.access.csv',
         'wizards/report_verificacion_wizard_views.xml',
         'views/comisionado_estadal.xml',
         'views/fundacupaz_views.xml',

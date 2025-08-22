@@ -16,7 +16,10 @@
     'data': [
         'security/ir.model.access.csv',
         'data/sequence.xml',
+        'report/visita_reports.xml',
+        'report/visita_report_templates.xml',
         'views/visitante_views.xml',
+        'wizards/reporte_dia_wizard_views.xml',
         'views/visita_hoja_views.xml',
 ],
     'demo': [],

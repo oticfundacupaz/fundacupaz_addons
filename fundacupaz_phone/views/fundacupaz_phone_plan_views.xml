@@ -32,6 +32,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_fundacupaz_phone_plan" name="Planes" parent="base.menu_administration"
-    sequence="10005" action="action_fundacupaz_phone_plan"/>
+    <menuitem id="menu_fundacupaz_phone_plan" name="Planes" parent="menu_Fundacupaz_Ajustes"/>
+        sequence="30" action="action_action_fundacupaz_phone_plan"/>
 </odoo>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-
+from datetime import timedelta
 
 class Visita(models.Model):
     _name = 'fundacion.visita'
@@ -35,6 +35,14 @@ class Visita(models.Model):
             self.identification_number = False
             self.phone = False
             self.email = False
+
+    @api.constrains('entry_date', 'exit_date')
+    def _check_exit_date_after_entry_date(self):
+        for record in self:
+            if record.entry_date and record.exit_date:
+                # La diferencia de tiempo debe ser mayor a 60 segundos (1 minuto)
+                if (record.exit_date - record.entry_date).total_seconds() < 60:
+                    raise ValidationError("La hora de salida debe ser al menos un minuto después de la hora de entrada.")
 
     @api.model
     def create(self, vals):

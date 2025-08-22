@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
-
+from odoo import models, fields, api, _
 
 class VisitaHoja(models.Model):
     _name = 'fundacion.visita.hoja'
@@ -8,8 +7,7 @@ class VisitaHoja(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name desc'
 
-    name = fields.Char(string='Referencia', required=True, copy=False, readonly=True,
-                       default=lambda self: self.env['ir.sequence'].next_by_code('fundacion.visita.hoja'))
+    name = fields.Char(string='Referencia', required=False, copy=False, readonly=True)
     date = fields.Date(string='Fecha', default=fields.Date.today, required=True, readonly=True,
                        states={'draft': [('readonly', False)]})
     state = fields.Selection([
@@ -19,8 +17,6 @@ class VisitaHoja(models.Model):
     ], string='Estado', default='draft', tracking=True)
 
     visita_ids = fields.One2many('fundacion.visita', 'hoja_id', string='Visitas')
-
-
 
     def action_validate(self):
         self.state = 'done'
@@ -33,11 +29,14 @@ class VisitaHoja(models.Model):
 
     def action_view_visitas(self):
         self.ensure_one()
-        return {
-            'name': 'Visitas',
-            'type': 'ir.actions.act_window',
-            'res_model': 'fundacion.visita',
-            'view_mode': 'list,form',
-            'domain': [('hoja_id', '=', self.id)],
-            'context': {'default_hoja_id': self.id}
-        }
+        action = self.env.ref('fundacion_visitantes.fundacion_visita_action').read()[0]
+        action['domain'] = [('hoja_id', '=', self.id)]
+        return action
+
+    @api.model
+    def create(self, vals):
+        if vals.get('name', _('New')) == _('New'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('fundacion.visita.hoja') or _('New')
+
+        result = super(VisitaHoja, self).create(vals)
+        return result
