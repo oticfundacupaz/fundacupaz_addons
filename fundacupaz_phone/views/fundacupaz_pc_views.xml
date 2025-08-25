@@ -86,8 +86,6 @@
             <field name="view_id" ref="view_tree_fundacupaz_pc"/>
         </record>
 
-        <menuitem id="menu_Fundacupaz_Ajustes" name="Fundacupaz_Ajustes" parent="menu_fundacupaz_pc"
-            sequence="10000" groups="group_fundacupaz_manager_pc"/>
 
     </data>
 </odoo>

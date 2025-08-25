@@ -41,7 +41,6 @@
             <field name="view_id" ref="view_tree_fundacupaz_cuadrante"/>
         </record>
 
-        <menuitem id="menu_fundacupaz_cuadrante" name="Cuadrante" parent="menu_Fundacupaz_Ajustes"/>
-            sequence="20" action="action_fundacupaz_cuadrante"/>
+
     </data>
 </odoo>

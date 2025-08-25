@@ -214,10 +214,10 @@
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Aplicaciones')])]"/>
         </record>
 
-        <record model="res.groups" id="group_fundacupaz_manager_pc">
-            <field name="name">Fundacupaz Ajustes </field>
+        <record model="res.groups" id="group_fundacupaz_manager">
+            <field name="name">Fundacupaz Ajustes</field>
+            <field name="comment">fundacupaz Ajustes</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <!-- Grupo de seguridad para ocultar el menú -->
@@ -231,9 +231,9 @@
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
         </record>
 
-        <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">
-            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>
-        </record>
+<!--        <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">-->
+<!--            <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>-->
+<!--        </record>-->
 
         <record id="hr.menu_hr_root" model="ir.ui.menu">
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_ocultar_menus')])]"/>

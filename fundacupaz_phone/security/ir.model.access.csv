@@ -1,5 +1,4 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_fundacupaz_ajustes,access.fundacupaz.ajustes,model_fundacupaz_pc,group_fundacupaz_manager_pc,1,1,1,1
 "access_fundacupaz_ente","access.fundacupaz.ente","model_fundacupaz_ente","base.group_user",1,1,1,1
 "access_fundacupaz_phone_plan","access.fundacupaz.phone.plan","model_fundacupaz_phone_plan","base.group_user",1,1,1,1
 "access_fundacupaz_cuadrante","access.fundacupaz.cuadrante","model_fundacupaz_cuadrante","base.group_user",1,1,1,1

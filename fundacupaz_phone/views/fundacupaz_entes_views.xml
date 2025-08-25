@@ -35,10 +35,5 @@
             <field name="view_id" ref="view_tree_fundacupaz_ente"/>
         </record>
 
-        <menuitem id="menu_Fundacupaz_Ajustes" name="Fundacupaz_Ajustes"
-            sequence="10000"/>
-
-        <menuitem id="menu_fundacupaz_ente" name="Entes" parent="menu_Fundacupaz_Ajustes"
-            sequence="10" action="action_fundacupaz_ente"/>
     </data>
 </odoo>
