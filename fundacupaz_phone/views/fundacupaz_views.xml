@@ -31,7 +31,7 @@
 
                         <group>
                             <group string="Asignación del Teléfono">
-                                <field name="persona_asignada" required="True"/>
+                                <field name="persona_asignada"/>
                                 <field name="ente"/>
                             </group>
                             <group/>
