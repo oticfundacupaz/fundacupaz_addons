@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fundacupaz_phone_dashboard_search" model="ir.ui.view">
+        <field name="name">fundacupaz.phone.dashboard.search</field>
+        <field name="model">fundacupaz.phone</field>
+        <field name="arch" type="xml">
+            <search string="Análisis de Teléfonos">
+                <field name="number_phone"/>
+                <field name="imei_phone"/>
+                <separator/>
+                <filter string="Por Operadora" name="group_by_operadora" context="{'group_by': 'operadora'}"/>
+                <filter string="Por Estatus" name="group_by_estatus" context="{'group_by': 'estatus'}"/>
+                <filter string="Por Plan" name="group_by_plan" context="{'group_by': 'plan_id'}"/>
+                <filter string="Por Estado" name="group_by_estado" context="{'group_by': 'estado'}"/>
+                <filter string="Por Municipio" name="group_by_municipio" context="{'group_by': 'municipio'}"/>
+                <filter string="Por Cuadrante" name="group_by_cuadrante" context="{'group_by': 'cuadrantes'}"/>
+                <filter string="Por Ente" name="group_by_ente" context="{'group_by': 'ente'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_fundacupaz_phone_graph" model="ir.ui.view">
+        <field name="name">fundacupaz.phone.graph</field>
+        <field name="model">fundacupaz.phone</field>
+        <field name="arch" type="xml">
+            <graph string="Análisis Gráfico de Teléfonos" type="bar">
+                <field name="estatus" type="row"/>
+                <field name="operadora" type="row"/>
+                <field name="estado" type="row"/>
+                <field name="municipio" type="row"/>
+                <field name="ente" type="row"/>
+                <field name="cuadrantes" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_fundacupaz_phone_pivot" model="ir.ui.view">
+        <field name="name">fundacupaz.phone.pivot</field>
+        <field name="model">fundacupaz.phone</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Teléfonos">
+                <field name="estatus" type="row"/>
+                <field name="operadora" type="col"/>
+                <field name="estado" type="row"/>
+                <field name="municipio" type="row"/>
+                <field name="ente" type="row"/>
+                <field name="cuadrantes" type="row"/>
+                <field name="plan_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_fundacupaz_dashboard" model="ir.actions.act_window">
+        <field name="name">Tablero de Teléfonos</field>
+        <field name="res_model">fundacupaz.phone</field>
+        <field name="view_mode">graph,pivot</field> <field name="search_view_id" ref="view_fundacupaz_phone_dashboard_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Analiza el estado de tus teléfonos de forma interactiva.
+            </p><p>
+                Usa los menús de 'Agrupar por' y 'Medidas' para personalizar tu vista.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_fundacupaz_dashboard_root"
+        name="Tableros"
+        sequence="1"
+        web_icon="fundacupaz_dashboard,static/description/icon.png"
+    />
+
+    <menuitem
+        id="menu_fundacupaz_dashboard"
+        name="Tablero de Teléfonos"
+        parent="menu_fundacupaz_dashboard_root"
+        action="action_fundacupaz_dashboard"
+        sequence="10"
+    />
+</odoo>
