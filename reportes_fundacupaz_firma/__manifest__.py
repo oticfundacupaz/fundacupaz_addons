@@ -12,6 +12,7 @@
     'version': '1.0',
     'depends': ['stock'],
     'data': [
+        'reports/stock_picking_templates.xml.xml',
        # 'reports/stock_picking_styles.xml',
     ],
     'installable': True,
