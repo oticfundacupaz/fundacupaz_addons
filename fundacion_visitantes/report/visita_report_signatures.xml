@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_visita_hoja_template_inherit" inherit_id="fundacion_visitantes.report_visita_hoja_template">
+        <xpath expr="//div[@class='page']" position="after">
+            <table style="width: 100%; margin-top: 50px; page-break-inside: avoid; border-collapse: collapse; border: 1px solid #d3d3d3;">
+                <tbody>
+                    <tr style="text-align: center; vertical-align: bottom;">
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [Frima]
+                        </td>
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [SELLO]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="report_visitas_por_dia_template_inherit" inherit_id="fundacion_visitantes.report_visitas_por_dia_template">
+        <xpath expr="//div[@class='page']" position="after">
+            <table style="width: 100%; margin-top: 50px; page-break-inside: avoid; border-collapse: collapse; border: 1px solid #d3d3d3;">
+                <tbody>
+                    <tr style="text-align: center; vertical-align: bottom;">
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [Firma]
+                        </td>
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [SELLO]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="report_visitas_por_destino_template_inherit" inherit_id="fundacion_visitantes.report_visitas_por_destino_template">
+        <xpath expr="//div[@class='page']" position="after">
+            <table style="width: 100%; margin-top: 50px; page-break-inside: avoid; border-collapse: collapse; border: 1px solid #d3d3d3;">
+                <tbody>
+                    <tr style="text-align: center; vertical-align: bottom;">
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [Firma]
+                        </td>
+                        <td style="width: 50%; height: 5cm; border: 1px solid #d3d3d3;">
+                            <div> </div>
+                            [SELLO]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+</odoo>

@@ -11,8 +11,13 @@
                             string="Reporte De Hoy"
                             class="oe_highlight"
                             />
+                    <button name="%(fundacion_visitantes.action_launch_report_por_destino_wizard)d"
+                            type="action"
+                            string="Reporte por Destino"
+                            class="oe_highlight"
+                            />
                     <button name="action_validate" type="object" string="Validar" class="oe_highlight"
-                            invisible="state != 'draft'"/>
+                            invisible="state != 'draft' or not all_visitas_have_exit_date"/>
                     <button name="action_cancel" type="object" string="Cancelar"
                             invisible="state != 'draft'"/>
                     <button name="action_reset_draft" type="object" string="Reiniciar a Borrador"
@@ -44,6 +49,7 @@
                                     <field name="visitor_id" domain="[('identification_number', '!=', False)]"/>
                                     <field name="identification_number" string="Cédula / ID" readonly="1"/>
                                     <field name="name" string="Nombre Completo" readonly="1"/>
+                                    <field name="origen"/>
                                     <field name="visit_purpose" required="1"/>
                                     <field name="destination_person"/>
                                     <field name="entry_date" widget="datetime"/>
@@ -89,5 +95,7 @@
 
     <menuitem id="fundacion_reportes_menu_root" name="Reportes" parent="fundacion_menu_root" sequence="50"/>
 
-    <menuitem id="fundacion_reporte_dia_menu" name="Reporte por Día" parent="fundacion_reportes_menu_root" action="action_lanzar_reporte_dia_wizard" sequence="10"/>
+    <menuitem id="fundacion_reporte_dia_menu" name="Reporte por Día" parent="fundacion_reportes_menu_root" action="action_lanzar_reporte_dia_wizard" sequence="10"/>}
+
+    <menuitem id="fundacion_reporte_destino_menu" name="Reporte por Destino" parent="fundacion_reportes_menu_root" action="action_launch_report_por_destino_wizard" sequence="20"/>
 </odoo>

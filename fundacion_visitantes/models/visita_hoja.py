@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 class VisitaHoja(models.Model):
     _name = 'fundacion.visita.hoja'
@@ -19,6 +20,9 @@ class VisitaHoja(models.Model):
     visita_ids = fields.One2many('fundacion.visita', 'hoja_id', string='Visitas')
 
     def action_validate(self):
+        for visita in self.visita_ids:
+            if not visita.exit_date:
+                raise ValidationError("No puedes validar la hoja de visitas si hay visitas sin hora de salida registrada.")
         self.state = 'done'
 
     def action_cancel(self):
@@ -40,3 +44,10 @@ class VisitaHoja(models.Model):
 
         result = super(VisitaHoja, self).create(vals)
         return result
+
+    all_visitas_have_exit_date = fields.Boolean(compute='_compute_all_visitas_have_exit_date')
+
+    @api.depends('visita_ids.exit_date')
+    def _compute_all_visitas_have_exit_date(self):
+        for rec in self:
+            rec.all_visitas_have_exit_date = all(visita.exit_date for visita in rec.visita_ids)

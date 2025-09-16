@@ -4,12 +4,19 @@
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <div class="page">
-                    <h2 class="text-center">Reporte de Visitas del Día: <span t-esc="docs[0].entry_date.strftime('%d/%m/%Y')" t-if="docs"/></h2>
+                    <h2 class="text-center">Reporte de Visitas del Día: <span t-esc="data['fecha_reporte'].strftime('%d/%m/%Y')"/></h2>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <strong>Generado por: </strong>
+                            <span t-esc="data['nombre_usuario']"/>
+                        </div>
+                    </div>
                     <table class="table table-sm table-bordered mt-4">
                         <thead>
                             <tr>
                                 <th>Visitante</th>
                                 <th>Cédula / ID</th>
+                                <th>ORIGEN</th>
                                 <th>Motivo</th>
                                 <th>Se dirige a</th>
                                 <th>Hora Entrada</th>
@@ -20,6 +27,7 @@
                             <tr t-foreach="docs" t-as="visita">
                                 <td><span t-field="visita.name"/></td>
                                 <td><span t-field="visita.identification_number"/></td>
+                                <td><span t-field="visita.origen"/></td>
                                 <td><span t-field="visita.visit_purpose"/></td>
                                 <td><span t-field="visita.destination_person"/></td>
                                 <td><span t-field="visita.entry_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>
@@ -51,6 +59,7 @@
                         <tr>
                             <th>Visitante</th>
                             <th>Cédula / ID</th>
+                            <th>ORIGEN</th>
                             <th>Motivo</th>
                             <th>Se dirige a</th>
                             <th>Hora Entrada</th>
@@ -61,6 +70,7 @@
                         <tr t-foreach="docs.visita_ids" t-as="visita">
                             <td><span t-field="visita.visitor_id.name"/></td>
                             <td><span t-field="visita.identification_number"/></td>
+                            <td><span t-field="visita.origen"/></td>
                             <td><span t-field="visita.visit_purpose"/></td>
                             <td><span t-field="visita.destination_person"/></td>
                             <td><span t-field="visita.entry_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>

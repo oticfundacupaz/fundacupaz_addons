@@ -12,7 +12,7 @@
         <!--##########################################################################################-->
                                      <!--solo lectura telefono -->
         <!--##########################################################################################-->
-        <record id="gupo_fundacupaz" model="res.groups">
+        <record id="grupo_fundacupaz" model="res.groups">
             <field name="name"> fundacupaz solo lectura telefono</field>
             <field name="comment"> fundacupaz permiso solo lectura telefono</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>

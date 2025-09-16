@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 class Visitante(models.Model):
     _name = 'fundacion.visitante'
@@ -7,8 +8,7 @@ class Visitante(models.Model):
 
     name = fields.Char(string='Nombre Completo', required=True)
     identification_number = fields.Char(string='Cédula / ID', required=True, copy=False)
-    phone = fields.Char(string='Teléfono')
-    email = fields.Char(string='Correo Electrónico')
+    phone = fields.Char(string='Teléfono', required=True)
 
     image_1920 = fields.Image(string="Foto del Visitante", help="Foto tomada con la webcam o cargada desde un archivo.")
 
@@ -18,3 +18,14 @@ class Visitante(models.Model):
         for rec in self:
             result.append((rec.id, f"{rec.name} ({rec.identification_number})"))
         return result
+
+    @api.constrains('identification_number', 'phone')
+    def _check_numeric_and_length(self):
+        for rec in self:
+            if rec.identification_number and not rec.identification_number.isdigit():
+                raise ValidationError("El campo 'Cédula / ID' solo debe contener números.")
+            if rec.phone:
+                if not rec.phone.isdigit():
+                    raise ValidationError("El campo 'Teléfono' solo debe contener números.")
+                if len(rec.phone) != 11:
+                    raise ValidationError("El campo 'Teléfono' debe tener exactamente 11 dígitos.")

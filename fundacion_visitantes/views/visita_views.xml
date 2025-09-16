@@ -20,7 +20,6 @@
                         <field name="name" readonly="visitor_id != False" required="visitor_id == False"/>
                         <field name="identification_number" readonly="visitor_id != False" required="visitor_id == False"/>
                         <field name="phone" readonly="visitor_id != False"/>
-                        <field name="email" readonly="visitor_id != False"/>
                     </group>
                     <group>
                         <field name="visit_purpose" required="1"/>

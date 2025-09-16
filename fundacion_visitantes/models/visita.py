@@ -15,10 +15,27 @@ class Visita(models.Model):
     name = fields.Char(string='Nombre Completo')
     identification_number = fields.Char(string='Cédula / ID')
     phone = fields.Char(string='Teléfono')
-    email = fields.Char(string='Correo Electrónico')
+    origen = fields.Char(string='Origen')
 
     visit_purpose = fields.Text(string='Motivo de la Visita', required=True)
-    destination_person = fields.Char(string='Se dirige a')
+
+    destination_person = fields.Selection(
+        selection=[
+        ('PRE', 'PRESIDENCIA'),
+        ('RRHH', 'RECURSOS HUMANOS'),
+        ('COMISION', 'COMISION'),
+        ('SALASI', 'SALA SITUACIONAL'),
+        ('SC', 'SALA DE CONFERENCIA'),
+        ('PROYECTOS', 'PROYECTOS'),
+        ('TEC', 'TECNOLOGIA'),
+        ('FIN', 'FINANSAS'),
+        ('SER', 'SERVICIOS GENERALES'),
+        ('COC', 'COCINA'),
+        ('AUD', 'AUDITORIA'),
+        ('REC', 'RECEPCION'),
+        ('ALM', 'ALMACEN')
+    ], string='Se dirige a')
+
 
     entry_date = fields.Datetime(string='Hora de Entrada', default=fields.Datetime.now, readonly=True)
     exit_date = fields.Datetime(string='Hora de Salida')
@@ -29,12 +46,10 @@ class Visita(models.Model):
             self.name = self.visitor_id.name
             self.identification_number = self.visitor_id.identification_number
             self.phone = self.visitor_id.phone
-            self.email = self.visitor_id.email
         else:
             self.name = False
             self.identification_number = False
             self.phone = False
-            self.email = False
 
     @api.constrains('entry_date', 'exit_date')
     def _check_exit_date_after_entry_date(self):
@@ -52,7 +67,6 @@ class Visita(models.Model):
             vals['name'] = visitor.name
             vals['identification_number'] = visitor.identification_number
             vals['phone'] = visitor.phone
-            vals['email'] = visitor.email
         # Si no hay visitante, creamos uno nuevo
         elif vals.get('identification_number'):
             existing_visitor = self.env['fundacion.visitante'].search(
@@ -62,7 +76,6 @@ class Visita(models.Model):
                     'name': vals.get('name'),
                     'identification_number': vals.get('identification_number'),
                     'phone': vals.get('phone'),
-                    'email': vals.get('email'),
                 }).id
             else:
                 vals['visitor_id'] = existing_visitor.id

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_visitas_por_destino" model="ir.actions.report">
+        <field name="name">Reporte de Visitas por Destino</field>
+        <field name="model">fundacion.visita</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fundacion_visitantes.report_visitas_por_destino_template</field>
+        <field name="report_file">fundacion_visitantes.report_visitas_por_destino_template</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_visitas_por_destino_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Reporte de Visitas</h2>
+                    <div class="row mt-4 mb-4">
+                        <div class="col-6">
+                            <strong>Fecha: </strong>
+                            <span t-esc="docs[0].entry_date.strftime('%d/%m/%Y')" t-if="docs"/>
+                        </div>
+                        <div class="col-6 text-right">
+                            <strong>Destino: </strong>
+                            <span t-field="docs[0].destination_person" t-if="docs"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <strong>Generado por: </strong>
+                            <span t-esc="user.name"/>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>Visitante</th>
+                                <th>Cédula / ID</th>
+                                <th>Origen</th>
+                                <th>Motivo</th>
+                                <th>Hora Entrada</th>
+                                <th>Hora Salida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="visita">
+                                <td><span t-field="visita.name"/></td>
+                                <td><span t-field="visita.identification_number"/></td>
+                                <td><span t-field="visita.origen"/></td>
+                                <td><span t-field="visita.visit_purpose"/></td>
+                                <td><span t-field="visita.entry_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>
+                                <td><span t-field="visita.exit_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

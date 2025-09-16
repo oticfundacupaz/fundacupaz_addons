@@ -14,7 +14,7 @@
         'views/fundacupaz_views.xml',
         'views/fundacupaz_fleet_views.xml',
         'views/fundacupaz_entes_views.xml',
-        'views/fundacupaz_inventario_views.xml',
+        # 'views/fundacupaz_inventario_views.xml',
         'reportes/fundacupaz_reportes_entrega.xml',
         'reportes/report_verificacion_template.xml',
     ],

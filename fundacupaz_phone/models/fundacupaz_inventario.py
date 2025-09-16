@@ -26,7 +26,7 @@ class FundacupazInventarioCampos(models.Model):
             ('asi', 'ASIGNACIÓN'),
             ('dot', 'DOTACIÓN'),
             ('don', 'DONACIÓN'),
-        ], string='Tipo de Entrega', required=True, tracking=True)
+        ], string='Tipo de Entrega', tracking=True)
 
     def get_month_name(self, date):
         if date:
