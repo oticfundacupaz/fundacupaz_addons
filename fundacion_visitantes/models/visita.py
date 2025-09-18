@@ -16,26 +16,23 @@ class Visita(models.Model):
     identification_number = fields.Char(string='Cédula / ID')
     phone = fields.Char(string='Teléfono')
     origen = fields.Char(string='Origen')
-
     visit_purpose = fields.Text(string='Motivo de la Visita', required=True)
-
     destination_person = fields.Selection(
         selection=[
-        ('PRE', 'PRESIDENCIA'),
-        ('RRHH', 'RECURSOS HUMANOS'),
-        ('COMISION', 'COMISION'),
-        ('SALASI', 'SALA SITUACIONAL'),
-        ('SC', 'SALA DE CONFERENCIA'),
-        ('PROYECTOS', 'PROYECTOS'),
-        ('TEC', 'TECNOLOGIA'),
-        ('FIN', 'FINANSAS'),
-        ('SER', 'SERVICIOS GENERALES'),
-        ('COC', 'COCINA'),
-        ('AUD', 'AUDITORIA'),
-        ('REC', 'RECEPCION'),
-        ('ALM', 'ALMACEN')
-    ], string='Se dirige a')
-
+            ('PRE', 'PRESIDENCIA'),
+            ('RRHH', 'RECURSOS HUMANOS'),
+            ('COMISION', 'COMISION'),
+            ('SALASI', 'SALA SITUACIONAL'),
+            ('SC', 'SALA DE CONFERENCIA'),
+            ('PROYECTOS', 'PROYECTOS'),
+            ('TEC', 'TECNOLOGIA'),
+            ('FIN', 'FINANSAS'),
+            ('SER', 'SERVICIOS GENERALES'),
+            ('COC', 'COCINA'),
+            ('AUD', 'AUDITORIA'),
+            ('REC', 'RECEPCION'),
+            ('ALM', 'ALMACEN')
+        ], string='Se dirige a')
 
     entry_date = fields.Datetime(string='Hora de Entrada', default=fields.Datetime.now, readonly=True)
     exit_date = fields.Datetime(string='Hora de Salida')

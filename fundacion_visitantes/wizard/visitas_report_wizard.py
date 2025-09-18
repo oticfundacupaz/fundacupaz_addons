@@ -2,7 +2,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class VisitaReportWizard(models.TransientModel):
     _name = 'fundacion.visita.report.wizard'
     _description = 'Asistente para Reporte de Visitas por Destino'
@@ -44,18 +43,5 @@ class VisitaReportWizard(models.TransientModel):
         if not visitas:
             raise ValidationError("No se encontraron visitas para los filtros seleccionados.")
 
-        # Obtener el nombre legible del destino para el nombre del archivo
-        destination_name = dict(self.env['fundacion.visita']._fields['destination_person'].selection).get(
-            self.destination_person, self.destination_person)
-
-        # Formatear la fecha para el nombre del archivo (Ej: 2025-09-16)
-        date_str = self.date_filter.strftime('%Y-%m-%d')
-
-        # Construir el nombre del archivo PDF
-        report_filename = f"Reporte de Visitas a {destination_name} - {date_str}.pdf"
-
-        # Llamamos a la acción del reporte y le pasamos el nombre del archivo en la configuración
-        return self.env.ref('fundacion_visitantes.action_report_visitas_por_destino').report_action(
-            docids=visitas,
-            config={'report_file': report_filename},
-        )
+        # Llamamos a la acción del reporte y le pasamos los registros encontrados
+        return self.env.ref('fundacion_visitantes.action_report_visitas_por_destino').report_action(visitas)

@@ -29,3 +29,4 @@ class Visitante(models.Model):
                     raise ValidationError("El campo 'Teléfono' solo debe contener números.")
                 if len(rec.phone) != 11:
                     raise ValidationError("El campo 'Teléfono' debe tener exactamente 11 dígitos.")
+
