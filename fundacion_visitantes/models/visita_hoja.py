@@ -22,7 +22,11 @@ class VisitaHoja(models.Model):
     def action_validate(self):
         for visita in self.visita_ids:
             if not visita.exit_date:
-                raise ValidationError("No puedes validar la hoja de visitas si hay visitas sin hora de salida registrada.")
+                raise ValidationError(
+                    "No puedes validar la hoja de visitas si hay visitas sin hora de salida registrada.")
+        self.state = 'done'
+
+    def action_validate(self):
         self.state = 'done'
 
     def action_cancel(self):

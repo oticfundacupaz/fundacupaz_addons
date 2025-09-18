@@ -3,7 +3,6 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 from datetime import datetime, time
 
-
 class VisitaReporteDiaWizard(models.TransientModel):
     _name = 'fundacion.visita.reporte.dia.wizard'
     _description = 'Asistente para Reporte de Visitas por Día'
@@ -25,14 +24,5 @@ class VisitaReporteDiaWizard(models.TransientModel):
         if not visitas_ids:
             raise UserError("No se encontraron visitas registradas para la fecha seleccionada.")
 
-        # Preparamos los datos a enviar al reporte
-        data = {
-            'fecha_reporte': self.fecha_reporte,
-            'nombre_usuario': self.env.user.name,
-        }
-
-        # Llama a la acción del reporte, enviando el diccionario de datos
-        return self.env.ref('fundacion_visitantes.action_report_visitas_por_dia').report_action(
-            docids=visitas_ids,
-            data=data,
-        )
+        # Llama a la acción del reporte y le pasa los registros encontrados
+        return self.env.ref('fundacion_visitantes.action_report_visitas_por_dia').report_action(visitas_ids)
