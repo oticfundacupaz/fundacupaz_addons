@@ -6,16 +6,55 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">fundacion_visitantes.report_visita_hoja_template</field>
         <field name="report_file">fundacion_visitantes.report_visita_hoja_template</field>
+        <field name="print_report_name">'Report De Hoy %s' % object.date.strftime('%d-%m-%Y')</field>
     </record>
 
-   <record id="action_report_visitas_por_dia" model="ir.actions.report">
-        <field name="name">Reporte de Visitas por Día</field>
-        <field name="model">fundacion.visita</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">fundacion_visitantes.report_visitas_por_dia_template</field>
-        <field name="report_file">fundacion_visitantes.report_visitas_por_dia_template</field>
-        <field name="binding_model_id" ref="model_fundacion_visita_reporte_dia_wizard"/>
-        <field name="binding_type">report</field>
-    </record>
+   <template id="report_visita_hoja_template">
+    <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 class="text-center">Hoja de Registro de Visitas</h2>
+                 <div class="row mt-4 mb-4">
+                    <div class="col-6">
+                        <strong>Referencia: </strong><span t-field="docs.name"/>
+                        <p>
+                            Generado por: <span t-esc="user.name"/> (<span t-esc="user.login"/>)
+                        </p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <p>
+                            Fecha de generación: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        </p>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-4">
+                    <thead>
+                        <tr>
+                            <th>Visitante</th>
+                            <th>Cédula / ID</th>
+                            <th>Origen</th>
+                            <th>Motivo</th>
+                            <th>Se dirige a</th>
+                            <th>Hora Entrada</th>
+                            <th>Hora Salida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="docs.visita_ids" t-as="visita">
+                            <td><span t-field="visita.visitor_id.name"/></td>
+                            <td><span t-field="visita.identification_number"/></td>
+                            <td><span t-field="visita.origen"/></td>
+                            <td><span t-field="visita.visit_purpose"/></td>
+                            <td><span t-field="visita.destination_person"/></td>
+                            <td><span t-field="visita.entry_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>
+                            <td><span t-field="visita.exit_date" t-options='{"widget": "datetime", "format": "HH:mm"}'/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
 
 </odoo>
