@@ -2,7 +2,8 @@
 "access_fundacupaz_ente","access.fundacupaz.ente","model_fundacupaz_ente","base.group_user",1,1,1,1
 "access_fundacupaz_phone_plan","access.fundacupaz.phone.plan","model_fundacupaz_phone_plan","base.group_user",1,1,1,1
 "access_fundacupaz_cuadrante","access.fundacupaz.cuadrante","model_fundacupaz_cuadrante","base.group_user",1,1,1,1
-"access_readonly_fundacupaz_phone","readonly.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.gupo_fundacupaz",1,0,0,0
+"access_write_fundacupaz_phone","write.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.gupo_fundacupaz",1,1,1,0
+"access_editor_basico_fundacupaz_phone","editor.basico.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz_editor_basico",1,1,1,0
 "access_readonly_fundacupaz_inventario_picking","readonly.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario",1,0,0,0
 "access_transferencia_fundacupaz_inventario_picking","transferencia.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario_transferencias",1,1,1,0
 "access_readonly_fundacupaz_producto_solo_lectura","readonly.fundacupaz.producto.solo.lectura","stock.model_product_template","fundacupaz_phone.grupo_producto_solo_lectura",1,0,0,0

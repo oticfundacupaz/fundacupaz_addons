@@ -14,30 +14,32 @@
                         <group>
                             <group string="Información del Dispositivo">
                                 <field name="number_phone" required="True"/>
-                                <field name="marca_phone"/>
-                                <field name="modelo_phone"/>
-                                <field name="imei_phone"/>
+                                <field name="marca_phone"
+                                       readonly="not is_editor_basico"/>
+                                <field name="modelo_phone"
+                                       readonly="not is_editor_basico"/>
+                                <field name="imei_phone"
+                                       readonly="not is_editor_basico"/>
                             </group>
                             <group string="Detalles de Operadora y Plan">
-                                <field name="operadora" required="True"
+                                <field name="operadora"
                                        readonly="1"/>
 
                                 <field name="plan_id"
-                                       required="True"
                                        domain="[('operadora', '=', operadora)]"
-                                       options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                       options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                                       readonly="not is_editor_basico"/>
+                                <field name="facturado_por"
+                                       readonly="not is_editor_basico"/>
                             </group>
                         </group>
 
                         <group>
                             <group string="Asignación del Teléfono">
-                                <field name="persona_asignada"/>
-                                <field name="ente"/>
+                                <field name="persona_asignada"
+                                       readonly="is_editor_basico"/>
                             </group>
                             <group/>
-                        </group>
-                        <group string="Observaciones Adicionales">
-                            <field name="observaciones" nolabel="1" colspan="2"/>
                         </group>
 
                         <notebook>
@@ -45,36 +47,56 @@
                                 <group>
                                     <label for="es_cuadrante"/>
                                     <div>
-                                        <field name="es_cuadrante"/>
+                                        <field name="es_cuadrante"
+                                               readonly="is_editor_basico"/>
                                     </div>
                                 </group>
 
                                 <group invisible="not es_cuadrante">
-                                    <field name="estado"/>
-                                    <field name="municipio"/>
-                                    <field name="cuadrantes"/>
+                                    <field name="estado"
+                                           readonly="is_editor_basico"/>
+                                    <field name="municipio"
+                                           readonly="is_editor_basico"/>
+                                    <field name="cuadrantes"
+                                           readonly="is_editor_basico"/>
+                                    <field name="parroqui_comuna"
+                                           readonly="is_editor_basico"/>
+                                    <field name="organismo"
+                                           readonly="is_editor_basico"/>
+                                    <field name="organismo_otro"
+                                           invisible="[('organismo', '!=', 'OTRO')]"
+                                           required="[('organismo', '=', 'OTRO')]"
+                                           readonly="is_editor_basico"/>
+                                    <field name="observaciones"
+                                           placeholder="Si es (otro) indicar"
+                                           readonly="is_editor_basico"/>
                                 </group>
                             </page>
 
                             <page string="Gestión y Verificación" name="management_details">
                                 <group>
                                     <group string="Proceso de Facturación y Revisión">
-                                        <field name="facturado_por"/>
-                                        <field name="revisado"/>
-<!--                                        <field name="fecha_revision" invisible="is_fecha_revision_invisible"/>-->
-                                        <field name="fecha_revision_time" invisible="is_fecha_revision_invisible"/>
+
+                                        <field name="fecha_revision_time" invisible="not telf_corresponde"
+                                               readonly="is_editor_basico"/>
+                                        <field name="operador_id" invisible="not telf_corresponde"
+                                               string="Operador de Revisión"
+                                               readonly="1"/>
                                     </group>
                                     <group string="Verificación Telefónica">
-                                        <field name="llamado"/>
+
                                         <field name="telf_corresponde" widget="radio" options="{'horizontal': true}"
-                                               invisible="llamado == False"/>
-                                        <div invisible="llamado == False or telf_corresponde != 'no'">
+                                              readonly="is_editor_basico"/>
+
+                                        <div invisible="telf_corresponde != 'no'">
                                             <label for="motivo_seleccionado" string="Motivo:"/>
-                                            <field name="motivo_seleccionado" widget="radio" options="{'horizontal': true}"/>
+                                            <field name="motivo_seleccionado" widget="radio" options="{'horizontal': true}"
+                                                   readonly="is_editor_basico"/>
                                             <field name="motivo_otros_observaciones"
-                                                   placeholder="Especifique el motivo..."
-                                                   invisible="motivo_seleccionado != 'otros'"
-                                                   nolabel="1"/>
+                                                   placeholder="observacion"
+                                                   invisible="telf_corresponde != 'no'"
+                                                   nolabel="1"
+                                                   readonly="is_editor_basico"/>
                                         </div>
                                     </group>
                                 </group>
@@ -100,21 +122,18 @@
                     <field name="marca_phone" optional="hide"/>
                     <field name="modelo_phone" optional="hide"/>
                     <field name="imei_phone" optional="hide"/>
-                    <field name="ente"/>
                     <field name="persona_asignada"/>
                     <field name="estado"/>
                     <field name="municipio" optional="show"/>
                     <field name="cuadrantes" optional="show"/>
                     <field name="facturado_por" optional="hide"/>
-                    <field name="revisado" optional="show"/>
-<!--                    <field name="fecha_revision" optional="hide"/>-->
                     <field name="fecha_revision_time" optional="hide"/>
-                    <field name="llamado" optional="hide"/>
                     <field name="telf_corresponde" optional="hide"/>
                     <field name="motivo_seleccionado" optional="hide"/>
                     <field name="motivo_otros_observaciones" optional="hide"/>
                     <field name="estatus" widget="badge" decoration-info="estatus == 'N/A'" decoration-success="estatus == 'ACTIVA'" decoration-danger="estatus == 'INACTIVA'" decoration-warning="estatus == 'SUSPENDIDA'" optional="show"/>
                     <field name="observaciones" optional="hide"/>
+                    <field name="organismo" optional="hide"/>
                 </list>
             </field>
         </record>

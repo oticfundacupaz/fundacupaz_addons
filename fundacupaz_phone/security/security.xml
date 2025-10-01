@@ -214,6 +214,12 @@
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_Aplicaciones')])]"/>
         </record>
 
+        <record id="grupo_fundacupaz_editor_basico" model="res.groups">
+            <field name="name">Fundacupaz Editor Básico</field>
+            <field name="comment">Permite a los usuarios editar la información del dispositivo y el plan.</field>
+            <field name="category_id" ref="module_category_fundacupaz_phone"/>
+        </record>
+
         <record model="res.groups" id="group_fundacupaz_manager">
             <field name="name">Fundacupaz Ajustes</field>
             <field name="comment">fundacupaz Ajustes</field>

@@ -15,7 +15,7 @@ class FundacupazPhone(models.Model):
     marca_phone = fields.Char("Marca", tracking=True)
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
-    observaciones = fields.Char("Observaciones", tracking=True)
+    observaciones = fields.Char("Si es otro:", tracking=True)
 
     # Campos de estado y clasificación
     operadora = fields.Selection(
@@ -67,7 +67,7 @@ class FundacupazPhone(models.Model):
     # Campos de relación
     plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
     ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
-    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Persona Asignada", tracking=True)
+    persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Responsable", tracking=True)
     estado = fields.Many2one('res.country.state', domain=[('country_id.name', '=', 'Venezuela')], string="Estado", tracking=True)
     municipio = fields.Many2one('res.country.state.municipality', domain="[('state_id','=', estado)]", string="Municipio", tracking=True)
     cuadrantes = fields.Many2one('fundacupaz.cuadrante', string="Cuadrante", tracking=True)
@@ -75,7 +75,13 @@ class FundacupazPhone(models.Model):
     # Campos de revisión y verificación
     fecha_revision = fields.Date("Fecha de Revisión", tracking=True)
     fecha_revision_time = fields.Datetime("Fecha de Revisión hora", tracking=True)
-    is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
+    operador_id = fields.Many2one(
+        'res.users',
+        string='Operador',
+        tracking=True,
+        readonly=True,  # El usuario no debe poder cambiarlo manualmente
+        help="Usuario que realizó la última verificación.")
+    # is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
     is_cuadrante_fields_invisible = fields.Boolean(compute='_compute_is_cuadrante_fields_invisible', store=False)
     telf_corresponde = fields.Selection(
         selection=[
@@ -84,13 +90,15 @@ class FundacupazPhone(models.Model):
         ],
         string="¿Teléfono verificado corresponde?", tracking=True)
 
+    parroqui_comuna = fields.Char("Parroquia o circuito comunal", tracking=True)
+
+
     motivo_seleccionado = fields.Selection(
         selection=[
-            ('N/D', 'No Disponible'),
-            ('F/L', 'Fuera de línea / Apagado'),
+            ('N/D', 'Repica y no responde'),
+            ('F/L', 'Fuera de cobertura / Apagado'),
             ('N/A', 'No Asignado'),
-            ('S/D', 'Dañado / Suspendido por operadora'),
-            ('otros', 'Otros')
+            ('S/D', 'Suspendido temporalmente')
         ],
         string="Motivo", tracking=True)
 
@@ -103,6 +111,47 @@ class FundacupazPhone(models.Model):
             ('ver04', 'Fuera de Linea')
         ],
         string='Telefono Verificado', default=False, tracking=True)
+
+    organismo = fields.Selection(
+        selection=[
+            ('P/E', 'POLICIA DEL ESTADO'),
+            ('P/M', 'POLICIA MUNICIPAL'),
+            ('GNB', 'GNB'),
+            ('CPNB', 'CPNB'),
+            ('OTRO', 'OTRO')
+        ],
+        string="Organismo", tracking=True)
+
+    organismo_otro = fields.Char(
+        string="Especifique el Organismo",
+        tracking=True
+    )
+
+    is_editor_basico = fields.Boolean(
+        string="Es Editor Básico",
+        compute='_compute_is_editor_basico'
+    )
+
+
+    def write(self, vals):
+        """
+        Sobreescribe write para actualizar la fecha y el operador de revisión
+        con el usuario y la hora del servidor en cada modificación.
+        """
+        # Verifica si hay un usuario real activo (no el OdooBot o un proceso automático)
+        # Esto asegura que el campo solo se llene cuando un usuario interactúa.
+        if self.env.user and self.env.user.id != self.env.ref('base.user_root').id:
+            # Forzamos la actualización de los valores con el usuario y la hora del servidor
+            vals['fecha_revision_time'] = fields.Datetime.now()
+            vals['operador_id'] = self.env.user.id
+
+        # Llama al método write original de Odoo para que guarde los cambios (incluyendo los forzados)
+        return super(FundacupazPhone, self).write(vals)
+
+    @api.depends_context('uid')
+    def _compute_is_editor_basico(self):
+        """Calcula si el usuario actual pertenece al grupo 'Editor Básico'."""
+        self.is_editor_basico = self.env.user.has_group('fundacupaz_phone.grupo_fundacupaz_editor_basico')
 
     # Métodos Compute
     @api.depends('number_phone')
@@ -123,10 +172,7 @@ class FundacupazPhone(models.Model):
                 operadora_detectada = prefix_map.get(prefix, False)
             record.operadora = operadora_detectada
 
-    @api.depends('revisado')
-    def _compute_is_fecha_revision_invisible(self):
-        for record in self:
-            record.is_fecha_revision_invisible = not record.revisado
+
 
     @api.depends('es_cuadrante')
     def _compute_is_cuadrante_fields_invisible(self):
@@ -134,6 +180,12 @@ class FundacupazPhone(models.Model):
             record.is_cuadrante_fields_invisible = not record.es_cuadrante
 
     # Métodos Onchange
+    @api.onchange('organismo')
+    def _onchange_organismo(self):
+        """Limpia el campo de especificación si la opción seleccionada no es 'OTRO'."""
+        if self.organismo != 'OTRO':
+            self.organismo_otro = False
+
     @api.onchange('number_phone')
     def _onchange_number_phone(self):
         """
@@ -159,32 +211,21 @@ class FundacupazPhone(models.Model):
         else:
             return {'domain': {'plan_id': [('id', '=', False)]}}
 
-    @api.onchange('llamado')
-    def _onchange_llamado(self):
-        """Si 'Llamado' se desmarca, limpia todos los campos de verificación."""
-        if not self.llamado:
-            self.telf_corresponde = False
-            self.motivo_seleccionado = False
-            self.motivo_otros_observaciones = ''
 
     @api.onchange('telf_corresponde')
     def _onchange_telf_corresponde(self):
-        """Si la respuesta no es 'no', limpia los campos de motivo."""
-        if self.telf_corresponde != 'no':
-            self.motivo_seleccionado = False
-            self.motivo_otros_observaciones = ''
+            """Establece la fecha y hora y el Operador al seleccionar el estado de verificación."""
+            if self.telf_corresponde:
+                self.fecha_revision_time = fields.Datetime.now()
+                self.operador_id = self.env.user.id
+            else:
+                self.fecha_revision_time = False
+                self.operador_id = False
 
-    @api.onchange('motivo_seleccionado')
-    def _onchange_motivo_seleccionado(self):
-        """Si el motivo seleccionado no es 'Otros', limpia el campo de observaciones."""
-        if self.motivo_seleccionado != 'otros':
-            self.motivo_otros_observaciones = ''
+            if self.telf_corresponde == 'si':
+                self.motivo_seleccionado = False
+                self.motivo_otros_observaciones = ''
 
-    @api.onchange('revisado')
-    def _onchange_revisado(self):
-        """Si 'Revisado' se desmarca, vaciar 'Fecha de Revisión'."""
-        if not self.revisado:
-            self.fecha_revision_time = False
 
     @api.onchange('es_cuadrante')
     def _onchange_es_cuadrante(self):
