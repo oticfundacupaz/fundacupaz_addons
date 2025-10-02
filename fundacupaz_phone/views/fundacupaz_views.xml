@@ -11,38 +11,48 @@
                                options="{'clickable': '1', 'colors': {'ACTIVA': 'success', 'INACTIVA': 'danger', 'SUSPENDIDA': 'warning'}}"/>
                     </header>
                     <sheet>
-                        <group>
-                            <group string="Información del Dispositivo">
-                                <field name="number_phone" required="True"/>
-                                <field name="marca_phone"
-                                       readonly="not is_editor_basico"/>
-                                <field name="modelo_phone"
-                                       readonly="not is_editor_basico"/>
-                                <field name="imei_phone"
-                                       readonly="not is_editor_basico"/>
-                            </group>
-                            <group string="Detalles de Operadora y Plan">
-                                <field name="operadora"
-                                       readonly="1"/>
-
-                                <field name="plan_id"
-                                       domain="[('operadora', '=', operadora)]"
-                                       options="{'no_create': True, 'no_edit': True, 'no_open': True}"
-                                       readonly="not is_editor_basico"/>
-                                <field name="facturado_por"
-                                       readonly="not is_editor_basico"/>
-                            </group>
-                        </group>
-
-                        <group>
-                            <group string="Asignación del Teléfono">
-                                <field name="persona_asignada"
-                                       readonly="is_editor_basico"/>
-                            </group>
-                            <group/>
-                        </group>
-
+                        <div class="oe_title">
+                            <h1>
+                                <field name="operadora" readonly="1" placeholder="Operadora"/>
+                            </h1>
+                            <h3>
+                                <field name="number_phone" required="True" readonly="not is_editor_basico and id" placeholder="Número de Teléfono"/>
+                            </h3>
+                        </div>
                         <notebook>
+                            <page string="Información y Detalles" name="info_details">
+                                <group>
+                                    <group string="Información del Dispositivo">
+
+                                        <field name="marca_phone"
+                                               readonly="not is_editor_basico and id"/>
+
+                                        <field name="modelo_phone"
+                                               readonly="not is_editor_basico and id"/>
+
+                                        <field name="imei_phone"
+                                               readonly="not is_editor_basico and id"/>
+                                    </group>
+                                    <group string="Detalles de Operadora y Plan">
+
+                                        <field name="plan_id"
+                                               domain="[('operadora', '=', operadora)]"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                                               readonly="not is_editor_basico and id"/>
+                                        <field name="facturado_por"
+                                               readonly="not is_editor_basico and id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Asignación" name="assignment_details">
+                                <group>
+                                    <group string="Asignación del Teléfono">
+                                        <field name="persona_asignada"
+                                               readonly="is_editor_basico"/>
+                                    </group>
+                                    <group/>
+                                </group>
+                            </page>
                             <page string="Ubicación y Cuadrante" name="location_details">
                                 <group>
                                     <label for="es_cuadrante"/>
