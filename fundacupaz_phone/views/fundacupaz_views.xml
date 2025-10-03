@@ -73,10 +73,6 @@
                                            readonly="is_editor_basico"/>
                                     <field name="organismo"
                                            readonly="is_editor_basico"/>
-                                    <field name="organismo_otro"
-                                           invisible="[('organismo', '!=', 'OTRO')]"
-                                           required="[('organismo', '=', 'OTRO')]"
-                                           readonly="is_editor_basico"/>
                                     <field name="observaciones"
                                            placeholder="Si es (otro) indicar"
                                            readonly="is_editor_basico"/>
@@ -126,9 +122,11 @@
                     decoration-success="estatus == 'ACTIVA'"
                     decoration-danger="estatus == 'INACTIVA'"
                     decoration-warning="estatus == 'SUSPENDIDA'">
+                    <field name="fecha_revision_time"/>
+                    <field name="operador_id"/>
                     <field name="number_phone"/>
                     <field name="operadora"/>
-                    <field name="plan_id" optional="show"/> <field name="marca_phone" optional="hide"/>
+                    <field name="plan_id" optional="show"/>
                     <field name="marca_phone" optional="hide"/>
                     <field name="modelo_phone" optional="hide"/>
                     <field name="imei_phone" optional="hide"/>
@@ -136,14 +134,14 @@
                     <field name="estado"/>
                     <field name="municipio" optional="show"/>
                     <field name="cuadrantes" optional="show"/>
+                    <field name="parroqui_comuna" optional="show"/>
+                    <field name="organismo" optional="hide"/>
                     <field name="facturado_por" optional="hide"/>
-                    <field name="fecha_revision_time" optional="hide"/>
                     <field name="telf_corresponde" optional="hide"/>
                     <field name="motivo_seleccionado" optional="hide"/>
                     <field name="motivo_otros_observaciones" optional="hide"/>
-                    <field name="estatus" widget="badge" decoration-info="estatus == 'N/A'" decoration-success="estatus == 'ACTIVA'" decoration-danger="estatus == 'INACTIVA'" decoration-warning="estatus == 'SUSPENDIDA'" optional="show"/>
                     <field name="observaciones" optional="hide"/>
-                    <field name="organismo" optional="hide"/>
+                    <field name="estatus" widget="badge" decoration-info="estatus == 'N/A'" decoration-success="estatus == 'ACTIVA'" decoration-danger="estatus == 'INACTIVA'" decoration-warning="estatus == 'SUSPENDIDA'" optional="show"/>
                 </list>
             </field>
         </record>

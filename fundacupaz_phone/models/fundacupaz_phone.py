@@ -79,7 +79,7 @@ class FundacupazPhone(models.Model):
         'res.users',
         string='Operador',
         tracking=True,
-        readonly=True,  # El usuario no debe poder cambiarlo manualmente
+        readonly=True,
         help="Usuario que realizó la última verificación.")
     # is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
     is_cuadrante_fields_invisible = fields.Boolean(compute='_compute_is_cuadrante_fields_invisible', store=False)
@@ -88,7 +88,7 @@ class FundacupazPhone(models.Model):
             ('si', 'Sí'),
             ('no', 'No')
         ],
-        string="¿Teléfono verificado corresponde?", tracking=True)
+        string="¿La llamada fue efectiva?", tracking=True)
 
     parroqui_comuna = fields.Char("Parroquia o circuito comunal", tracking=True)
 
