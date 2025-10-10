@@ -81,7 +81,7 @@ class FundacupazPhone(models.Model):
         tracking=True,
         readonly=True,
         help="Usuario que realizó la última verificación.")
-    is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
+    is_fecha_revision_invisible = fields.Boolean(store=False, tracking=True)
     is_cuadrante_fields_invisible = fields.Boolean(compute='_compute_is_cuadrante_fields_invisible', store=False)
     telf_corresponde = fields.Selection(
         selection=[
