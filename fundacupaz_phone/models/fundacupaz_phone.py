@@ -16,6 +16,7 @@ class FundacupazPhone(models.Model):
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
     observaciones = fields.Char("Si es otro:", tracking=True)
+    observaciones_llamada = fields.Text("Observaciones de Llamada Efectiva", tracking=True)
 
     # Campos de estado y clasificación
     operadora = fields.Selection(
@@ -102,7 +103,7 @@ class FundacupazPhone(models.Model):
         ],
         string="Motivo", tracking=True)
 
-    motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
+    motivo_otros_observaciones = fields.Text("Observaciones de llamada no efectiva", tracking=True)
     telf_verificado = fields.Selection(
         selection=[
             ('ver01', 'Corresponde a Cuadrante'),
@@ -211,20 +212,26 @@ class FundacupazPhone(models.Model):
         else:
             return {'domain': {'plan_id': [('id', '=', False)]}}
 
-
     @api.onchange('telf_corresponde')
     def _onchange_telf_corresponde(self):
-            """Establece la fecha y hora y el Operador al seleccionar el estado de verificación."""
-            if self.telf_corresponde:
-                self.fecha_revision_time = fields.Datetime.now()
-                self.operador_id = self.env.user.id
-            else:
-                self.fecha_revision_time = False
-                self.operador_id = False
+        """
+        Establece la fecha/hora/operador y limpia los campos de motivo/observación
+        según si la llamada fue efectiva o no.
+        """
+        if self.telf_corresponde:
+            self.fecha_revision_time = fields.Datetime.now()
+            self.operador_id = self.env.user.id
+        else:
+            self.fecha_revision_time = False
+            self.operador_id = False
 
-            if self.telf_corresponde == 'si':
-                self.motivo_seleccionado = False
-                self.motivo_otros_observaciones = ''
+        if self.telf_corresponde == 'si':
+            # Si la llamada es efectiva, limpiar los campos del caso 'no'
+            self.motivo_seleccionado = False
+            self.motivo_otros_observaciones = ''
+        elif self.telf_corresponde == 'no':
+            # Si la llamada no es efectiva, limpiar los campos del caso 'si'
+            self.observaciones_llamada = ''
 
 
     @api.onchange('es_cuadrante')

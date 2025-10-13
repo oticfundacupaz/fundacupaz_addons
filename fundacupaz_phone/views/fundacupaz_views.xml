@@ -94,6 +94,12 @@
                                         <field name="telf_corresponde" widget="radio" options="{'horizontal': true}"
                                               readonly="is_editor_basico"/>
 
+                                        <field name="observaciones_llamada"
+                                               placeholder="Añadir observaciones de la llamada..."
+                                               invisible="telf_corresponde != 'si'"
+                                               required="telf_corresponde == 'si'"
+                                               readonly="is_editor_basico"/>
+
                                         <div invisible="telf_corresponde != 'no'">
                                             <label for="motivo_seleccionado" string="Motivo:"/>
                                             <field name="motivo_seleccionado" widget="radio" options="{'horizontal': true}"
@@ -141,6 +147,7 @@
                     <field name="motivo_seleccionado" optional="hide"/>
                     <field name="motivo_otros_observaciones" optional="hide"/>
                     <field name="observaciones" optional="hide"/>
+                    <field name="observaciones_llamada" optional="hide"/>
                     <field name="estatus" widget="badge" decoration-info="estatus == 'N/A'" decoration-success="estatus == 'ACTIVA'" decoration-danger="estatus == 'INACTIVA'" decoration-warning="estatus == 'SUSPENDIDA'" optional="show"/>
                 </list>
             </field>
