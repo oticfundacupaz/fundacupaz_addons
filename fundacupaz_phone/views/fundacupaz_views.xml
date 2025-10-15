@@ -7,8 +7,8 @@
             <field name="arch" type="xml">
                 <form string="Fundacupaz">
                     <header>
-                        <field name="estatus" widget="statusbar" required="True"
-                               options="{'clickable': '1', 'colors': {'ACTIVA': 'success', 'INACTIVA': 'danger', 'SUSPENDIDA': 'warning'}}"/>
+                        <field name="estatus" widget="statusbar"
+                               options="{'clickable': '1', 'colors': {'ACTIVA': 'success', 'INACTIVA': 'danger', 'SUSPENDIDA': 'warning', 'CANCELADO': 'dark'}}"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -23,23 +23,21 @@
                             <page string="Información y Detalles" name="info_details">
                                 <group>
                                     <group string="Información del Dispositivo">
-
                                         <field name="marca_phone"
                                                readonly="not is_editor_basico and id"/>
-
                                         <field name="modelo_phone"
                                                readonly="not is_editor_basico and id"/>
-
                                         <field name="imei_phone"
                                                readonly="not is_editor_basico and id"/>
                                     </group>
                                     <group string="Detalles de Operadora y Plan">
-
                                         <field name="plan_id"
                                                domain="[('operadora', '=', operadora)]"
                                                options="{'no_create': True, 'no_edit': True, 'no_open': True}"
                                                readonly="not is_editor_basico and id"/>
                                         <field name="facturado_por"
+                                               readonly="not is_editor_basico and id"/>
+                                        <field name="numero_cuenta"
                                                readonly="not is_editor_basico and id"/>
                                     </group>
                                 </group>
@@ -61,7 +59,6 @@
                                                readonly="is_editor_basico"/>
                                     </div>
                                 </group>
-
                                 <group invisible="not es_cuadrante">
                                     <field name="estado"
                                            readonly="is_editor_basico"/>
@@ -82,7 +79,6 @@
                             <page string="Gestión y Verificación" name="management_details">
                                 <group>
                                     <group string="Proceso de Facturación y Revisión">
-
                                         <field name="fecha_revision_time" invisible="not telf_corresponde"
                                                readonly="is_editor_basico"/>
                                         <field name="operador_id" invisible="not telf_corresponde"
@@ -90,14 +86,12 @@
                                                readonly="1"/>
                                     </group>
                                     <group string="Verificación Telefónica">
-
                                         <field name="telf_corresponde" widget="radio" options="{'horizontal': true}"
                                               readonly="is_editor_basico"/>
 
                                         <field name="observaciones_llamada"
                                                placeholder="Añadir observaciones de la llamada..."
                                                invisible="telf_corresponde != 'si'"
-                                               required="telf_corresponde == 'si'"
                                                readonly="is_editor_basico"/>
 
                                         <div invisible="telf_corresponde != 'no'">
@@ -127,7 +121,8 @@
                 <list string="Fundacupaz"
                     decoration-success="estatus == 'ACTIVA'"
                     decoration-danger="estatus == 'INACTIVA'"
-                    decoration-warning="estatus == 'SUSPENDIDA'">
+                    decoration-warning="estatus == 'SUSPENDIDA'"
+                    decoration-muted="estatus == 'CANCELADO'">
                     <field name="fecha_revision_time"/>
                     <field name="operador_id"/>
                     <field name="number_phone"/>
@@ -143,6 +138,7 @@
                     <field name="parroqui_comuna" optional="show"/>
                     <field name="organismo" optional="hide"/>
                     <field name="facturado_por" optional="hide"/>
+                    <field name="numero_cuenta" optional="show"/>
                     <field name="telf_corresponde" optional="hide"/>
                     <field name="motivo_seleccionado" optional="hide"/>
                     <field name="motivo_otros_observaciones" optional="hide"/>
@@ -236,7 +232,7 @@
                                     </div>
                                     <div class="o_kanban_record_bottom d-flex align-items-end justify-content-end mt-auto">
                                         <div>
-                                            <field name="estatus"  widget="label_selection" options="{'classes': {'INACTIVA': 'danger', 'SUSPENDIDA': 'warning', 'N/A': 'info', 'ACTIVA': 'success'}}" class="ms-auto"/>
+                                            <field name="estatus" widget="label_selection" options="{'classes': {'INACTIVA': 'danger', 'SUSPENDIDA': 'warning', 'N/A': 'info', 'ACTIVA': 'success', 'CANCELADO': 'dark'}}" class="ms-auto"/>
                                         </div>
                                     </div>
                                 </div>
