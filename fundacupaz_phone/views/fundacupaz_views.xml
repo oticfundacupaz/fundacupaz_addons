@@ -71,10 +71,24 @@
                                            readonly="is_editor_basico"/>
                                     <field name="parroqui_comuna"
                                            readonly="is_editor_basico"/>
+                                    <field name="circuito_comuna"
+                                           readonly="is_editor_basico"/>
                                     <field name="organismo"
                                            readonly="is_editor_basico"/>
                                     <field name="observaciones"
                                            placeholder="Si es (otro) indicar"
+                                           readonly="is_editor_basico"/>
+                                    <label for="Moto"/>
+                                    <div>
+                                        <field name="Moto"
+                                               widget="radio" options="{'horizontal': true}"
+                                               readonly="is_editor_basico"/>
+                                    </div>
+                                    <field name="marca_Moto"
+                                           invisible="Moto != 'si'"
+                                           readonly="is_editor_basico"/>
+                                    <field name="serial_Moto"
+                                           invisible="Moto != 'si'"
                                            readonly="is_editor_basico"/>
                                 </group>
                             </page>

@@ -17,6 +17,7 @@ class FundacupazPhone(models.Model):
     imei_phone = fields.Char("IMEI", tracking=True)
     observaciones = fields.Char("Si es otro:", tracking=True)
 
+
     # Campos de estado y clasificación
     operadora = fields.Selection(
         selection=[
@@ -81,7 +82,7 @@ class FundacupazPhone(models.Model):
         tracking=True,
         readonly=True,
         help="Usuario que realizó la última verificación.")
-    is_fecha_revision_invisible = fields.Boolean(compute='_compute_is_fecha_revision_invisible', store=False, tracking=True)
+    is_fecha_revision_invisible = fields.Boolean(store=False, tracking=True)
     is_cuadrante_fields_invisible = fields.Boolean(compute='_compute_is_cuadrante_fields_invisible', store=False)
     telf_corresponde = fields.Selection(
         selection=[
@@ -90,8 +91,8 @@ class FundacupazPhone(models.Model):
         ],
         string="¿La llamada fue efectiva?", tracking=True)
 
-    parroqui_comuna = fields.Char("Parroquia o circuito comunal", tracking=True)
-
+    parroqui_comuna = fields.Char("Parroquia", tracking=True)
+    circuito_comuna = fields.Char("circuito comunal", tracking=True)
 
     motivo_seleccionado = fields.Selection(
         selection=[
@@ -132,6 +133,23 @@ class FundacupazPhone(models.Model):
         compute='_compute_is_editor_basico'
     )
 
+    Moto = fields.Selection(
+        selection=[
+            ('si', 'Sí'),
+            ('no', 'No')
+        ],
+        string="¿Usa Moto?",
+        default='no',
+        tracking=True
+    )
+    marca_Moto = fields.Char(
+        string="Marca de la Moto",
+        tracking=True
+    )
+    serial_Moto = fields.Char(
+        string="Serial de la Moto",
+        tracking=True
+    )
 
     def write(self, vals):
         """
@@ -185,6 +203,13 @@ class FundacupazPhone(models.Model):
         """Limpia el campo de especificación si la opción seleccionada no es 'OTRO'."""
         if self.organismo != 'OTRO':
             self.organismo_otro = False
+
+    @api.onchange('Moto')
+    def _onchange_Moto(self):
+        """Limpia los campos de moto si '¿Usa Moto?' se marca como 'No'."""
+        if self.Moto == 'no':
+            self.marca_Moto = False
+            self.serial_Moto = False
 
     @api.onchange('number_phone')
     def _onchange_number_phone(self):
