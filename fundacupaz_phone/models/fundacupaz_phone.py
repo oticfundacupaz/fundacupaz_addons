@@ -16,7 +16,7 @@ class FundacupazPhone(models.Model):
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
     observaciones = fields.Char("Si es otro:", tracking=True)
-
+    observaciones_llamada = fields.Text("Observaciones de Llamada Efectiva", tracking=True)
 
     # Campos de estado y clasificación
     operadora = fields.Selection(
@@ -35,7 +35,8 @@ class FundacupazPhone(models.Model):
             ('N/A', 'N/A'),
             ('ACTIVA', 'ACTIVA'),
             ('INACTIVA', 'INACTIVA'),
-            ('SUSPENDIDA', 'SUSPENDIDA')
+            ('SUSPENDIDA', 'SUSPENDIDA'),
+            ('CANCELADO', 'CANCELADO')
         ],
         string='Estatus', default=False, tracking=True
     )
@@ -47,6 +48,8 @@ class FundacupazPhone(models.Model):
         ],
         string='Facturado a:', tracking=True
     )
+
+    numero_cuenta = fields.Char("Número de Cuenta", tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
     llamado = fields.Boolean("Llamado", tracking=True)
     es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)
@@ -66,7 +69,7 @@ class FundacupazPhone(models.Model):
         ],
         string='Planes', tracking=True)
     # Campos de relación
-    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes')
+    plan_id = fields.Many2one('fundacupaz.phone.plan', string='Planes', tracking=True)
     ente = fields.Many2one('fundacupaz.ente', string="Ente Asignado", tracking=True)
     persona_asignada = fields.Many2one('res.partner', domain="[('is_company', '!=','true')]", string="Responsable", tracking=True)
     estado = fields.Many2one('res.country.state', domain=[('country_id.name', '=', 'Venezuela')], string="Estado", tracking=True)
@@ -103,7 +106,7 @@ class FundacupazPhone(models.Model):
         ],
         string="Motivo", tracking=True)
 
-    motivo_otros_observaciones = fields.Text("Otras observaciones", tracking=True)
+    motivo_otros_observaciones = fields.Text("Observaciones de llamada no efectiva", tracking=True)
     telf_verificado = fields.Selection(
         selection=[
             ('ver01', 'Corresponde a Cuadrante'),
@@ -154,16 +157,20 @@ class FundacupazPhone(models.Model):
     def write(self, vals):
         """
         Sobreescribe write para actualizar la fecha y el operador de revisión
-        con el usuario y la hora del servidor en cada modificación.
+        únicamente cuando se modifica el campo 'telf_corresponde'.
         """
-        # Verifica si hay un usuario real activo (no el OdooBot o un proceso automático)
-        # Esto asegura que el campo solo se llene cuando un usuario interactúa.
-        if self.env.user and self.env.user.id != self.env.ref('base.user_root').id:
-            # Forzamos la actualización de los valores con el usuario y la hora del servidor
-            vals['fecha_revision_time'] = fields.Datetime.now()
-            vals['operador_id'] = self.env.user.id
+        # Verifica si 'telf_corresponde' es una de las claves que se está actualizando.
+        if 'telf_corresponde' in vals:
+            if self.env.user and self.env.user.id != self.env.ref('base.user_root').id:
+                # Si se está estableciendo un valor en telf_corresponde, actualiza fecha y operador.
+                if vals.get('telf_corresponde'):
+                    vals['fecha_revision_time'] = fields.Datetime.now()
+                    vals['operador_id'] = self.env.user.id
+                # Si se está limpiando telf_corresponde, limpia también fecha y operador.
+                else:
+                    vals['fecha_revision_time'] = False
+                    vals['operador_id'] = False
 
-        # Llama al método write original de Odoo para que guarde los cambios (incluyendo los forzados)
         return super(FundacupazPhone, self).write(vals)
 
     @api.depends_context('uid')
@@ -236,20 +243,26 @@ class FundacupazPhone(models.Model):
         else:
             return {'domain': {'plan_id': [('id', '=', False)]}}
 
-
     @api.onchange('telf_corresponde')
     def _onchange_telf_corresponde(self):
-            """Establece la fecha y hora y el Operador al seleccionar el estado de verificación."""
-            if self.telf_corresponde:
-                self.fecha_revision_time = fields.Datetime.now()
-                self.operador_id = self.env.user.id
-            else:
-                self.fecha_revision_time = False
-                self.operador_id = False
+        """
+        Establece la fecha/hora/operador y limpia los campos de motivo/observación
+        según si la llamada fue efectiva o no.
+        """
+        if self.telf_corresponde:
+            self.fecha_revision_time = fields.Datetime.now()
+            self.operador_id = self.env.user.id
+        else:
+            self.fecha_revision_time = False
+            self.operador_id = False
 
-            if self.telf_corresponde == 'si':
-                self.motivo_seleccionado = False
-                self.motivo_otros_observaciones = ''
+        if self.telf_corresponde == 'si':
+            # Si la llamada es efectiva, limpiar los campos del caso 'no'
+            self.motivo_seleccionado = False
+            self.motivo_otros_observaciones = ''
+        elif self.telf_corresponde == 'no':
+            # Si la llamada no es efectiva, limpiar los campos del caso 'si'
+            self.observaciones_llamada = ''
 
 
     @api.onchange('es_cuadrante')
