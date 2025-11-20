@@ -81,9 +81,20 @@
                                                widget="radio" options="{'horizontal': true}"
                                                readonly="is_editor_basico"/>
                                     </div>
-                                    <field name="marca_Moto"
+
+                                    <field name="marca_Moto_id"
+                                           string="Marca de la Moto"
                                            invisible="Moto != 'si'"
-                                           readonly="is_editor_basico"/>
+                                           readonly="is_editor_basico"
+                                           options="{'no_create': False}"/>
+
+                                    <field name="modelo_Moto_id"
+                                           string="Modelo de la Moto"
+                                           invisible="Moto != 'si'"
+                                           readonly="is_editor_basico"
+                                           domain="[('marca_id', '=', marca_Moto_id)]"
+                                           options="{'no_create': False}"/>
+
                                     <field name="serial_Moto"
                                            invisible="Moto != 'si'"
                                            readonly="is_editor_basico"/>

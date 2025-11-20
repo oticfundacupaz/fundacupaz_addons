@@ -1,8 +1,10 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_fundacupaz_moto_marca","access.fundacupaz.moto.marca","model_fundacupaz_moto_marca","base.group_user",1,1,1,1
+"access_fundacupaz_moto_modelo","access.fundacupaz.moto.modelo","model_fundacupaz_moto_modelo","base.group_user",1,1,1,1
 "access_fundacupaz_ente","access.fundacupaz.ente","model_fundacupaz_ente","base.group_user",1,1,1,1
 "access_fundacupaz_phone_plan","access.fundacupaz.phone.plan","model_fundacupaz_phone_plan","base.group_user",1,1,1,1
 "access_fundacupaz_cuadrante","access.fundacupaz.cuadrante","model_fundacupaz_cuadrante","base.group_user",1,1,1,1
-"access_write_fundacupaz_phone","write.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.gupo_fundacupaz",1,1,1,0
+"access_write_fundacupaz_phone","write.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz",1,1,1,0
 "access_editor_basico_fundacupaz_phone","editor.basico.fundacupaz.phone","model_fundacupaz_phone","fundacupaz_phone.grupo_fundacupaz_editor_basico",1,1,1,0
 "access_readonly_fundacupaz_inventario_picking","readonly.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario",1,0,0,0
 "access_transferencia_fundacupaz_inventario_picking","transferencia.fundacupaz.inventario.picking","stock.model_stock_picking","fundacupaz_phone.grupo_inventario_transferencias",1,1,1,0
@@ -14,3 +16,5 @@
 "access_administrador_fundacupaz_pc","administrador.fundacupaz.pc","model_fundacupaz_pc","fundacupaz_phone.grupo_fundacupaz_pc_administrador",1,1,1,1
 "access_readonly_fundacupaz_pc","readonly.fundacupaz.pc","model_fundacupaz_pc","fundacupaz_phone.grupo_fundacupaz_pc_solo_lectura",1,0,0,0
 "access_fundacupaz_phone_report_wizard","fundacupaz.phone.report.wizard.access","model_fundacupaz_phone_report_wizard","base.group_user",1,1,1,1
+"access_fundacupaz_ocurrencia","access.fundacupaz.ocurrencia","model_fundacupaz_ocurrencia","base.group_user",1,1,1,1
+"access_fundacupaz_registrar_ocurrencia_wizard","access.fundacupaz.registrar.ocurrencia.wizard","model_fundacupaz_registrar_ocurrencia_wizard","base.group_user",1,1,1,1

@@ -145,8 +145,14 @@ class FundacupazPhone(models.Model):
         default='no',
         tracking=True
     )
-    marca_Moto = fields.Char(
+    marca_Moto_id = fields.Many2one(
+        'fundacupaz.moto.marca',
         string="Marca de la Moto",
+        tracking=True
+    )
+    modelo_Moto_id = fields.Many2one(
+        'fundacupaz.moto.modelo',
+        string="Modelo de la Moto",
         tracking=True
     )
     serial_Moto = fields.Char(
@@ -215,8 +221,21 @@ class FundacupazPhone(models.Model):
     def _onchange_Moto(self):
         """Limpia los campos de moto si '¿Usa Moto?' se marca como 'No'."""
         if self.Moto == 'no':
-            self.marca_Moto = False
-            self.serial_Moto = False
+            # CORREGIDO: Usamos los nuevos nombres de los campos
+            self.marca_Moto_id = False  # Antes decía: self.marca_Moto
+            self.modelo_Moto_id = False  # Nuevo campo
+            self.serial_Moto = False  # Este se mantiene igual si no lo cambiaste
+
+    # Asegúrate de tener también este método para filtrar los modelos:
+    @api.onchange('marca_Moto_id')
+    def _onchange_marca_Moto_id(self):
+        """Limpia el Modelo si la Marca ha cambiado y filtra la lista."""
+        self.modelo_Moto_id = False  # Limpia el modelo anterior
+        if self.marca_Moto_id:
+            # Filtra los modelos que pertenecen a la marca seleccionada
+            return {'domain': {'modelo_Moto_id': [('marca_id', '=', self.marca_Moto_id.id)]}}
+        else:
+            return {'domain': {'modelo_Moto_id': [('id', '=', False)]}}
 
     @api.onchange('number_phone')
     def _onchange_number_phone(self):
