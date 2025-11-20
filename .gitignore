@@ -1,0 +1,9 @@
+# Ignorar archivos de Python compilados
+*.pyc
+
+# Opcional, pero recomendado: Ignorar directorios comunes de Python
+# Directorio de entornos virtuales
+.venv/
+venv/
+# Archivos de caché de Python
+__pycache__/
