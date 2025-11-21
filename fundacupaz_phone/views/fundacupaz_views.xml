@@ -161,6 +161,7 @@
                     <field name="municipio" optional="show"/>
                     <field name="cuadrantes" optional="show"/>
                     <field name="parroqui_comuna" optional="show"/>
+                    <field name="circuito_comuna" optional="show"/>
                     <field name="organismo" optional="hide"/>
                     <field name="facturado_por" optional="hide"/>
                     <field name="numero_cuenta" optional="show"/>
