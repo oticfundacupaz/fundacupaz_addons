@@ -1,4 +1,5 @@
 from . import fundacupaz_phone
+from . import fundacupaz_ocurrencia
 from . import fundacupaz_phone_plan
 from . import comisionado_estadal
 from . import fundacupaz_cuadrantes
