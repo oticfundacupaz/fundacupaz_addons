@@ -152,7 +152,7 @@
             <field name="sequence">10001</field>
             <field name="groups_id" eval="[(6, 0, [ref('fundacupaz_phone.grupo_fundacupaz_menu_pc')])]"/>
         </record>
-                                        <!--menu Telefono -->
+                                        menu Telefono
         <!--##########################################################################################-->
 
         <record id="grupo_fundacupaz_menu_telefonos" model="res.groups">
@@ -267,6 +267,10 @@
             <field name="model_id" ref="model_fundacupaz_phone"/>
             <field name="domain_force">[('estado', '=', (user.estado_comisionado.id if user.estado_comisionado else False))]</field>
             <field name="groups" eval="[(4, ref('fundacupaz_phone.group_comisionados_estatales'))]"/>
+        </record>
+
+        <record model="res.groups" id="group_fundacupaz_manager">
+            <field name="name">Fundacupaz_Ajustes</field>
         </record>
 
     </data>

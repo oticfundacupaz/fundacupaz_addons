@@ -19,19 +19,17 @@ class FundacupazCuadrantes(models.Model):
 
     )
     municipio = fields.Many2one('res.country.state.municipality' ,domain="[('state_id','=', estado)]", string="Municipio", tracking=True, required=True)
-    
+    parroquia_comuna = fields.Char(string='Parroquia Comuna', required=True)
     circuito_comunal = fields.Char(string='Circuito Comunal', required=True)
     jefe_cuadrante = fields.Many2one('res.partner', string='Jefe de Cuadrantes', required=True)
-    Telefono = fields.Char(string="Telefono", tracking=True, required=True)
+    telefono = fields.Char(string="Teléfono", tracking=True, required=True)
 
-    Moto = fields.Selection([
+    tiene_moto = fields.Selection([
         ('si', 'Si'),
         ('no', 'No')
     ], string='¿Tiene Moto?', default='no', tracking=True)
 
-    marca_Moto_id = fields.Many2one('fundacupaz.moto.marca', string="Marca de la Moto", tracking=True)
-    modelo_Moto_id = fields.Many2one('fundacupaz.moto.modelo',
-                                     string="Modelo de la Moto",
-                                     tracking=True)
+    marca_moto_id = fields.Many2one('fundacupaz.moto.marca', string="Marca de la Moto", tracking=True)
+    modelo_moto_id = fields.Many2one('fundacupaz.moto.modelo', string="Modelo de la Moto", tracking=True)
     serial_vehiculo = fields.Char(string="Serial de Vehículo/Moto (IMEI/Chasis)", tracking=True)
 

@@ -14,24 +14,25 @@
                             <group string="Datos del Cuadrante">
                                 <field name="estado"/>
                                 <field name="municipio"/>
+                                <field name="parroquia_comuna"/>
                                 <field name="circuito_comunal"/>
                                 <field name="jefe_cuadrante"/>
-                                <field name="Telefono"/>
+                                <field name="telefono"/>
                             </group>
                         </group>
 
                        <group string="Información del Vehículo/Moto">
-                            <field name="Moto" widget="radio"/>
+                            <field name="tiene_moto" widget="radio"/>
 
-                            <field name="marca_Moto_id"
-                                   string="Marca de la Moto"
-                                   invisible="Moto != 'si'"
-                                   options="{'no_create': False}"/>
+                           <field name="marca_moto_id"
+                                  string="Marca de la Moto"
+                                  invisible="tiene_moto != 'si'"
+                                  options="{'no_create': False}"/>
 
-                            <field name="modelo_Moto_id"
+                            <field name="modelo_moto_id"
                                    string="Modelo de la Moto"
-                                   invisible="Moto != 'si'"
-                                   domain="[('marca_id', '=', marca_Moto_id)]"
+                                   invisible="tiene_moto != 'si'"
+                                   domain="[('marca_id', '=', marca_moto_id)]"
                                    options="{'no_create': False}"/>
 
                             <field name="serial_vehiculo"/>
@@ -51,20 +52,16 @@
                     <field name="name"/>
                     <field name="estado"/>
                     <field name="municipio"/>
+                    <field name="parroquia_comuna"/>
                     <field name="circuito_comunal"/>
                     <field name="jefe_cuadrante"/>
-                    <field name="Telefono"/>
+                    <field name="telefono"/>
 
-                    <field name="marca_Moto_id"
-                           string="Marca de la Moto"
-                           invisible="Moto != 'si'"
-                           options="{'no_create': False}"/>
+                    <field name="tiene_moto"/>
 
-                    <field name="modelo_Moto_id"
-                           string="Modelo de la Moto"
-                           invisible="Moto != 'si'"
-                           domain="[('marca_id', '=', marca_Moto_id)]"
-                           options="{'no_create': False}"/>
+                    <field name="marca_moto_id" string="Marca de la Moto" invisible="tiene_moto != 'si'" options="{'no_create': False}"/>
+
+                    <field name="modelo_moto_id" string="Modelo de la Moto" invisible="tiene_moto != 'si'" options="{'no_create': False}"/>
 
                     <field name="serial_vehiculo"/>
 

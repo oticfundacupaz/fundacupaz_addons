@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_form_registrar_ocurrencia_wizard" model="ir.ui.view">
+            <field name="name">fundacupaz.registrar.ocurrencia.wizard.form</field>
+            <field name="model">fundacupaz.registrar.ocurrencia.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Registrar Ocurrencia">
+                    <group>
+                        <field name="phone_record_id" invisible="1"/>
+
+                        <field name="numero_telefono_input" placeholder="Escriba el número de teléfono (solo números)"/>
+                    </group>
+                    <group string="Datos de la Ocurrencia">
+                        <group>
+                            <field name="fecha_ocurrencia"/>
+                        </group>
+                        <group>
+                            <field name="hora_ocurrencia" widget="float_time"/>
+                        </group>
+                    </group>
+                    <group string="Datos del Cuadrante (Autocompletado)">
+                        <group>
+                            <field name="estado_id"/>
+                            <field name="municipio_id"/>
+                        </group>
+                        <group>
+                            <field name="parroquia_del_telefono" string="Parroquia"/>
+                            <field name="circuito_comunal" string="Circuito Comunal"/>
+                            <field name="organo_seguridad"/>
+
+                            <field name="organismo" string="Organismo de Seguridad"/>
+
+                            <field name="estatus_telefono" string="Estatus Línea Telefónica" widget="badge"/>
+
+                            <field name="estatus_incidencia"
+                                   widget="badge"
+                                   decoration-danger="estatus_incidencia == 'PENDIENTE'"
+                                   decoration-warning="estatus_incidencia == 'EN PROCESO'"
+                                   decoration-success="estatus_incidencia == 'RESUELTO'"/>
+
+                        </group>
+                    </group>
+                    <group string="Detalles Manuales de la Incidencia">
+                        <field name="jefe_cuadrante_manual"/>
+                        <field name="detalle_incidencia" widget="html"/>
+                    </group>
+
+                    <footer>
+                        <button name="action_registrar_e_imprimir" string="Registrar e Imprimir" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_launch_registrar_ocurrencia_wizard" model="ir.actions.act_window">
+            <field name="name">Registrar Ocurrencia</field>
+            <field name="res_model">fundacupaz.registrar.ocurrencia.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            id="menu_fundacupaz_incidencias_root"
+            name="Incidencias"
+            parent="fundacupaz_phone.menu_fundacupaz_phone"
+            sequence="10"/>
+
+        <menuitem
+            id="menu_action_registrar_ocurrencia"
+            name="Reporte De Incidecias"
+            parent="menu_fundacupaz_incidencias_root"
+            action="action_launch_registrar_ocurrencia_wizard"/>
+    </data>
+</odoo>

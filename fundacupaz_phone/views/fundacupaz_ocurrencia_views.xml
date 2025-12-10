@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_fundacupaz_ocurrencia_search" model="ir.ui.view">
+            <field name="name">fundacupaz.ocurrencia.search</field>
+            <field name="model">fundacupaz.ocurrencia</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Incidencia">
+                    <field name="name" string="Incidencia N°"/>
+                    <field name="phone_id"/>
+                    <field name="jefe_cuadrante_manual"/>
+
+                    <separator/>
+                    <filter string="Pendientes" name="filter_pending" domain="[('estatus', '=', 'PENDIENTE')]"/>
+                    <filter string="En Proceso" name="filter_in_progress" domain="[('estatus', '=', 'EN PROCESO')]"/>
+                    <filter string="Resueltos" name="filter_resolved" domain="[('estatus', '=', 'RESUELTO')]"/>
+                    <separator/>
+
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="Estado de Incidencia" name="group_estatus" context="{'group_by':'estatus'}"/>
+                        <filter string="Operadora" name="group_operadora" context="{'group_by':'organo_seguridad'}"/>
+                        <filter string="Organismo de Seguridad" name="group_organismo" context="{'group_by':'organismo'}"/>
+                        <filter string="Estado" name="group_estado" context="{'group_by':'estado_id'}"/>
+                        <filter string="Municipio" name="group_municipio" context="{'group_by':'municipio_id'}"/>
+                        <filter string="Cuadrante" name="group_cuadrante" context="{'group_by':'cuadrante_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_fundacupaz_ocurrencia_form" model="ir.ui.view">
+            <field name="name">fundacupaz.ocurrencia.form</field>
+            <field name="model">fundacupaz.ocurrencia</field>
+            <field name="arch" type="xml">
+                <form string="Reporte de Incidencia">
+                    <header>
+                        <field name="estatus" widget="statusbar"
+                               statusbar_visible="PENDIENTE,EN PROCESO,RESUELTO"
+                               options="{'clickable': '1'}"/>
+
+                        <button name="%(action_report_ocurrencia)d" string="Imprimir PDF" type="action" class="btn-primary" icon="fa-print"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+
+                        <group>
+                            <group string="Datos Principales">
+                                <field name="phone_id" options="{'no_create': True, 'no_open': True}" string="Teléfono Reportante"/>
+                                <field name="organo_seguridad" readonly="1" string="Operadora"/>
+                                <field name="organismo" readonly="1"/>
+                                <field name="fecha_ocurrencia"/>
+
+                                <field name="estatus"
+                                       string="Estado de Incidencia"
+                                       widget="badge"
+                                       decoration-danger="estatus == 'PENDIENTE'"
+                                       decoration-warning="estatus == 'EN PROCESO'"
+                                       decoration-success="estatus == 'RESUELTO'"/>
+
+                                <field name="hora_ocurrencia" widget="float_time"/>
+                            </group>
+                            <group string="Ubicación (Datos del Teléfono)">
+                                <field name="estado_id" readonly="1"/>
+                                <field name="municipio_id" readonly="1"/>
+                                <field name="parroquia_del_telefono" readonly="1" string="Parroquia"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Descripción de los Hechos">
+                                <field name="detalle_incidencia" widget="html" placeholder="Descripción detallada de lo ocurrido..."/>
+                            </page>
+                            <page string="Datos del Cuadrante">
+                                <group>
+                                    <group>
+                                        <field name="cuadrante_id" readonly="1"/>
+                                        <field name="circuito_comunal" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="jefe_cuadrante_manual"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="o_attachment_preview"/>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fundacupaz_ocurrencia_list" model="ir.ui.view">
+            <field name="name">fundacupaz.ocurrencia.list</field>
+            <field name="model">fundacupaz.ocurrencia</field>
+            <field name="arch" type="xml">
+                <list string="Incidencias">
+                    <field name="name"/>
+                    <field name="fecha_ocurrencia"/>
+                    <field name="hora_ocurrencia" widget="float_time"/>
+                    <field name="phone_id"/>
+                    <field name="estado_id"/>
+                    <field name="municipio_id" optional="hide"/>
+                    <field name="parroquia_del_telefono" optional="hide"/>
+                    <field name="circuito_comunal" optional="hide"/>
+                    <field name="organismo" optional="hide"/>
+                    <field name="jefe_cuadrante_manual" optional="hide"/>
+                    <field name="cuadrante_id" optional="hide"/>
+                    <field name="organo_seguridad"/>
+                    <field name="estatus" widget="badge"
+                           decoration-danger="estatus == 'PENDIENTE'"
+                           decoration-warning="estatus == 'EN PROCESO'"
+                           decoration-success="estatus == 'RESUELTO'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_view_all_ocurrencia" model="ir.actions.act_window">
+            <field name="name">Datos de Incidencias</field>
+            <field name="res_model">fundacupaz.ocurrencia</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_fundacupaz_ocurrencia_search"/>
+        </record>
+
+        <menuitem
+            id="menu_action_all_ocurrencia"
+            name="Datos de Incidencias"
+            action="action_view_all_ocurrencia"
+            parent="menu_fundacupaz_incidencias_root"
+            sequence="20"/>
+
+    </data>
+</odoo>

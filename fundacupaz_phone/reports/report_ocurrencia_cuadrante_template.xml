@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_ocurrencia" model="ir.actions.report">
+            <field name="name">Reporte de Ocurrencia</field>
+            <field name="model">fundacupaz.ocurrencia</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fundacupaz_phone.report_ocurrencia_cuadrante_document</field>
+            <field name="report_file">fundacupaz_phone.report_ocurrencia_cuadrante_document</field>
+            <field name="binding_model_id" ref="model_fundacupaz_ocurrencia"/>
+            <field name="binding_type">report</field>
+
+            <field name="attachment">('Incidencia_' + (object.name or '').replace('/','_') + '.pdf')</field>
+            <field name="attachment_use" eval="True"/>
+        </record>
+
+        <record id="action_report_ocurrencia" model="ir.actions.report">
+            <field name="binding_model_id" ref="model_fundacupaz_ocurrencia"/>
+            <field name="binding_type">report</field>
+
+            <field name="attachment">('Incidencia_' + (object.name or '').replace('/','_') + '.pdf')</field>
+            <field name="attachment_use" eval="True"/>
+        </record>
+
+        <template id="report_ocurrencia_cuadrante_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page" style="font-family: 'Helvetica', sans-serif; font-size: 14px; color: #000; padding: 15px;">
+
+                            <div class="text-center mb-4 mt-2" style="border-bottom: 3px double #000; padding-bottom: 10px;">
+                                <h2 style="font-weight: bold; color: #333; margin-bottom: 5px;">REPORTE DE INCIDENCIA</h2>
+                                <h4 style="color: #666; margin-top: 0;"><span t-field="doc.name"/></h4>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <table class="table table-bordered mb-0" style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" style="text-align: center; background-color: #f2f2f2; font-weight: bold; padding: 8px; border: 1px solid #ddd;">Datos De La Incidencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Fecha de Ocurrencia</th>
+                                            <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.fecha_ocurrencia"/></td>
+                                            <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Hora</th>
+                                            <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.hora_ocurrencia" t-options='{"widget": "float_time"}'/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Teléfono Reportante</th>
+                                            <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.phone_id.number_phone"/></td>
+                                            <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Operadora</th>
+                                            <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.organo_seguridad"/></td>
+                                        </tr>
+                                            <tr>
+                                                <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Estado de Incidencia</th>
+                                                <td colspan="3" style="padding: 8px; border: 1px solid #ddd;">
+                                                    <span t-field="doc.estatus"
+                                                          t-attf-style="..."/>
+                                           </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <table class="table table-bordered mb-0" style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4" style="text-align: center; background-color: #f2f2f2; font-weight: bold; padding: 8px; border: 1px solid #ddd;">Ubicación y Datos del Cuadrante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Estado</th>
+                                                <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.estado_id"/></td>
+                                                <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Municipio</th>
+                                                <td style="width: 25%; padding: 8px; border: 1px solid #ddd;"><span t-field="doc.municipio_id"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th style="background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Parroquia</th>
+                                                <td style="padding: 8px; border: 1px solid #ddd;"><span t-field="doc.parroquia_del_telefono"/></td>
+                                                <th style="background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Cuadrante</th>
+                                                <td style="padding: 8px; border: 1px solid #ddd;"><span t-field="doc.cuadrante_id"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th style="background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Circuito Comunal</th>
+                                                <td style="padding: 8px; border: 1px solid #ddd;"><span t-field="doc.circuito_comunal"/></td>
+                                            <tr>
+                                                <th style="width: 25%; background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Organismo de Seguridad</th>
+                                                <td colspan="3" style="padding: 8px; border: 1px solid #ddd;">
+                                                     <span t-field="doc.organismo"/>
+                                                </td>
+                                            </tr>
+
+
+                                                <th style="background-color: #f9f9f9; padding: 8px; border: 1px solid #ddd;">Jefe de Cuadrante (Ref.)</th>
+                                                <td style="padding: 8px; border: 1px solid #ddd;"><span t-field="doc.jefe_cuadrante_manual"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <h5 style="font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 5px; text-align: center;">DESCRIPCIÓN DE LOS HECHOS</h5>
+                                <div style="min-height: 200px; padding: 10px; border: 1px solid #eee; background-color: #f9f9f9; text-align: justify; line-height: 1.5;">
+                                    <div t-out="doc.detalle_incidencia" t-options='{"widget": "html"}'/>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 80px; page-break-inside: avoid;">
+                                <div class="col-6 text-center">
+                                    <div style="border-top: 1px solid #000; width: 80%; margin: 0 auto; padding-top: 5px;">
+                                        <strong>Recibido Por</strong><br/>
+                                        (Firma y Sello)
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <div style="border-top: 1px solid #000; width: 80%; margin: 0 auto; padding-top: 5px;">
+                                        <strong>Supervisor de Guardia</strong><br/>
+                                        (Firma y Sello)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
