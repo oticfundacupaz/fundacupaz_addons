@@ -39,7 +39,4 @@
     </record>
 
     <menuitem id="menu_fundacupaz_phone_plan" name="Planes" parent="fundacupaz_phone.menu_Fundacupaz_Ajustes" sequence="30" action="action_fundacupaz_phone_plan"/>
-    <menuitem id="menu_fundacupaz_cuadrante" name="Cuadrante" parent="fundacupaz_phone.menu_Fundacupaz_Ajustes" action="action_fundacupaz_cuadrante"/>
-    <menuitem id="menu_fundacupaz_ente" name="Entes" parent="fundacupaz_phone.menu_Fundacupaz_Ajustes" action="action_fundacupaz_ente" sequence="10"/>
-
 </odoo>
