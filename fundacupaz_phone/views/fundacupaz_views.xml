@@ -297,13 +297,6 @@
             <field name="sequence">10</field>
         </record>
 
-        <menuitem id="menu_Fundacupaz_Menu" name="Fundacupaz_Ajustes" sequence="10"/>
-
-        <menuitem id="menu_Fundacupaz_Ajustes"
-            name="Ajustes de Fundacupaz"
-            parent="menu_Fundacupaz_Menu"
-            sequence="20000"
-            groups="fundacupaz_phone.group_fundacupaz_manager"/>
 
     </data>
 </odoo>
