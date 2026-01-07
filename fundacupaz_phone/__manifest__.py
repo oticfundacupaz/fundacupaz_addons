@@ -5,8 +5,11 @@
     'depends': ['base','purchase', 'web', 'mail', 'fleet', 'hr', 'stock', 'l10n_ve_dpt-10', 'project', 'contacts', 'event'],
     'data': [
     'security/security.xml',
+
     'security/ir.model.access.csv',
     'data/fundacupaz_sequence.xml',
+    'views/fundacupaz_reportes_entrega.xml',
+    'views/fundacupaz_inventario_views.xml',
     'views/fundacupaz_cuadrantes_views.xml',
     'views/fundacupaz_phone_plan_views.xml',
     'reports/report_ocurrencia_cuadrante_template.xml',
