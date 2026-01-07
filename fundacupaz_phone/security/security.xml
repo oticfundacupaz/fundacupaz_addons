@@ -13,9 +13,9 @@
                                      <!--solo lectura telefono -->
         <!--##########################################################################################-->
         <record id="gupo_fundacupaz" model="res.groups">
-            <field name="name"> fundacupaz solo lectura telefono</field>
-            <field name="comment"> fundacupaz permiso solo lectura telefono</field>
+            <field name="name">Fundacupaz Solo Lectura Telefono</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_phone"/>
+            <field name="comment">Permiso de solo lectura para teléfonos Fundacupaz</field>
         </record>
                                              <!--Boton Validar inventario -->
         <!--##########################################################################################-->

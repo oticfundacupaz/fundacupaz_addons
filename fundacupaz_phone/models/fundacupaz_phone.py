@@ -9,6 +9,8 @@ class FundacupazPhone(models.Model):
     _name = "fundacupaz.phone"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Registro de Teléfonos'
+    _rec_name = 'number_phone'
+
 
     # Campos de información básica
     number_phone = fields.Char("Número Telefono", tracking=True, size=11)

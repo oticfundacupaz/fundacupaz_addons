@@ -74,4 +74,6 @@ class RegistrarOcurrenciaWizard(models.TransientModel):
         nueva_ocurrencia = self.env['fundacupaz.ocurrencia'].create(vals)
 
         # 2. Devolver la acción para imprimir el PDF directamente (CORRECCIÓN CLAVE)
-        return self.env.ref('fundacupaz_phone.action_report_ocurrencia').report_action(nueva_ocurrencia)
+        report_action = self.env.ref('fundacupaz_phone.action_report_ocurrencia').report_action(nueva_ocurrencia)
+        report_action['close_on_report_download'] = True
+        return report_action
