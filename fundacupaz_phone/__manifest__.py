@@ -8,7 +8,7 @@
 
     'security/ir.model.access.csv',
     'data/fundacupaz_sequence.xml',
-    'reports/fundacupaz_reportes_entrega.xml',
+    'reportes/fundacupaz_reportes_entrega.xml',
     'views/fundacupaz_inventario_views.xml',
     'views/fundacupaz_cuadrantes_views.xml',
     'views/fundacupaz_phone_plan_views.xml',
