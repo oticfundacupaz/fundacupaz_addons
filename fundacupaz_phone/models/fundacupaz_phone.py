@@ -42,6 +42,15 @@ class FundacupazPhone(models.Model):
         ],
         string='Estatus', default=False, tracking=True
     )
+    estatus_previo = fields.Char(string="Estatus Previo (Antes de Remisión)", copy=False, tracking=True)
+
+    en_remision = fields.Boolean(
+        string="En Remisión",
+        compute="_compute_en_remision",
+        store=True,
+        tracking=True
+    )
+
     facturado_por = fields.Selection(
         selection=[
             ('Fundacupaz', 'Fundacupaz'),
@@ -161,6 +170,16 @@ class FundacupazPhone(models.Model):
         string="Serial de la Moto",
         tracking=True
     )
+
+    @api.depends('estatus', 'estatus_previo')
+    def _compute_en_remision(self):
+        for record in self:
+            # Si tiene un estatus previo guardado (significa que vino de una remisión)
+            # Y el estatus actual es INACTIVA
+            if record.estatus == 'INACTIVA' and record.estatus_previo:
+                record.en_remision = True
+            else:
+                record.en_remision = False
 
     def write(self, vals):
         """

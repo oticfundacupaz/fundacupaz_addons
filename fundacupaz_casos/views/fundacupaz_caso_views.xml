@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_fundacupaz_caso_form" model="ir.ui.view">
+        <field name="name">fundacupaz.caso.form</field>
+        <field name="model">fundacupaz.caso</field>
+        <field name="arch" type="xml">
+            <form string="Gestión de Caso">
+                <header>
+                    <button name="action_solicitar" string="Solicitar Aprobación" type="object" class="oe_highlight"
+                            invisible="state != 'borrador'"/>
+
+                    <button name="action_aprobar" string="Aprobar y Ejecutar" type="object" class="oe_highlight"
+                            invisible="state != 'solicitado'"
+                            confirm="¿Confirma procesar estos cambios?"/>
+
+                    <button name="action_finalizar_remision" string="Finalizar Remisión (Restaurar)"
+                            type="object" class="btn-success"
+                            invisible="state != 'aprobado' or tipo_operacion != 'remision' or remision_finalizada"
+                            confirm="¿Desea restaurar el estatus original de estos teléfonos y finalizar el proceso?"/>
+
+                    <button name="action_cancelar_caso" string="Anular Caso" type="object"
+                            invisible="state in ('aprobado', 'cancelado')"/>
+
+                    <button name="action_borrador" string="Volver a Borrador" type="object"
+                            invisible="state != 'cancelado'"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,solicitado,aprobado"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="FINALIZADO" bg_color="bg-success"
+                            invisible="not remision_finalizada"/>
+
+                    <div class="oe_title">
+                        <h1><field name="codigo_caso"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Datos del Caso">
+                            <field name="tipo_operacion" widget="radio" readonly="state != 'borrador'"/>
+                            <field name="fecha_solicitud" readonly="state == 'aprobado'"/>
+                            <field name="remision_finalizada" invisible="1"/>
+                        </group>
+
+                        <group string="Detalles de la Operación">
+                            <field name="nuevo_responsable_id"
+                                   invisible="tipo_operacion != 'traslado'"
+                                   required="tipo_operacion == 'traslado'"
+                                   readonly="state == 'aprobado'"/>
+
+                            <field name="ente_a_remitir"
+                                   invisible="tipo_operacion != 'remision'"
+                                   required="tipo_operacion == 'remision'"
+                                   readonly="state == 'aprobado'"/>
+
+                            <field name="fecha_remision"
+                                   invisible="tipo_operacion != 'remision'"
+                                   required="tipo_operacion == 'remision'"
+                                   readonly="state == 'aprobado'"/>
+
+                            <div class="alert alert-danger" role="alert" invisible="tipo_operacion != 'cancelacion'">
+                                <strong>Advertencia:</strong> Las líneas pasarán a estatus CANCELADO.
+                            </div>
+                        </group>
+                    </group>
+
+                    <group string="Justificación">
+                        <field name="motivo" readonly="state == 'aprobado'"/>
+                        <field name="descripcion" placeholder="Detalles adicionales..." readonly="state == 'aprobado'"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Líneas Telefónicas">
+                            <field name="line_ids" readonly="state == 'aprobado'">
+                                <list editable="bottom" string="Teléfonos">
+                                    <field name="phone_id" options="{'no_create': True, 'no_open': True}"/>
+
+                                    <field name="operadora" optional="show"/>
+                                    <field name="plan_id" optional="show"/>
+                                    <field name="persona_asignada" optional="show"/>
+                                    <field name="numero_cuenta" optional="hide"/>
+
+                                    <field name="estatus_phone" widget="badge"
+                                           decoration-success="estatus_phone == 'ACTIVA'"
+                                           decoration-danger="estatus_phone == 'INACTIVA'"
+                                           decoration-warning="estatus_phone == 'SUSPENDIDA'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <div class="o_attachment_preview"/>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_fundacupaz_caso_tree" model="ir.ui.view">
+        <field name="name">fundacupaz.caso.list</field>
+        <field name="model">fundacupaz.caso</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'solicitado'"
+                  decoration-muted="state == 'cancelado'"
+                  decoration-danger="tipo_operacion == 'cancelacion'">
+                <field name="codigo_caso"/>
+                <field name="fecha_solicitud"/>
+                <field name="tipo_operacion" widget="badge"
+                       decoration-info="tipo_operacion == 'remision'"
+                       decoration-primary="tipo_operacion == 'traslado'"
+                       decoration-danger="tipo_operacion == 'cancelacion'"/>
+                <field name="ente_a_remitir" optional="show"/>
+                <field name="motivo" optional="hide"/>
+                <field name="remision_finalizada" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'aprobado'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_fundacupaz_caso" model="ir.actions.act_window">
+        <field name="name">Gestión de Casos</field>
+        <field name="res_model">fundacupaz.caso</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Crear nuevo caso.
+          </p>
+        </field>
+    </record>
+
+</odoo>

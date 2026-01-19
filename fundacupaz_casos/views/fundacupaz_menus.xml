@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_fundacupaz_casos"
+              name="Casos (Remisión/Bajas)"
+              action="action_fundacupaz_caso"
+              sequence="20"/>
+</odoo>

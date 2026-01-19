@@ -11,6 +11,7 @@
                                options="{'clickable': '1', 'colors': {'ACTIVA': 'success', 'INACTIVA': 'danger', 'SUSPENDIDA': 'warning', 'CANCELADO': 'dark'}}"/>
                     </header>
                     <sheet>
+                        <widget name="web_ribbon" title="EN REMISIÓN" bg_color="bg-danger" invisible="not en_remision"/>
                         <div class="oe_title">
                             <h1>
                                 <field name="operadora" readonly="1" placeholder="Operadora"/>
