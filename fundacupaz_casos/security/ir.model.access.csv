@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fundacupaz_caso,fundacupaz.caso,model_fundacupaz_caso,,1,1,1,1
 access_fundacupaz_caso_line,fundacupaz.caso.line,model_fundacupaz_caso_line,,1,1,1,1
+access_fundacupaz_caso_tag,fundacupaz.caso.tag,model_fundacupaz_caso_tag,,1,1,1,1

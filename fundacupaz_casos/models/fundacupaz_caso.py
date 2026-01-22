@@ -14,6 +14,11 @@ class FundacupazCaso(models.Model):
         required=True, copy=False, readonly=True,
         default=lambda self: _('Nuevo')
     )
+    tag_ids = fields.Many2many(
+        'fundacupaz.caso.tag',
+        string="Etiquetas",
+        help="Etiquetas para clasificar y buscar casos fácilmente."
+    )
 
     tipo_operacion = fields.Selection([
         ('traslado', 'Traslado de Responsable'),
@@ -200,6 +205,11 @@ class FundacupazCasoLine(models.Model):
         string="Estatus Actual",
         readonly=True
     )
+    estado_id = fields.Many2one(
+        related='phone_id.estado',
+        string="Estado (Región)",
+        readonly=True
+    )
 
     @api.onchange('phone_id')
     def _onchange_phone_id_check_pending(self):
@@ -219,3 +229,10 @@ class FundacupazCasoLine(models.Model):
                         'message': _("El número seleccionado ya está en proceso en el caso %s.") % codigo_otro
                     }
                 }
+
+class FundacupazCasoTag(models.Model):
+    _name = 'fundacupaz.caso.tag'
+    _description = 'Etiqueta de Caso'
+
+    name = fields.Char('Nombre de Etiqueta', required=True)
+    color = fields.Integer('Color Index')
