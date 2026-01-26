@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -230,9 +231,12 @@ class FundacupazCasoLine(models.Model):
                     }
                 }
 
+
 class FundacupazCasoTag(models.Model):
     _name = 'fundacupaz.caso.tag'
     _description = 'Etiqueta de Caso'
-
     name = fields.Char('Nombre de Etiqueta', required=True)
-    color = fields.Integer('Color Index')
+    color = fields.Integer(
+        string='Color',
+        default=lambda self: random.randint(1, 11)
+    )

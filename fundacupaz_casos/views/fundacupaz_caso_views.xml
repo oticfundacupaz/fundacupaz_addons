@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_fundacupaz_caso_tag_form" model="ir.ui.view">
+        <field name="name">fundacupaz.caso.tag.form</field>
+        <field name="model">fundacupaz.caso.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color" widget="color_picker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="view_fundacupaz_caso_form" model="ir.ui.view">
         <field name="name">fundacupaz.caso.form</field>
@@ -37,7 +51,7 @@
 
                     <group>
                         <group string="Datos del Caso">
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" placeholder="Ej. Urgente, VIP..."/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': False}" placeholder="Ej. Urgente, VIP..."/>
                             <field name="tipo_operacion" widget="radio" readonly="state != 'borrador'"/>
                             <field name="fecha_solicitud" readonly="state == 'aprobado'"/>
                             <field name="remision_finalizada" invisible="1"/>
