@@ -103,7 +103,6 @@ class FundacupazCaso(models.Model):
             self.ente_a_remitir = False
             self.fecha_remision = False
 
-        # Opcional: Si cambias de operación, quizás quieras limpiar advertencias previas
         if self.tipo_operacion == 'cancelacion':
             self.motivo = False
 
@@ -114,7 +113,6 @@ class FundacupazCaso(models.Model):
                 record.resumen_html = "<p class='text-muted'>Sin líneas cargadas.</p>"
                 continue
 
-            # Estructura de datos: { 'Miranda': {'Movilnet': 5, 'Digitel': 2}, ... }
             data = {}
             total_lines = 0
 
@@ -130,7 +128,6 @@ class FundacupazCaso(models.Model):
                 data[estado][operadora] += 1
                 total_lines += 1
 
-            # Construir HTML simple
             html = "<table class='table table-sm table-bordered' style='width:100%; font-size:12px;'>"
             html += "<thead class='table-light'><tr><th>Estado</th><th>Operadora</th><th>Cantidad</th></tr></thead><tbody>"
 
@@ -237,11 +234,9 @@ class FundacupazCaso(models.Model):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         sheet = workbook.add_worksheet("Lineas")
 
-        # 1. Rutas de imágenes
         img_fundacion = get_module_resource('fundacupaz_casos', 'static/src/img', 'logo_fundacion.png')
         img_ministerio = get_module_resource('fundacupaz_casos', 'static/src/img', 'logo_ministerio.png')
 
-        # 2. ESTILOS ORIGINALES (Recuperamos el formato que estaba bien)
         style_title = workbook.add_format({
             'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_size': 12, 'font_name': 'Arial'
         })
@@ -258,31 +253,25 @@ class FundacupazCaso(models.Model):
             'border': 1, 'align': 'left', 'valign': 'vcenter', 'font_size': 10
         })
 
-        # 3. ANCHOS DE COLUMNAS ORIGINALES
         sheet.set_column('A:A', 5)  # N°
         sheet.set_column('B:B', 20)  # Celular
         sheet.set_column('C:C', 30)  # Plan
         sheet.set_column('D:D', 20)  # Facturado A
         sheet.set_column('E:E', 22)  # Nro Cuenta
 
-        # 4. Ajustamos la primera fila para que las imágenes tengan espacio arriba sin pisar el texto
         sheet.set_row(0, 50)
 
-        # 5. INSERTAR IMÁGENES (En la fila 1, flotando)
-        # x_scale y y_scale al 30% (0.3). Si las ves muy pequeñas, súbelo a 0.4 o 0.5
         if img_fundacion:
-            sheet.insert_image('B1', img_fundacion, {'x_scale': 0.7, 'y_scale': 0.5, 'x_offset': 5, 'y_offset': 5})
+            sheet.insert_image('E1', img_fundacion, {'x_scale': 0.7, 'y_scale': 0.5, 'x_offset': 5, 'y_offset': 5})
 
         if img_ministerio:
-            sheet.insert_image('E1', img_ministerio, {'x_scale': 0.7, 'y_scale': 0.7, 'x_offset': 5, 'y_offset': 5})
+            sheet.insert_image('B1', img_ministerio, {'x_scale': 0.7, 'y_scale': 0.7, 'x_offset': 5, 'y_offset': 5})
 
-        # 6. MEMBRETE (Centrado perfectamente desde la columna A hasta la E)
         sheet.merge_range('A2:E2', "REPÚBLICA BOLIVARIANA DE VENEZUELA", style_title)
         sheet.merge_range('A3:E3', "MINISTERIO DEL PODER POPULAR PARA LAS RELACIONES INTERIORES JUSTICIA Y PAZ",
                           style_subtitle)
         sheet.merge_range('A4:E4', "FUNDACION GRAN MISION CUADRANTES DE PAZ ( FUNDACUPAZ)", style_subtitle)
 
-        # 7. TÍTULO DINÁMICO
         operadoras = ", ".join(set([l.operadora for l in self.line_ids if l.operadora])) or "VARIAS"
         estados = ", ".join(set([l.estado_id.name for l in self.line_ids if l.estado_id])) or "NACIONAL"
         tipo_op = dict(self._fields['tipo_operacion'].selection).get(self.tipo_operacion, '').upper()
@@ -290,12 +279,10 @@ class FundacupazCaso(models.Model):
         texto_dinamico = f"LINEAS ({operadoras}): DEL ESTADO ({estados}) PARA ({tipo_op})"
         sheet.merge_range('A6:E6', texto_dinamico, style_title)
 
-        # 8. ENCABEZADOS DE TABLA (Iniciando en la A12)
         headers = ["N°", "CELULAR NUMERO", "PLAN", "FACTURADO A", "NUMERO DE CUENTA"]
         for col_num, header in enumerate(headers):
             sheet.write(7, col_num, header, style_header_table)
 
-        # 9. DATOS DE LA TABLA
         row = 8
         count = 1
         for linea in self.line_ids:
@@ -307,7 +294,6 @@ class FundacupazCaso(models.Model):
             row += 1
             count += 1
 
-        # 10. CERRAR Y DESCARGAR
         workbook.close()
         output.seek(0)
         file_data = base64.b64encode(output.read())
@@ -401,15 +387,12 @@ class FundacupazCasoLine(models.Model):
                 }
 
     def unlink(self):
-        # Agrupamos por caso para no enviar 50 notificaciones si borras 50 líneas
         casos_afectados = self.mapped('caso_id')
 
         for caso in casos_afectados:
-            # Filtramos las líneas que pertenecen a este caso y se van a borrar
             lineas_del_caso = self.filtered(lambda l: l.caso_id == caso)
             numeros = ", ".join(lineas_del_caso.mapped('phone_id.number_phone'))
 
-            # Escribimos en el chatter del caso
             caso.message_post(
                 body=f"🗑️ <b>Líneas eliminadas:</b> Se quitaron los siguientes números del caso: {numeros}",
                 message_type='comment',
