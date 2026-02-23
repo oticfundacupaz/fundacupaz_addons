@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+from odoo.modules.module import get_module_resource
 import random
+import io
+import base64
+import xlsxwriter
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -83,6 +87,67 @@ class FundacupazCaso(models.Model):
         string="Teléfonos a Procesar"
     )
 
+    resumen_html = fields.Html(
+        string="Resumen de Líneas",
+        compute="_compute_resumen_html",
+        store=False
+    )
+
+    @api.onchange('tipo_operacion')
+    def _onchange_tipo_operacion_clean(self):
+        """ Limpia los campos que no corresponden a la operación seleccionada """
+        if self.tipo_operacion != 'traslado':
+            self.nuevo_responsable_id = False
+
+        if self.tipo_operacion != 'remision':
+            self.ente_a_remitir = False
+            self.fecha_remision = False
+
+        # Opcional: Si cambias de operación, quizás quieras limpiar advertencias previas
+        if self.tipo_operacion == 'cancelacion':
+            self.motivo = False
+
+    @api.depends('line_ids', 'line_ids.operadora', 'line_ids.estado_id')
+    def _compute_resumen_html(self):
+        for record in self:
+            if not record.line_ids:
+                record.resumen_html = "<p class='text-muted'>Sin líneas cargadas.</p>"
+                continue
+
+            # Estructura de datos: { 'Miranda': {'Movilnet': 5, 'Digitel': 2}, ... }
+            data = {}
+            total_lines = 0
+
+            for linea in record.line_ids:
+                estado = linea.estado_id.name if linea.estado_id else 'Sin Estado'
+                operadora = linea.operadora or 'N/A'
+
+                if estado not in data:
+                    data[estado] = {}
+                if operadora not in data[estado]:
+                    data[estado][operadora] = 0
+
+                data[estado][operadora] += 1
+                total_lines += 1
+
+            # Construir HTML simple
+            html = "<table class='table table-sm table-bordered' style='width:100%; font-size:12px;'>"
+            html += "<thead class='table-light'><tr><th>Estado</th><th>Operadora</th><th>Cantidad</th></tr></thead><tbody>"
+
+            for estado, ops in data.items():
+                rowspan = len(ops)
+                first = True
+                for op, count in ops.items():
+                    html += "<tr>"
+                    if first:
+                        html += f"<td rowspan='{rowspan}' style='vertical-align:middle; font-weight:bold;'>{estado}</td>"
+                        first = False
+                    html += f"<td>{op}</td><td class='text-end'>{count}</td></tr>"
+
+            html += f"<tr class='table-info'><td colspan='2'><strong>TOTAL LÍNEAS</strong></td><td class='text-end'><strong>{total_lines}</strong></td></tr>"
+            html += "</tbody></table>"
+            record.resumen_html = html
+
     @api.model
     def create(self, vals):
         if vals.get('codigo_caso', _('Nuevo')) == _('Nuevo'):
@@ -165,6 +230,104 @@ class FundacupazCaso(models.Model):
     def action_borrador(self):
         self.state = 'borrador'
 
+    def action_generar_excel(self):
+        self.ensure_one()
+
+        output = io.BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        sheet = workbook.add_worksheet("Lineas")
+
+        # 1. Rutas de imágenes
+        img_fundacion = get_module_resource('fundacupaz_casos', 'static/src/img', 'logo_fundacion.png')
+        img_ministerio = get_module_resource('fundacupaz_casos', 'static/src/img', 'logo_ministerio.png')
+
+        # 2. ESTILOS ORIGINALES (Recuperamos el formato que estaba bien)
+        style_title = workbook.add_format({
+            'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_size': 12, 'font_name': 'Arial'
+        })
+        style_subtitle = workbook.add_format({
+            'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_size': 10, 'font_name': 'Arial'
+        })
+        style_header_table = workbook.add_format({
+            'bold': True, 'align': 'center', 'valign': 'vcenter', 'border': 1, 'bg_color': '#D3D3D3', 'text_wrap': True
+        })
+        style_cell = workbook.add_format({
+            'border': 1, 'align': 'center', 'valign': 'vcenter', 'font_size': 10
+        })
+        style_cell_left = workbook.add_format({
+            'border': 1, 'align': 'left', 'valign': 'vcenter', 'font_size': 10
+        })
+
+        # 3. ANCHOS DE COLUMNAS ORIGINALES
+        sheet.set_column('A:A', 5)  # N°
+        sheet.set_column('B:B', 20)  # Celular
+        sheet.set_column('C:C', 30)  # Plan
+        sheet.set_column('D:D', 20)  # Facturado A
+        sheet.set_column('E:E', 22)  # Nro Cuenta
+
+        # 4. Ajustamos la primera fila para que las imágenes tengan espacio arriba sin pisar el texto
+        sheet.set_row(0, 50)
+
+        # 5. INSERTAR IMÁGENES (En la fila 1, flotando)
+        # x_scale y y_scale al 30% (0.3). Si las ves muy pequeñas, súbelo a 0.4 o 0.5
+        if img_fundacion:
+            sheet.insert_image('B1', img_fundacion, {'x_scale': 0.7, 'y_scale': 0.5, 'x_offset': 5, 'y_offset': 5})
+
+        if img_ministerio:
+            sheet.insert_image('E1', img_ministerio, {'x_scale': 0.7, 'y_scale': 0.7, 'x_offset': 5, 'y_offset': 5})
+
+        # 6. MEMBRETE (Centrado perfectamente desde la columna A hasta la E)
+        sheet.merge_range('A2:E2', "REPÚBLICA BOLIVARIANA DE VENEZUELA", style_title)
+        sheet.merge_range('A3:E3', "MINISTERIO DEL PODER POPULAR PARA LAS RELACIONES INTERIORES JUSTICIA Y PAZ",
+                          style_subtitle)
+        sheet.merge_range('A4:E4', "FUNDACION GRAN MISION CUADRANTES DE PAZ ( FUNDACUPAZ)", style_subtitle)
+
+        # 7. TÍTULO DINÁMICO
+        operadoras = ", ".join(set([l.operadora for l in self.line_ids if l.operadora])) or "VARIAS"
+        estados = ", ".join(set([l.estado_id.name for l in self.line_ids if l.estado_id])) or "NACIONAL"
+        tipo_op = dict(self._fields['tipo_operacion'].selection).get(self.tipo_operacion, '').upper()
+
+        texto_dinamico = f"LINEAS ({operadoras}): DEL ESTADO ({estados}) PARA ({tipo_op})"
+        sheet.merge_range('A6:E6', texto_dinamico, style_title)
+
+        # 8. ENCABEZADOS DE TABLA (Iniciando en la A12)
+        headers = ["N°", "CELULAR NUMERO", "PLAN", "FACTURADO A", "NUMERO DE CUENTA"]
+        for col_num, header in enumerate(headers):
+            sheet.write(7, col_num, header, style_header_table)
+
+        # 9. DATOS DE LA TABLA
+        row = 8
+        count = 1
+        for linea in self.line_ids:
+            sheet.write(row, 0, count, style_cell)
+            sheet.write(row, 1, linea.phone_id.number_phone or '', style_cell)
+            sheet.write(row, 2, linea.plan_id.name if linea.plan_id else '', style_cell_left)
+            sheet.write(row, 3, "FUNDACUPAZ", style_cell)
+            sheet.write(row, 4, linea.numero_cuenta or '', style_cell)
+            row += 1
+            count += 1
+
+        # 10. CERRAR Y DESCARGAR
+        workbook.close()
+        output.seek(0)
+        file_data = base64.b64encode(output.read())
+        output.close()
+
+        attachment = self.env['ir.attachment'].create({
+            'name': f"Reporte_Lineas_{self.codigo_caso}.xlsx",
+            'type': 'binary',
+            'datas': file_data,
+            'res_model': self._name,
+            'res_id': self.id,
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        })
+
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+
 
 class FundacupazCasoLine(models.Model):
     _name = 'fundacupaz.caso.line'
@@ -212,6 +375,12 @@ class FundacupazCasoLine(models.Model):
         readonly=True
     )
 
+    _sql_constraints = [
+        ('unique_phone_in_case',
+         'unique(caso_id, phone_id)',
+         '¡Advertencia! No puedes agregar el mismo número telefónico dos veces en este caso.')
+    ]
+
     @api.onchange('phone_id')
     def _onchange_phone_id_check_pending(self):
         if self.phone_id:
@@ -230,6 +399,24 @@ class FundacupazCasoLine(models.Model):
                         'message': _("El número seleccionado ya está en proceso en el caso %s.") % codigo_otro
                     }
                 }
+
+    def unlink(self):
+        # Agrupamos por caso para no enviar 50 notificaciones si borras 50 líneas
+        casos_afectados = self.mapped('caso_id')
+
+        for caso in casos_afectados:
+            # Filtramos las líneas que pertenecen a este caso y se van a borrar
+            lineas_del_caso = self.filtered(lambda l: l.caso_id == caso)
+            numeros = ", ".join(lineas_del_caso.mapped('phone_id.number_phone'))
+
+            # Escribimos en el chatter del caso
+            caso.message_post(
+                body=f"🗑️ <b>Líneas eliminadas:</b> Se quitaron los siguientes números del caso: {numeros}",
+                message_type='comment',
+                subtype_xmlid='mail.mt_note'
+            )
+
+        return super(FundacupazCasoLine, self).unlink()
 
 
 class FundacupazCasoTag(models.Model):

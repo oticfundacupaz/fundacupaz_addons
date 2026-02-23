@@ -28,6 +28,8 @@
                             invisible="state != 'solicitado'"
                             confirm="¿Confirma procesar estos cambios?"/>
 
+                    <button name="action_generar_excel" string="📄 Descargar Excel" type="object" class="btn-primary"/>
+
                     <button name="action_finalizar_remision" string="Finalizar Remisión (Restaurar)"
                             type="object" class="btn-success"
                             invisible="state != 'aprobado' or tipo_operacion != 'remision' or remision_finalizada"
@@ -102,6 +104,9 @@
                                            decoration-warning="estatus_phone == 'SUSPENDIDA'"/>
                                 </list>
                             </field>
+                        </page>
+                        <page string="Resumen Estadístico">
+                            <field name="resumen_html" nolabel="1"/>
                         </page>
                     </notebook>
 
