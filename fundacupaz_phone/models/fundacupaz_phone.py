@@ -13,7 +13,7 @@ class FundacupazPhone(models.Model):
 
 
     # Campos de información básica
-    number_phone = fields.Char("Número Telefono", tracking=True, size=11)
+    number_phone = fields.Char("Teléfono", tracking=True, size=11)
     marca_phone = fields.Char("Marca", tracking=True)
     modelo_phone = fields.Char("Modelo", tracking=True)
     imei_phone = fields.Char("IMEI", tracking=True)
@@ -106,7 +106,7 @@ class FundacupazPhone(models.Model):
         string="¿La llamada fue efectiva?", tracking=True)
 
     parroqui_comuna = fields.Char("Parroquia", tracking=True)
-    circuito_comuna = fields.Char("circuito comunal", tracking=True)
+    circuito_comuna = fields.Char("Circuito Comunal", tracking=True)
 
     motivo_seleccionado = fields.Selection(
         selection=[
@@ -125,17 +125,18 @@ class FundacupazPhone(models.Model):
             ('ver03', 'No contesta'),
             ('ver04', 'Fuera de Linea')
         ],
-        string='Telefono Verificado', default=False, tracking=True)
+        string='Teléfono Verificado', default=False, tracking=True)
 
     organismo = fields.Selection(
         selection=[
-            ('P/E', 'POLICIA DEL ESTADO'),
-            ('P/M', 'POLICIA MUNICIPAL'),
+            ('P/E', 'Policía del Estado'),
+            ('P/M', 'Policía Municipal'),
             ('GNB', 'GNB'),
             ('CPNB', 'CPNB'),
+            ('CICPC', 'CICPC'),
             ('OTRO', 'OTRO')
         ],
-        string="Organismo", tracking=True)
+        string="OSC", tracking=True)
 
     organismo_otro = fields.Char(
         string="Especifique el Organismo",

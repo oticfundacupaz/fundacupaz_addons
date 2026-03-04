@@ -5,7 +5,6 @@
     'depends': ['base','purchase', 'web', 'mail', 'fleet', 'hr', 'stock', 'l10n_ve_dpt-10', 'project', 'contacts', 'event'],
     'data': [
     'security/security.xml',
-
     'security/ir.model.access.csv',
     'data/fundacupaz_sequence.xml',
     'reportes/fundacupaz_reportes_entrega.xml',
