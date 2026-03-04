@@ -229,8 +229,8 @@
 
         <!-- Grupo de seguridad para ocultar el menú -->
         <record id="grupo_ocultar_menus" model="res.groups">
-            <field name="name">Grupo: Ocultar Otros Menús</field>
-            <field name="comment">Grupo para ocultar menús específicos</field>
+            <field name="name">Grupo: Mostrar Otros Menús</field>
+            <field name="comment">Grupo para mostrar menús específicos</field>
             <field name="category_id" ref="fundacupaz_phone.module_category_fundacupaz_menu"/>
         </record>
 
