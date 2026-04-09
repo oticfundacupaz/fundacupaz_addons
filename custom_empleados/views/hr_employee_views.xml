@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Hiding sections from the base HR module -->
+        <record id="custom_empleados_view_employee_form_inherit" model="ir.ui.view">
+            <field name="name">custom.empleados.view.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <!-- Estatus en cabecera -->
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <field name="custom_status" widget="statusbar" options="{'clickable': '1'}"/>
+                    </header>
+                </xpath>
+
+                <!-- Smart Button: Constancia -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="%(custom_empleados.action_report_constancia_trabajo)d" 
+                            type="action" 
+                            class="oe_stat_button" 
+                            icon="fa-file-pdf-o">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Constancia</span>
+                        </div>
+                    </button>
+                </xpath>
+
+                <!-- Información Privada: Hide "Permiso de trabajo" block -->
+                <xpath expr="//separator[@name='has_work_permit']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='visa_no']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='permit_no']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='visa_expire']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='work_permit_expiration_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='has_work_permit']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//group[@name='emergency']//field[@name='children']" position="after">
+                    <!-- Mostramos la lista de hijos (dependent_ids) justo debajo -->
+                    <field name="dependent_ids" invisible="not children" nolabel="1" colspan="2">
+                        <list editable="bottom" create="0" delete="0">
+                            <field name="name"/>
+                            <field name="last_name"/>
+                            <field name="gender"/>
+                            <field name="birthday"/>
+                            <field name="age" readonly="1" force_save="1"/>
+                        </list>
+                    </field>
+                </xpath>
+
+                <!-- Ajustes: Hide "Asistencia/Punto de Venta" and "Ajustes de la aplicación" blocks -->
+                <xpath expr="//group[@name='identification_group']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//group[@name='application_group']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Nuevos Campos: Fecha de inicio y Sueldo -->
+                <xpath expr="//field[@name='work_email']" position="before">
+                    <field name="service_start_date"/>
+                </xpath>
+                <xpath expr="//field[@name='category_ids']" position="after">
+                    <field name="sueldo"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Hiding the "Insignias recibidas" tab which comes from hr_gamification -->
+        <record id="custom_empleados_hr_hr_employee_view_form_inherit" model="ir.ui.view">
+            <field name="name">custom.empleados.hr.hr.employee.view.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_gamification.hr_hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Pestañas: Hide "Insignias recibidas" tab -->
+                <xpath expr="//page[@name='received_badges']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

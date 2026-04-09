@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_employee_toy" model="ir.actions.report">
+            <field name="name">Reporte Juguetes (Niños 0-13)</field>
+            <field name="model">hr.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_empleados.report_employee_toy_template</field>
+            <field name="report_file">custom_empleados.report_employee_toy_template</field>
+            <field name="print_report_name">'Entrega_Juguetes_0_a_13'</field>
+        </record>
+
+        <record id="action_report_employee_school" model="ir.actions.report">
+            <field name="name">Reporte Utiles Escolares (Niños 3-17)</field>
+            <field name="model">hr.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_empleados.report_employee_school_template</field>
+            <field name="report_file">custom_empleados.report_employee_school_template</field>
+            <field name="print_report_name">'Entrega_Utiles_3_a_17'</field>
+        </record>
+    </data>
+</odoo>

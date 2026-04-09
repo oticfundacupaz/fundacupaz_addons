@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_constancia_trabajo_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial, sans-serif; font-size: 15px; line-height: 1.8; color: #000; padding: 20px 40px;">
+                        
+                        <div class="text-center" style="margin-top: 60px; margin-bottom: 60px;">
+                            <h4 style="font-weight: bold; font-size: 18px;">CONSTANCIA DE TRABAJO</h4>
+                        </div>
+                        
+                        <div style="text-align: justify; margin-bottom: 60px;">
+                            Quien suscribe, <strong>ABG. MARIA MATILDE SOUSA GONCALVES</strong>&#160;&#160;&#160;&#160;,&#160;en mi carácter de <strong>DIRECTORA (E) DE LA OFICINA DE GESTIÓN HUMANA</strong>,&#160;de la <strong>FUNDACIÓN FONDO INTERGUBERNAMENTAL DEL SERVICIO DE POLICÍA (FISPOL)</strong>,&#160;&#160;hago constar mediante la presente que el ciudadano: <strong><span t-field="doc.name" style="text-transform: uppercase;"/></strong>,&#160;titular de la cédula de identidad Nro. <strong>V-<span t-field="doc.identification_id"/></strong>,&#160;presta sus servicios en este organismo desde el <strong><span t-esc="doc.service_start_date.strftime('%d/%m/%Y')" t-if="doc.service_start_date"/></strong>.&#160;Actualmente ejerce el cargo <strong><span t-field="doc.job_title" style="text-transform: uppercase;" t-if="doc.job_title"/><span t-field="doc.job_id.name" style="text-transform: uppercase;" t-if="not doc.job_title and doc.job_id"/></strong>,&#160;adscrito a la <strong><span t-field="doc.department_id.name" style="text-transform: uppercase;"/></strong>,&#160;devengando una remuneración mensual de <strong><span t-esc="sueldo_a_letras(doc.sueldo or 0.0)"/></strong>.
+                        </div>
+
+                        <div style="text-align: justify; margin-bottom: 150px;">
+                            Constancia que se expide en Caracas, a petición de la parte interesada a los <span t-esc="fecha_expedicion"/>.
+                        </div>
+
+                        <div class="text-center" style="line-height: 1.2;">
+                            <p style="margin-bottom: 100px;">Atentamente,</p>
+                            
+                            <p style="margin-bottom: 2px;"><strong>Abg. MARIA MATILDE SOUSA GONCALVES</strong></p>
+                            <p style="margin-bottom: 2px;">Directora (E) De La Oficina De Gestión Humana</p>
+                            <p style="margin-bottom: 2px;">Fundación Fondo Intergubernamental del Servicio de Policía (FISPOL)</p>
+                            <p style="margin-bottom: 2px;">Designación según Pto. De Cuenta N° 006 de fecha 28/03/2025.</p>
+                        </div>
+
+                    </div>
+                    
+                    <div class="footer" style="font-family: Arial, sans-serif; font-size: 10px; line-height: 1.2; text-align: center; border-top: 1px solid black; padding-top: 5px; width: 100%;">
+                        <span t-esc="doc.company_id.street" t-if="doc.company_id.street"/> <span t-esc="doc.company_id.street2" t-if="doc.company_id.street2"/>. 
+                        <span t-esc="doc.company_id.name" t-if="doc.company_id.name"/>. 
+                        RIF <span t-esc="doc.company_id.vat" t-if="doc.company_id.vat"/>. 
+                        Teléfono: <span t-esc="doc.company_id.phone" t-if="doc.company_id.phone"/>. 
+                        Correo: <span t-esc="doc.company_id.email" t-if="doc.company_id.email"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

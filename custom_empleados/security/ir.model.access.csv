@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_dependent_user,hr.employee.dependent.user,model_hr_employee_dependent,base.group_user,1,1,1,1
+access_benefits_report_wizard,benefits.report.wizard.access,model_benefits_report_wizard,base.group_user,1,1,1,1

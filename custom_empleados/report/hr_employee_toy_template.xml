@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_employee_toy_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center mt-4">Reporte de Entrega de Beneficios</h2>
+                        <h4 class="text-center mb-4 text-muted"><span t-esc="report_title"/></h4>
+
+                        <t t-if="docs">
+                            <table class="table table-sm table-bordered mt-4">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Empleado</th>
+                                        <th>Departamento</th>
+                                        <th>Nombre y Apellido del Hijo</th>
+                                        <th class="text-center">Género</th>
+                                        <th class="text-center">Edad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="docs" t-as="child">
+                                        <tr>
+                                            <td><span t-field="child.employee_id.name"/></td>
+                                            <td><span t-field="child.employee_id.department_id.name"/></td>
+                                            <td><span t-field="child.name"/> <span t-field="child.last_name"/></td>
+                                            <td class="text-center">
+                                                <span t-if="child.gender == 'male'">Masculino</span>
+                                                <span t-if="child.gender == 'female'">Femenino</span>
+                                            </td>
+                                            <td class="text-center"><span t-field="child.age"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Mensaje si la lista de hijos (docs) viene vacía -->
+                        <div t-if="not docs" class="alert alert-info mt-4">
+                            No se encontraron hijos registrados en este rango de edades (<t t-esc="min_age"/> a <t t-esc="max_age"/> años).
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_employee_school_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center mt-4">Reporte de Entrega de Beneficios</h2>
+                        <h4 class="text-center mb-4 text-muted"><span t-esc="report_title"/></h4>
+
+                        <t t-if="docs">
+                            <table class="table table-sm table-bordered mt-4">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Empleado</th>
+                                        <th>Departamento</th>
+                                        <th>Nombre y Apellido del Hijo</th>
+                                        <th class="text-center">Género</th>
+                                        <th class="text-center">Edad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="docs" t-as="child">
+                                        <tr>
+                                            <td><span t-field="child.employee_id.name"/></td>
+                                            <td><span t-field="child.employee_id.department_id.name"/></td>
+                                            <td><span t-field="child.name"/> <span t-field="child.last_name"/></td>
+                                            <td class="text-center">
+                                                <span t-if="child.gender == 'male'">Masculino</span>
+                                                <span t-if="child.gender == 'female'">Femenino</span>
+                                            </td>
+                                            <td class="text-center"><span t-field="child.age"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Mensaje si la lista de hijos (docs) viene vacía -->
+                        <div t-if="not docs" class="alert alert-info mt-4">
+                            No se encontraron hijos registrados en este rango de edades (<t t-esc="min_age"/> a <t t-esc="max_age"/> años).
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
