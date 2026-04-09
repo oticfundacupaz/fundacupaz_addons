@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Lista -->
+    <record id="view_asistencia_entrada_list" model="ir.ui.view">
+        <field name="name">asistencia.entrada.list</field>
+        <field name="model">asistencia.entrada</field>
+        <field name="arch" type="xml">
+            <list string="Asistencias de Entrada" decoration-muted="not employee_id" create="0">
+                <field name="cedula" string="Cédula"/>
+                <field name="employee_id" string="Empleado"/>
+                <field name="custom_status" string="Estatus" widget="badge" 
+                       decoration-success="custom_status == 'active'" 
+                       decoration-danger="custom_status == 'inactive'"/>
+                <field name="department_id" string="Departamento"/>
+                <field name="telefono_privado" string="Teléfono Privado"/>
+                <field name="fecha" string="Fecha"/>
+                <field name="hora" string="Hora"/>
+                <field name="nombre_empleado" string="Nombre" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista Formulario -->
+    <record id="view_asistencia_entrada_form" model="ir.ui.view">
+        <field name="name">asistencia.entrada.form</field>
+        <field name="model">asistencia.entrada</field>
+        <field name="arch" type="xml">
+            <form string="Asistencia de Entrada" create="0">
+                <sheet>
+                    <group>
+                        <group string="Datos del Registro">
+                            <field name="cedula" string="Cédula"/>
+                            <field name="nombre_empleado" string="Nombre"/>
+                        </group>
+                        <group string="Fecha y Hora">
+                            <field name="fecha" string="Fecha"/>
+                            <field name="hora" string="Hora de Entrada"/>
+                        </group>
+                    </group>
+                    <group string="Empleado Vinculado">
+                        <field name="employee_id" string="Empleado en Odoo"
+                               options="{'no_create': True, 'no_open': False}"/>
+                        <field name="department_id" string="Departamento"/>
+                        <field name="telefono_privado" string="Teléfono Privado"/>
+                        <field name="custom_status" string="Estatus"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Búsqueda -->
+    <record id="view_asistencia_entrada_search" model="ir.ui.view">
+        <field name="name">asistencia.entrada.search</field>
+        <field name="model">asistencia.entrada</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Asistencias">
+                <field name="cedula" string="Cédula"/>
+                <field name="nombre_empleado" string="Nombre"/>
+                <field name="department_id" string="Departamento"/>
+                <field name="telefono_privado" string="Teléfono Privado"/>
+                <field name="fecha" string="Fecha"/>
+                <filter name="hoy" string="Hoy"
+                        domain="[('fecha', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="esta_semana" string="Esta Semana"
+                        domain="[('fecha', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="activo" string="Activos" domain="[('custom_status', '=', 'active')]"/>
+                <filter name="inactivo" string="Inactivos" domain="[('custom_status', '=', 'inactive')]"/>
+                <separator/>
+                <filter name="sin_empleado" string="Sin empleado en Odoo"
+                        domain="[('employee_id', '=', False)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_fecha" string="Fecha"
+                            context="{'group_by': 'fecha'}"/>
+                    <filter name="group_nombre" string="Nombre"
+                            context="{'group_by': 'nombre_empleado'}"/>
+                    <filter name="group_departamento" string="Departamento"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter name="group_status" string="Estatus"
+                            context="{'group_by': 'custom_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción principal -->
+    <record id="action_asistencia_entrada" model="ir.actions.act_window">
+        <field name="name">Asistencias de Entrada</field>
+        <field name="res_model">asistencia.entrada</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_asistencia_entrada_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay registros de asistencia aún.
+            </p>
+            <p>
+                Usa el botón <b>Importar CSV</b> para cargar el archivo
+                exportado desde tu lector biométrico.
+            </p>
+        </field>
+    </record>
+</odoo>

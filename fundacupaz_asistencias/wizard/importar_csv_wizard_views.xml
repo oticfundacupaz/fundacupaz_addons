@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_importar_csv_wizard_form" model="ir.ui.view">
+        <field name="name">importar.csv.wizard.form</field>
+        <field name="model">importar.csv.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar CSV de Asistencias">
+                <group>
+                    <field name="archivo_csv" filename="nombre_archivo" widget="binary"
+                           string="Seleccionar archivo CSV"/>
+                    <field name="nombre_archivo" invisible="1"/>
+                </group>
+                <group invisible="not resultado">
+                    <field name="resultado" widget="text" readonly="1"
+                           string="Resultado de la importación"/>
+                </group>
+                <footer>
+                    <button name="action_importar" type="object"
+                            string="Importar" class="btn-primary"/>
+                    <button name="action_ver_registros" type="object"
+                            string="Ver Registros" class="btn-secondary"
+                            invisible="not resultado"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_importar_csv_wizard" model="ir.actions.act_window">
+        <field name="name">Importar CSV de Asistencias</field>
+        <field name="res_model">importar.csv.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

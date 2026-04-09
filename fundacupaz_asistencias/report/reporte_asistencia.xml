@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template QWeb del Reporte PDF -->
+    <template id="report_asistencia_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-set="data" t-value="wizard.get_report_data()"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Encabezado -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <h2 style="color:#2C3E50; font-weight:bold;">REPORTE DE ASISTENCIAS</h2>
+                                <h4 style="color:#5D6D7E;">
+                                    <t t-esc="data['department_name']"/>
+                                </h4>
+                                <p>
+                                    <strong>Período:</strong>
+                                    <t t-esc="data['fecha_desde']"/> — <t t-esc="data['fecha_hasta']"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tabla agrupada por Departamento -->
+                        <t t-if="data['agrupar']">
+                            <t t-foreach="data['grouped_records']" t-as="grupo">
+                                <h5 style="background-color:#2C3E50; color:white; padding:5px 10px; margin-top:15px;">
+                                    🏢 Departamento: <t t-esc="grupo['nombre']"/>
+                                    — <strong><t t-esc="grupo['total']"/> personas presentes</strong>
+                                </h5>
+                                <table class="table table-sm table-bordered" style="font-size:11px; width:100%;">
+                                    <thead style="background-color:#AED6F1;">
+                                        <tr>
+                                            <th style="width:5%">#</th>
+                                            <th style="width:10%">Cédula</th>
+                                            <th style="width:30%">Empleado</th>
+                                            <th style="width:10%">Estatus</th>
+                                            <th style="width:10%">Fecha</th>
+                                            <th style="width:15%">Hora Entrada</th>
+                                            <th style="width:20%">Teléfono Privado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="grupo['asistencias']" t-as="asistencia">
+                                            <tr>
+                                                <td><t t-esc="asistencia_index + 1"/></td>
+                                                <td><t t-esc="asistencia.cedula"/></td>
+                                                <td><t t-esc="asistencia.nombre_empleado"/></td>
+                                                <td class="text-center">
+                                                    <span t-if="asistencia.employee_id.custom_status == 'active'" class="badge badge-success" style="background-color:#28A745; color:white; padding:2px 5px; border-radius:3px;">Activo</span>
+                                                    <span t-if="asistencia.employee_id.custom_status == 'inactive'" class="badge badge-danger" style="background-color:#DC3545; color:white; padding:2px 5px; border-radius:3px;">Inactivo</span>
+                                                    <span t-if="not asistencia.employee_id.custom_status" style="color:#999;">—</span>
+                                                </td>
+                                                <td><t t-esc="asistencia.fecha"/></td>
+                                                <td><t t-esc="asistencia.hora"/></td>
+                                                <td><t t-esc="asistencia.telefono_privado or '—'"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+
+                        <!-- Tabla sin agrupación -->
+                        <t t-if="not data['agrupar']">
+                            <table class="table table-sm table-bordered" style="font-size:11px; width:100%;">
+                                <thead style="background-color:#AED6F1;">
+                                    <tr>
+                                        <th style="width:5%">#</th>
+                                        <th style="width:10%">Cédula</th>
+                                        <th style="width:20%">Empleado</th>
+                                        <th style="width:10%">Estatus</th>
+                                        <th style="width:15%">Departamento</th>
+                                        <th style="width:15%">Fecha</th>
+                                        <th style="width:10%">Hora</th>
+                                        <th style="width:15%">Teléfono</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="data['asistencias']" t-as="asistencia">
+                                        <tr>
+                                            <td><t t-esc="asistencia_index + 1"/></td>
+                                            <td><t t-esc="asistencia.cedula"/></td>
+                                            <td><t t-esc="asistencia.nombre_empleado"/></td>
+                                            <td class="text-center">
+                                                <span t-if="asistencia.employee_id.custom_status == 'active'" class="badge badge-success" style="background-color:#28A745; color:white; padding:2px 5px; border-radius:3px;">Activo</span>
+                                                <span t-if="asistencia.employee_id.custom_status == 'inactive'" class="badge badge-danger" style="background-color:#DC3545; color:white; padding:2px 5px; border-radius:3px;">Inactivo</span>
+                                                <span t-if="not asistencia.employee_id.custom_status" style="color:#999;">—</span>
+                                            </td>
+                                            <td><t t-esc="asistencia.department_id.name or '—'"/></td>
+                                            <td><t t-esc="asistencia.fecha"/></td>
+                                            <td><t t-esc="asistencia.hora"/></td>
+                                            <td><t t-esc="asistencia.telefono_privado or '—'"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Total -->
+                        <div class="row mt-3">
+                            <div class="col-12 text-right">
+                                <strong>Total de personas presentes: <t t-esc="data['total_asistencias']"/></strong>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Definición del reporte (ir.actions.report) -->
+    <record id="action_reporte_asistencias" model="ir.actions.report">
+        <field name="name">Reporte de Asistencias</field>
+        <field name="model">reporte.asistencia.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fundacupaz_asistencias.report_asistencia_template</field>
+        <field name="report_file">fundacupaz_asistencias.report_asistencia_template</field>
+    </record>
+</odoo>

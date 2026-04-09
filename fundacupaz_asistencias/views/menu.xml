@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Categoría del menú -->
+    <record id="asistencias_menu_root" model="ir.ui.menu">
+        <field name="name">Asistencias</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Submenú: Registros -->
+    <record id="menu_asistencia_entrada" model="ir.ui.menu">
+        <field name="name">Registros de Entrada</field>
+        <field name="parent_id" ref="asistencias_menu_root"/>
+        <field name="action" ref="action_asistencia_entrada"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Submenú: Importar CSV -->
+    <record id="menu_importar_csv" model="ir.ui.menu">
+        <field name="name">Importar CSV</field>
+        <field name="parent_id" ref="asistencias_menu_root"/>
+        <field name="action" ref="action_importar_csv_wizard"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Acción para abrir el wizard de reporte -->
+    <record id="action_reporte_asistencia_wizard" model="ir.actions.act_window">
+        <field name="name">Generar Reporte</field>
+        <field name="res_model">reporte.asistencia.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Submenú: Generar Reporte -->
+    <record id="menu_generar_reporte" model="ir.ui.menu">
+        <field name="name">Generar Reporte</field>
+        <field name="parent_id" ref="asistencias_menu_root"/>
+        <field name="action" ref="fundacupaz_asistencias.action_reporte_asistencia_wizard"/>
+        <field name="sequence">30</field>
+    </record>
+</odoo>
