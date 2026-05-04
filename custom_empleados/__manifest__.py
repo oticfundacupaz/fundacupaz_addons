@@ -16,7 +16,8 @@
     'website': 'https://www.yourcompany.com',
     'depends': [
         'hr',
-        'hr_gamification'
+        'hr_gamification',
+        'hr_skills'
     ],
     'data': [
         'security/ir.model.access.csv',

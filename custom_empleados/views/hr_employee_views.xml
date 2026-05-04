@@ -89,5 +89,28 @@
                 </xpath>
             </field>
         </record>
+
+        <!-- Modifying the Curriculum tab which comes from hr_skills -->
+        <record id="custom_empleados_hr_skills_view_form_inherit" model="ir.ui.view">
+            <field name="name">custom.empleados.hr.skills.view.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_skills.hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Ocultar pestaña original de currículum de hr_skills -->
+                <xpath expr="//page[@name='skills_resume']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <!-- Añadir la nueva pestaña de subida de PDF -->
+                <xpath expr="//page[@name='skills_resume']" position="after">
+                    <page name="custom_resume" string="Currículum">
+                        <group>
+                            <field name="custom_resume_file" filename="custom_resume_filename" widget="binary" />
+                            <field name="custom_resume_filename" invisible="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

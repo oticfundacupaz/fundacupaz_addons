@@ -40,6 +40,8 @@
                                                readonly="not is_editor_basico and id"/>
                                         <field name="numero_cuenta"
                                                readonly="not is_editor_basico and id"/>
+                                        <field name="numero_factura"
+                                               readonly="not is_editor_basico and id"/>
                                     </group>
                                 </group>
                             </page>

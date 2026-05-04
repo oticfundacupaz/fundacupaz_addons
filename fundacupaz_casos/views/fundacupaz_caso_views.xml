@@ -25,10 +25,11 @@
                             invisible="state != 'borrador'"/>
 
                     <button name="action_aprobar" string="Aprobar y Ejecutar" type="object" class="oe_highlight"
-                            invisible="state != 'solicitado'"
+                            invisible="state != 'en_espera'"
                             confirm="¿Confirma procesar estos cambios?"/>
 
-                    <button name="action_generar_excel" string="📄 Descargar Excel" type="object" class="btn-primary"/>
+                    <button name="action_generar_excel" string="📄 Descargar Excel" type="object" class="btn-primary"
+                            invisible="state != 'solicitado'"/>
 
                     <button name="action_finalizar_remision" string="Finalizar Remisión (Restaurar)"
                             type="object" class="btn-success"
@@ -41,7 +42,7 @@
                     <button name="action_borrador" string="Volver a Borrador" type="object"
                             invisible="state != 'cancelado'"/>
 
-                    <field name="state" widget="statusbar" statusbar_visible="borrador,solicitado,aprobado"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrador,solicitado,en_espera,aprobado"/>
                 </header>
                 <sheet>
                     <widget name="web_ribbon" title="FINALIZADO" bg_color="bg-success"
@@ -147,6 +148,59 @@
           <p class="o_view_nocontent_smiling_face">
             Crear nuevo caso.
           </p>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════
+         CONTACTOS TELEFONÍA — Vista Kanban personalizada
+    ══════════════════════════════════════════════════ -->
+
+    <record id="view_partner_telefonia_kanban" model="ir.ui.view">
+        <field name="name">res.partner.telefonia.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban create="false">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="image_128"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-center gap-3 p-2">
+                            <field name="image_128" widget="image"
+                                   style="width:52px; height:52px; border-radius:6px; object-fit:cover; flex-shrink:0;"/>
+                            <div class="d-flex flex-column overflow-hidden">
+                                <strong class="fs-6 text-truncate">
+                                    <field name="name"/>
+                                </strong>
+                                <span class="text-muted text-truncate" t-if="record.email.value">
+                                    <i class="fa fa-envelope me-1"/> <field name="email"/>
+                                </span>
+                                <span class="text-truncate" t-if="record.phone.value">
+                                    <i class="fa fa-phone me-1"/> <field name="phone"/>
+                                </span>
+                                <span class="text-muted text-truncate" t-if="record.mobile.value">
+                                    <i class="fa fa-mobile me-1"/> <field name="mobile"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_fundacupaz_contactos_telefonia" model="ir.actions.act_window">
+        <field name="name">Contactos Telefonía</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_partner_telefonia_kanban"/>
+        <field name="domain">[('is_company', '=', True), ('category_id.name', 'ilike', 'Telefonia')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay empresas de Telefonía registradas con esa etiqueta.
+            </p>
         </field>
     </record>
 

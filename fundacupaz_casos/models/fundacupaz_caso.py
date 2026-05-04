@@ -34,6 +34,7 @@ class FundacupazCaso(models.Model):
     state = fields.Selection([
         ('borrador', 'Borrador'),
         ('solicitado', 'Solicitado'),
+        ('en_espera', 'En Espera'),
         ('aprobado', 'Aprobado/Procesado'),
         ('cancelado', 'Anulado'),
     ], string='Estado', default='borrador', tracking=True)
@@ -307,6 +308,9 @@ class FundacupazCaso(models.Model):
             'res_id': self.id,
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         })
+
+        # Pasar el estado a 'En Espera' al descargar el Excel
+        self.state = 'en_espera'
 
         return {
             'type': 'ir.actions.act_url',

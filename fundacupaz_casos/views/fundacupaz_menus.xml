@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_fundacupaz_casos"
+    <!-- Menú raíz -->
+    <menuitem id="menu_fundacupaz_casos_root"
               name="Casos (Remisión/Bajas)"
+              sequence="20"/>
+
+    <!-- Submenú: Gestión de Casos -->
+    <menuitem id="menu_fundacupaz_casos"
+              name="Gestión de Casos"
+              parent="menu_fundacupaz_casos_root"
               action="action_fundacupaz_caso"
+              sequence="10"/>
+
+    <!-- Submenú: Contactos Telefonía -->
+    <menuitem id="menu_fundacupaz_contactos_telefonia"
+              name="Contactos Telefonía"
+              parent="menu_fundacupaz_casos_root"
+              action="action_fundacupaz_contactos_telefonia"
               sequence="20"/>
 </odoo>

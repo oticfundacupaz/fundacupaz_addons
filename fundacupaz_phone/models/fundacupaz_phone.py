@@ -61,6 +61,7 @@ class FundacupazPhone(models.Model):
     )
 
     numero_cuenta = fields.Char("Número de Cuenta", tracking=True)
+    numero_factura = fields.Char("Número de Factura", tracking=True)
     revisado = fields.Boolean("Revisado", tracking=True)
     llamado = fields.Boolean("Llamado", tracking=True)
     es_cuadrante = fields.Boolean("Es un cuadrante?", tracking=True)

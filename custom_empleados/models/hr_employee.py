@@ -39,6 +39,9 @@ class HrEmployee(models.Model):
         ('active', 'Activo'),
         ('inactive', 'Inactivo')
     ], string='Estatus', default='active')
+    
+    custom_resume_file = fields.Binary(string='Archivo PDF del Currículum', attachment=True)
+    custom_resume_filename = fields.Char(string='Nombre del Archivo')
 
     @api.onchange('children')
     def _onchange_children(self):
@@ -46,9 +49,16 @@ class HrEmployee(models.Model):
         Activa la creación/eliminación dinámica de campos
         para la información de los hijos dependientes de la cantidad ingresada.
         """
+        warning_res = False
         for record in self:
-            current_count = len(record.dependent_ids)
             target_count = record.children or 0
+            
+            if target_count > 7:
+                target_count = 7
+                record.children = 7
+                warning_res = True
+
+            current_count = len(record.dependent_ids)
 
             if target_count > current_count:
                 # Add empty records
@@ -58,3 +68,11 @@ class HrEmployee(models.Model):
             elif target_count < current_count:
                 # Remove extra records from the end
                 record.dependent_ids = record.dependent_ids[:target_count]
+                
+        if warning_res:
+            return {
+                'warning': {
+                    'title': 'Límite excedido',
+                    'message': 'Para evitar la creación masiva de casillas por accidente, el sistema está limitado a un máximo de 7 hijos.'
+                }
+            }
