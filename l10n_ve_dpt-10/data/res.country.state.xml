@@ -177,5 +177,12 @@
 		<field name="name">Dependencias Federales</field>
 	</record>
 
+	<record id="est_ve_GES" model="res.country.state">
+		<field name="country_id">238</field>
+		<field name="code">GES</field>
+		<field name="name">Guayana Esequiba</field>
+		<field name="ubigeo">25</field>
+	</record>
+
 	</data>
 </openerp>

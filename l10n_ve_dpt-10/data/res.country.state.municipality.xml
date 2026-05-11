@@ -411,12 +411,6 @@
 		<field name="state_id" ref="est_ve_BOL"/>
 	</record>
 
-	<record id="mun_ve_BOL_GSA" model="res.country.state.municipality">
-		<field name="code">GSA</field>
-		<field name="name">Gran Sabana</field>
-		<field name="state_id" ref="est_ve_BOL"/>
-	</record>
-
 	<record id="mun_ve_BOL_HER" model="res.country.state.municipality">
 		<field name="code">HER</field>
 		<field name="name">Heres</field>
@@ -438,12 +432,6 @@
 	<record id="mun_ve_BOL_ROS" model="res.country.state.municipality">
 		<field name="code">ROS</field>
 		<field name="name">Roscio</field>
-		<field name="state_id" ref="est_ve_BOL"/>
-	</record>
-
-	<record id="mun_ve_BOL_SIF" model="res.country.state.municipality">
-		<field name="code">SIF</field>
-		<field name="name">Sifontes</field>
 		<field name="state_id" ref="est_ve_BOL"/>
 	</record>
 
@@ -2011,6 +1999,26 @@
 		<field name="code">VRO</field>
 		<field name="name">Valmore Rodríguez</field>
 		<field name="state_id" ref="est_ve_ZUL"/>
+	</record>
+
+	<!-- Municipio adicional: Portuguesa -->
+	<record id="mun_ve_POR_SRO" model="res.country.state.municipality">
+		<field name="code">SRO</field>
+		<field name="name">San Rafael de Onoto</field>
+		<field name="state_id" ref="est_ve_POR"/>
+	</record>
+
+	<!-- Municipios de Guayana Esequiba -->
+	<record id="mun_ve_GES_SIF" model="res.country.state.municipality">
+		<field name="code">SIF</field>
+		<field name="name">Sifontes</field>
+		<field name="state_id" ref="est_ve_GES"/>
+	</record>
+
+	<record id="mun_ve_GES_GSA" model="res.country.state.municipality">
+		<field name="code">GSA</field>
+		<field name="name">Gran Sabana</field>
+		<field name="state_id" ref="est_ve_GES"/>
 	</record>
 
 	</data>
